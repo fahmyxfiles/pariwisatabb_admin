@@ -6,7 +6,7 @@ export default [{
         icon: 'WindIcon',
         children: [{
                 title: 'Daftar Hotel',
-                route: 'apps-invoice-list',
+                route: 'hotel-list',
             },
             {
                 title: 'Fasilitas Hotel',

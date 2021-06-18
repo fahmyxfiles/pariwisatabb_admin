@@ -1,6 +1,4 @@
 import Vue from 'vue'
-import VueLodash from 'vue-lodash'
-import lodash from 'lodash'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 
@@ -32,9 +30,6 @@ Vue.use(ModalPlugin)
 // Composition API
 Vue.use(VueCompositionAPI)
 
-// lodash
-Vue.use(VueLodash, { name: 'lod', lodash: lodash })
-
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard
 require('@core/assets/fonts/feather/iconfont.css') // For form-wizard
@@ -48,8 +43,8 @@ require('@/assets/scss/style.scss')
 Vue.config.productionTip = false
 
 new Vue({
-    router,
-    store,
-    i18n,
-    render: h => h(App),
+  router,
+  store,
+  i18n,
+  render: h => h(App),
 }).$mount('#app')

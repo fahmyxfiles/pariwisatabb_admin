@@ -143,17 +143,19 @@ export default {
   },
   methods: {
     logout() {
-      this.$http.get('/api/auth/logout').then(response => {
-            // Remove userData from localStorage
-            localStorage.removeItem('userData')
-            localStorage.removeItem('accessToken')
+      // Remove userData from localStorage
+      // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
+      localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
+      localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
 
-            // Reset ability
-            this.$ability.update(initialAbility)
+      // Remove userData from localStorage
+      localStorage.removeItem('userData')
 
-            // Redirect to login page
-            this.$router.push({ name: 'auth-login' })
-          });
+      // Reset ability
+      this.$ability.update(initialAbility)
+
+      // Redirect to login page
+      this.$router.push({ name: 'auth-login' })
     },
   },
 }

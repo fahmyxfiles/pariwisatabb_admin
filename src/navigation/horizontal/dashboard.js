@@ -1,6 +1,18 @@
-export default [{
+export default [
+  {
     header: 'Dashboards',
-    title: 'Dashboard',
     icon: 'HomeIcon',
-    route: 'dashboard-analytics',
-}, ]
+    children: [
+      {
+        title: 'eCommerce',
+        route: 'dashboard-ecommerce',
+        icon: 'ShoppingCartIcon',
+      },
+      {
+        title: 'Analytics',
+        route: 'dashboard-analytics',
+        icon: 'ActivityIcon',
+      },
+    ],
+  },
+]

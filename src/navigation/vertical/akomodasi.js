@@ -10,7 +10,7 @@ export default [{
             },
             {
                 title: 'Fasilitas Hotel',
-                route: 'apps-invoice-list',
+                route: 'hotel-fasilitas',
             },
         ],
     },
@@ -19,11 +19,11 @@ export default [{
         icon: 'FileTextIcon',
         children: [{
                 title: 'Daftar Wisma',
-                route: 'apps-invoice-list',
+                route: 'wisma-list',
             },
             {
                 title: 'Fasilitas Wisma',
-                route: 'apps-invoice-list',
+                route: 'wisma-fasilitas',
             },
         ],
     },
@@ -32,11 +32,11 @@ export default [{
         icon: 'FileTextIcon',
         children: [{
                 title: 'Daftar Homestay',
-                route: 'apps-invoice-list',
+                route: 'homestay-list',
             },
             {
                 title: 'Fasilitas Homestay',
-                route: 'apps-invoice-list',
+                route: 'homestay-fasilitas',
             },
         ],
     },

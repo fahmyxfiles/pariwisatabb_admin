@@ -6,11 +6,11 @@ export default [{
         icon: 'WindIcon',
         children: [{
                 title: 'Daftar Wisata',
-                route: 'apps-invoice-list',
+                route: 'wisata-list',
             },
             {
                 title: 'Fasilitas Wisata',
-                route: 'apps-invoice-list',
+                route: 'wisata-fasilitas',
             },
         ],
     },
@@ -19,15 +19,15 @@ export default [{
         icon: 'FileTextIcon',
         children: [{
                 title: 'Restoran',
-                route: 'apps-invoice-list',
+                route: 'kuliner-restoran',
             },
             {
                 title: 'Street Food',
-                route: 'apps-invoice-list',
+                route: 'kuliner-streetfood',
             },
             {
                 title: 'Fasilitas Kuliner',
-                route: 'apps-invoice-list',
+                route: 'kuliner-fasilitas',
             },
         ],
     },

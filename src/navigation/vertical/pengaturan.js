@@ -3,17 +3,17 @@ export default [{
     },
     {
         title: 'Wilayah',
-        route: 'apps-email',
+        route: 'pengaturan-wilayah',
         icon: 'MailIcon',
     },
     {
         title: 'Pengguna',
-        route: 'apps-email',
+        route: 'pengaturan-pengguna',
         icon: 'MailIcon',
     },
     {
         title: 'Hak Akses',
-        route: 'apps-email',
+        route: 'pengaturan-hak-akses',
         icon: 'MailIcon',
     },
 ]

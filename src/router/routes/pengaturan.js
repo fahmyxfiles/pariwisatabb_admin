@@ -5,13 +5,13 @@ export default [{
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: 'pengaturan/pengguna',
+        path: '/pengaturan/pengguna',
         name: 'pengaturan-pengguna',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: 'pengaturan/hak-akses',
+        path: '/pengaturan/hak-akses',
         name: 'pengaturan-hak-akses',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),

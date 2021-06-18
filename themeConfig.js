@@ -11,12 +11,12 @@ export const $themeConfig = {
     app: {
         appName: 'Vuexy', // Will update name in navigation menu (Branding)
         // eslint-disable-next-line global-require
-        appLogoImage: require('@/assets/images/logo/logo.svg'), // Will update logo in navigation menu (Branding)
+        appLogoImage: require('@/assets/images/logo/yuktrip_logo.png'), // Will update logo in navigation menu (Branding)
     },
     layout: {
         isRTL: false,
         skin: 'dark', // light, dark, bordered, semi-dark
-        routerTransition: 'zoom-fade', // zoom-fade, slide-fade, fade-bottom, fade, zoom-out, none
+        routerTransition: 'slide-fade', // zoom-fade, slide-fade, fade-bottom, fade, zoom-out, none
         type: 'vertical', // vertical, horizontal
         contentWidth: 'full', // full, boxed
         menu: {

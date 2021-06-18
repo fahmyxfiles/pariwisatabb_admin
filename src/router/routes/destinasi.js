@@ -1,36 +1,30 @@
 export default [{
-        path: '/hotel/list',
-        name: 'hotel-list',
+        path: '/wisata/list',
+        name: 'wisata-list',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: '/hotel/fasilitas',
-        name: 'hotel-fasilitas',
+        path: '/wisata/fasilitas',
+        name: 'wisata-fasilitas',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: '/wisma/list',
-        name: 'wisma-list',
+        path: '/kuliner/restoran',
+        name: 'kuliner-restoran',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: '/wisma/fasilitas',
-        name: 'wisma-fasilitas',
+        path: '/kuliner/streetfood',
+        name: 'kuliner-streetfood',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: '/homestay/list',
-        name: 'homestay-list',
-        component: () =>
-            import ('@/views/apps/calendar/Calendar.vue'),
-    },
-    {
-        path: '/homestay/fasilitas',
-        name: 'homestay-fasilitas',
+        path: '/kuliner/fasilitas',
+        name: 'kuliner-fasilitas',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },

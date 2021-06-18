@@ -1,5 +1,5 @@
 export default [{
-        header: 'Wisata',
+        header: 'Destinasi',
     },
     {
         title: 'Wisata',

@@ -2,7 +2,18 @@ export default [{
         path: '/pengaturan/wilayah',
         name: 'pengaturan-wilayah',
         component: () =>
-            import ('@/views/apps/calendar/Calendar.vue'),
+            import ('@/views/pengaturan/wilayah/index.vue'),
+        meta: {
+            pageTitle: 'Wilayah',
+            breadcrumb: [{
+                    text: 'Pengaturan',
+                },
+                {
+                    text: 'Wilayah',
+                    active: true,
+                },
+            ],
+        },
     },
     {
         path: '/pengaturan/pengguna',

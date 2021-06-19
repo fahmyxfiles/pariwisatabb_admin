@@ -6,7 +6,7 @@ export default [{
     },
     {
         path: '/hotel/facitilies',
-        name: 'hotel-facitilies',
+        name: 'hotel-facilities',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },
@@ -17,8 +17,8 @@ export default [{
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: '/guest-house/fasilitas',
-        name: 'guest-house-facitilies',
+        path: '/guest-house/facilities',
+        name: 'guest-house-facilities',
         component: () =>
             import ('@/views/apps/calendar/Calendar.vue'),
     },

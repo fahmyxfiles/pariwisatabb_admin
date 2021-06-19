@@ -21,13 +21,13 @@ export default [{
             import ('@/views/apps/calendar/Calendar.vue'),
     },
     {
-        path: '/settiings/access-control',
-        name: 'settiings-access-control',
+        path: '/settings/access-control',
+        name: 'settings-access-control',
         component: () => import ('@/views/settings/access-control/Index.vue'),
         meta: {
             pageTitle: 'Access Control',
             breadcrumb: [{
-                    text: 'Settiings',
+                    text: 'Settings',
                 },
                 {
                     text: 'Access Control',

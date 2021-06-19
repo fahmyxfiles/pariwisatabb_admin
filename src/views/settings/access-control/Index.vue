@@ -1,5 +1,5 @@
 <template>
-  <b-card title="Basic Table">
+  <b-card title="Access Control">
 
     <!-- search input -->
     <div class="custom-search d-flex justify-content-end">
@@ -169,7 +169,7 @@ export default {
   },
   data() {
     return {
-      pageLength: 3,
+      pageLength: 10,
       dir: false,
       columns: [
         {

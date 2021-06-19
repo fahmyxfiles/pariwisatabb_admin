@@ -1,8 +1,7 @@
 export default [{
         path: '/pengaturan/wilayah',
         name: 'pengaturan-wilayah',
-        component: () =>
-            import ('@/views/pengaturan/wilayah/index.vue'),
+        component: () => import ('@/views/pengaturan/wilayah/Index.vue'),
         meta: {
             pageTitle: 'Wilayah',
             breadcrumb: [{
@@ -24,7 +23,17 @@ export default [{
     {
         path: '/pengaturan/hak-akses',
         name: 'pengaturan-hak-akses',
-        component: () =>
-            import ('@/views/apps/calendar/Calendar.vue'),
+        component: () => import ('@/views/pengaturan/hak-akses/Index.vue'),
+        meta: {
+            pageTitle: 'Hak Akses',
+            breadcrumb: [{
+                    text: 'Pengaturan',
+                },
+                {
+                    text: 'Hak Akses',
+                    active: true,
+                },
+            ],
+        },
     },
 ]

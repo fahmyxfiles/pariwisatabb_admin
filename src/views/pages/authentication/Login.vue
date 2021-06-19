@@ -4,7 +4,7 @@
 
       <!-- Brand logo-->
       <b-link class="brand-logo">
-        <img :src="require(`@/assets/images/logo/yuktrip_logo.png`)" height="75px">
+        <img :src="require(`@/assets/images/logo/logo_brand.png`)" height="75px">
       </b-link>
       <!-- /Brand logo-->
 

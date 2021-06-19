@@ -113,7 +113,7 @@
                 type="submit"
                 variant="primary"
                 block
-                :disabled="loggingIn"
+                :disabled="invalid || loggingIn"
               >
                 <b-spinner v-if="loggingIn" small />
                 <span v-if="loggingIn" style="padding-left: 5px;">Logging in...</span>

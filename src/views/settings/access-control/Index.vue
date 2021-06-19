@@ -59,46 +59,43 @@
         slot-scope="props"
       >
         <span v-if="props.column.field === 'permissions'">
-          <span v-for="permission in props.row.permissions" :key="permission.id" class="permission-badge">
-            <b-badge variant="light-primary">
-              {{ permission.action | uppercase}}
-            </b-badge>
-            <b-badge variant="light-success">
-              {{ permission.subject | uppercase}}
-            </b-badge>
-          </span>
+          <b-row v-for="permission in props.row.permissions" :key="permission.id">
+            <span class="permission-badge" >
+              <b-badge variant="light-primary">
+                {{ permission.action | uppercase}}
+              </b-badge>
+              <b-badge variant="light-success">
+                {{ permission.subject | uppercase}}
+              </b-badge>
+            </span>
+          </b-row>
         </span>
         <!-- Column: Action -->
         <span v-else-if="props.column.field === 'action'">
-          <span>
-            <b-dropdown
-              variant="link"
-              toggle-class="text-decoration-none"
-              no-caret
+          <div class="actions-button">
+            <b-button
+              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+              variant="outline-primary"
+              @click="editModal(props.row)"
             >
-              <template v-slot:button-content>
-                <feather-icon
-                  icon="MoreVerticalIcon"
-                  size="16"
-                  class="text-body align-middle mr-25"
-                />
-              </template>
-              <b-dropdown-item>
-                <feather-icon
+              <feather-icon
                   icon="Edit2Icon"
-                  class="mr-50"
-                />
-                <span>Edit</span>
-              </b-dropdown-item>
-              <b-dropdown-item>
-                <feather-icon
+                  size="12"
+              />
+              Edit
+            </b-button>
+            <b-button
+              v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+              variant="outline-danger"
+              @click="deleteData(props.row)"
+            >
+              <feather-icon
                   icon="TrashIcon"
-                  class="mr-50"
-                />
-                <span>Delete</span>
-              </b-dropdown-item>
-            </b-dropdown>
-          </span>
+                  size="12"
+              />
+              Delete
+            </b-button>
+          </div>
         </span>
 
         <!-- Column: Common -->
@@ -155,12 +152,24 @@
         </div>
       </template>
     </vue-good-table>
+    <b-modal
+      ref="modal-input"
+      centered
+    >
+      Bonbon caramels muffin.
+      Chocolate bar oat cake cookie pastry dragée pastry.
+      Carrot cake chocolate tootsie roll chocolate bar candy canes biscuit.
+      Gummies bonbon apple pie fruitcake icing biscuit apple pie jelly-o sweet roll.
+      Toffee sugar plum sugar plum jelly-o jujubes bonbon dessert carrot cake.
+      Cookie dessert tart muffin topping donut icing fruitcake. Sweet roll cotton candy dragée danish Candy canes chocolate bar cookie.
+      Gingerbread apple pie oat cake. Carrot cake fruitcake bear claw. Pastry gummi bears marshmallow jelly-o.
+    </b-modal>
   </b-card>
 </template>
 
 <script>
 import {
-  BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
+  BRow, BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
@@ -168,6 +177,7 @@ import store from '@/store/index'
 
 export default {
   components: {
+    BRow, 
     BInputGroup,
     BInputGroupAppend, 
     BButton, 
@@ -193,6 +203,8 @@ export default {
         limit: 15,
         page: 1,
       },
+      fillableKey: ['name', 'permissions'],
+      params: null,
       loading: true,
       dir: false,
       columns: [
@@ -219,7 +231,42 @@ export default {
         this.rows = res.data.data;
         this.loading = false;
       });
-    }
+    },
+    editModal(item){
+      this.params = {};
+      this.fillableKey.forEach(key => this.params[key] = item[key]);
+      this.$refs['modal-input'].onOk = () => this.editData(this.params);
+      this.$refs['modal-input'].show();
+    },
+    editData(item){
+      console.log("editData(item)", item);
+      this.$refs['modal-input'].hide();
+    },
+    deleteData(item) {
+      this.$swal({
+        title: 'Are you sure?',
+        text: "Access Control " + item.name + " will be removed. All user with this Access Control need to be updated with new Access Control.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      }).then(result => {
+        if (result.value) {
+          this.$swal({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Access Control has been deleted.',
+            customClass: {
+              confirmButton: 'btn btn-success',
+            },
+          })
+        }
+      })
+    },
   },
   filters: {
     uppercase: function(v) {
@@ -253,8 +300,20 @@ export default {
   justify-content: flex-start;
   align-items: center;
   & > * {
-    margin-right: 1rem;
+    margin-left: 0.5rem;
     margin-top: 0;
+    margin-bottom: 0.5rem;
   }
+}
+.actions-button {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    & > * {
+      margin-left: 0.5rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
 }
 </style>

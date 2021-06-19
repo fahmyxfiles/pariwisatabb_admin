@@ -8,12 +8,12 @@ export default [{
     },
     {
         title: 'Users',
-        route: 'settiings-users',
+        route: 'settings-users',
         icon: 'MailIcon',
     },
     {
         title: 'Access Control',
-        route: 'settiings-access-control',
+        route: 'settings-access-control',
         icon: 'MailIcon',
     },
 ]

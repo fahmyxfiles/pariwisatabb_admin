@@ -4,16 +4,16 @@ export default [{
     {
         title: 'Region',
         route: 'settings-region',
-        icon: 'MailIcon',
+        icon: 'GlobeIcon',
     },
     {
         title: 'Users',
         route: 'settings-users',
-        icon: 'MailIcon',
+        icon: 'UserIcon',
     },
     {
         title: 'Access Control',
         route: 'settings-access-control',
-        icon: 'MailIcon',
+        icon: 'ShieldIcon',
     },
 ]

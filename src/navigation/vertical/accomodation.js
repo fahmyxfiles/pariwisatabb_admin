@@ -3,7 +3,7 @@ export default [{
     },
     {
         title: 'Hotel',
-        icon: 'WindIcon',
+        icon: 'HomeIcon',
         children: [{
                 title: 'List',
                 route: 'hotel-list',

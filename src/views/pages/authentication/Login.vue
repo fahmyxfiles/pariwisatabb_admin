@@ -113,9 +113,11 @@
                 type="submit"
                 variant="primary"
                 block
-                :disabled="invalid"
+                :disabled="loggingIn"
               >
-                Sign in
+                <b-spinner v-if="loggingIn" small />
+                <span v-if="loggingIn" style="padding-left: 5px;">Logging in...</span>
+                <span v-else>Login</span>
               </b-button>
             </b-form>
           </validation-observer>
@@ -131,7 +133,7 @@
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton, BAlert, VBTooltip,
+  BSpinner, BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton, BAlert, VBTooltip,
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
@@ -145,6 +147,7 @@ export default {
     'b-tooltip': VBTooltip,
   },
   components: {
+    BSpinner,
     BRow,
     BCol,
     BLink,
@@ -165,6 +168,7 @@ export default {
   mixins: [togglePasswordVisibility],
   data() {
     return {
+      loggingIn: false,
       status: '',
       password: 'mikasa123',
       userEmail: 'fahmy.xfiles@gmail.com',
@@ -192,6 +196,7 @@ export default {
     login() {
       this.$refs.loginForm.validate().then(success => {
         if (success) {
+          this.loggingIn = true;
           this.$http.post('login', {
             email: this.userEmail,
             password: this.password,
@@ -217,8 +222,9 @@ export default {
                   })
                 })
             }).catch(error => {
+                this.loggingIn = false;
                 this.$refs.loginForm.errors.email.push(error.response.data.message);
-              })
+            })
         }
       })
     },

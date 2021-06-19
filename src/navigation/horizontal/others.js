@@ -3,6 +3,7 @@ export default [
     header: 'Others',
     icon: 'MoreHorizontalIcon',
     children: [
+      /*
       {
         title: 'Access Control',
         route: 'access-control',
@@ -12,6 +13,7 @@ export default [
         resource: 'ACL',
         // },
       },
+      */
       {
         title: 'Menu Levels',
         icon: 'MenuIcon',

@@ -3,7 +3,7 @@ export default [{
     },
     {
         title: 'Tourist Attraction',
-        icon: 'WindIcon',
+        icon: 'MapPinIcon',
         children: [{
                 title: 'List',
                 route: 'tourist-attraction-list',
@@ -16,7 +16,7 @@ export default [{
     },
     {
         title: 'Culinary',
-        icon: 'FileTextIcon',
+        icon: 'ShoppingBagIcon',
         children: [{
                 title: 'Restaurant',
                 route: 'culinary-restaurant',

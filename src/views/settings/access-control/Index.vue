@@ -1,17 +1,36 @@
 <template>
   <b-card title="Access Control">
-
     <!-- search input -->
-    <div class="custom-search d-flex justify-content-end">
+    <div class="custom-search d-flex justify-content-between">
       <b-form-group>
         <div class="d-flex align-items-center">
-          <label class="mr-1">Search</label>
-          <b-form-input
-            v-model="searchTerm"
-            placeholder="Search"
-            type="text"
-            class="d-inline-block"
-          />
+          <b-button
+            v-ripple.400="'rgba(40, 199, 111, 0.15)'"
+            variant="outline-primary"
+          >
+            <feather-icon
+              icon="PlusIcon"
+              class="mr-50"
+            />
+            <span class="align-middle">New Role</span>
+          </b-button>
+        </div>
+      </b-form-group>
+      <b-form-group>
+        <div class="d-flex align-items-center">
+          <b-input-group>
+            <b-form-input
+              v-model="query.keyword"
+              placeholder="Search"
+              type="text"
+              class="d-inline-block"
+            />
+            <b-input-group-append>
+              <b-button variant="outline-primary" @click="getData()">
+                <feather-icon icon="SearchIcon" />
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
         </div>
       </b-form-group>
     </div>
@@ -21,41 +40,34 @@
       :columns="columns"
       :rows="rows"
       :rtl="direction"
-      :search-options="{
-        enabled: true,
-        externalQuery: searchTerm }"
       :select-options="{
         enabled: false,
       }"
       :pagination-options="{
         enabled: true,
-        perPage:pageLength
+        perPage:query.limit
       }"
+      :isLoading="loading" 
     >
+      <template slot="loadingContent">
+        <div class="d-flex justify-content-center mb-1">
+          <b-spinner variant="primary" label="Loading..." />
+        </div>
+      </template>
       <template
         slot="table-row"
         slot-scope="props"
       >
-
-        <!-- Column: Name -->
-        <span
-          v-if="props.column.field === 'fullName'"
-          class="text-nowrap"
-        >
-          <b-avatar
-            :src="props.row.avatar"
-            class="mx-1"
-          />
-          <span class="text-nowrap">{{ props.row.fullName }}</span>
+        <span v-if="props.column.field === 'permissions'">
+          <span v-for="permission in props.row.permissions" :key="permission.id" class="permission-badge">
+            <b-badge variant="light-primary">
+              {{ permission.action | uppercase}}
+            </b-badge>
+            <b-badge variant="light-success">
+              {{ permission.subject | uppercase}}
+            </b-badge>
+          </span>
         </span>
-
-        <!-- Column: Status -->
-        <span v-else-if="props.column.field === 'status'">
-          <b-badge :variant="statusVariant(props.row.status)">
-            {{ props.row.status }}
-          </b-badge>
-        </span>
-
         <!-- Column: Action -->
         <span v-else-if="props.column.field === 'action'">
           <span>
@@ -106,8 +118,8 @@
               Showing 1 to
             </span>
             <b-form-select
-              v-model="pageLength"
-              :options="['3','5','10']"
+              v-model="query.limit"
+              :options="['5','15','30']"
               class="mx-1"
               @input="(value)=>props.perPageChanged({currentPerPage:value})"
             />
@@ -117,7 +129,7 @@
             <b-pagination
               :value="1"
               :total-rows="props.total"
-              :per-page="pageLength"
+              :per-page="query.limit"
               first-number
               last-number
               align="right"
@@ -143,19 +155,23 @@
         </div>
       </template>
     </vue-good-table>
-
   </b-card>
 </template>
 
 <script>
 import {
-  BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
+  BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import store from '@/store/index'
 
 export default {
   components: {
+    BInputGroup,
+    BInputGroupAppend, 
+    BButton, 
+    BSpinner,
     BCard,
     VueGoodTable,
     BAvatar,
@@ -167,30 +183,26 @@ export default {
     BDropdown,
     BDropdownItem,
   },
+  directives: {
+    Ripple,
+  },
   data() {
     return {
-      pageLength: 10,
+      query : {
+        keyword: '',
+        limit: 15,
+        page: 1,
+      },
+      loading: true,
       dir: false,
       columns: [
         {
-          label: 'Name',
-          field: 'fullName',
+          label: 'Role',
+          field: 'name',
         },
         {
-          label: 'Email',
-          field: 'email',
-        },
-        {
-          label: 'Date',
-          field: 'startDate',
-        },
-        {
-          label: 'Salary',
-          field: 'salary',
-        },
-        {
-          label: 'Status',
-          field: 'status',
+          label: 'Permissions',
+          field: 'permissions',
         },
         {
           label: 'Action',
@@ -198,37 +210,23 @@ export default {
         },
       ],
       rows: [],
-      searchTerm: '',
-      status: [{
-        1: 'Current',
-        2: 'Professional',
-        3: 'Rejected',
-        4: 'Resigned',
-        5: 'Applied',
-      },
-      {
-        1: 'light-primary',
-        2: 'light-success',
-        3: 'light-danger',
-        4: 'light-warning',
-        5: 'light-info',
-      }],
+    }
+  },
+  methods: {
+    getData() {
+      this.loading = true;
+      this.$http.get('/role',{ params: this.query }).then(res => { 
+        this.rows = res.data.data;
+        this.loading = false;
+      });
+    }
+  },
+  filters: {
+    uppercase: function(v) {
+      return v.toUpperCase();
     }
   },
   computed: {
-    statusVariant() {
-      const statusColor = {
-        /* eslint-disable key-spacing */
-        Current      : 'light-primary',
-        Professional : 'light-success',
-        Rejected     : 'light-danger',
-        Resigned     : 'light-warning',
-        Applied      : 'light-info',
-        /* eslint-enable key-spacing */
-      }
-
-      return status => statusColor[status]
-    },
     direction() {
       if (store.state.appConfig.isRTL) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -241,8 +239,7 @@ export default {
     },
   },
   created() {
-    this.$http.get('/good-table/basic')
-      .then(res => { this.rows = res.data })
+    this.getData();
   },
 }
 </script>
@@ -250,4 +247,14 @@ export default {
 
 <style lang="scss" >
 @import '@core/scss/vue/libs/vue-good-table.scss';
+.permission-badge {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  & > * {
+    margin-right: 1rem;
+    margin-top: 0;
+  }
+}
 </style>

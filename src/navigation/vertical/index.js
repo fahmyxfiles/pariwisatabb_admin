@@ -32,13 +32,13 @@ tagVariant
 */
 import dashboard from './dashboard'
 import appsAndPages from './apps-and-pages'
-import akomodasi from './akomodasi'
-import destinasi from './destinasi'
-import pengaturan from './pengaturan'
+import accomodation from './accomodation'
+import destination from './destination'
+import settings from './settings'
 import others from './others'
 import chartsAndMaps from './charts-and-maps'
 import uiElements from './ui-elements'
 import formAndTable from './forms-and-table'
 
 // Array of sections
-export default [...dashboard, ...akomodasi, ...destinasi, ...pengaturan, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+export default [...dashboard, ...accomodation, ...destination, ...settings, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]

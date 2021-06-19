@@ -5,9 +5,9 @@ import VueRouter from 'vue-router'
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
 import apps from './routes/apps'
-import akomodasi from './routes/akomodasi'
-import destinasi from './routes/destinasi'
-import pengaturan from './routes/pengaturan'
+import accomodation from './routes/accomodation'
+import destination from './routes/destination'
+import settings from './routes/settings'
 import dashboard from './routes/dashboard'
 import uiElements from './routes/ui-elements/index'
 import pages from './routes/pages'
@@ -27,9 +27,9 @@ const router = new VueRouter({
         { path: '/', redirect: { name: 'dashboard' } },
         ...apps,
         ...dashboard,
-        ...akomodasi,
-        ...destinasi,
-        ...pengaturan,
+        ...accomodation,
+        ...destination,
+        ...settings,
         ...pages,
         ...chartsMaps,
         ...formsTable,

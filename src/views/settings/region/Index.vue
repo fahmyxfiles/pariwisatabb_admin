@@ -39,6 +39,7 @@
       <div class="d-flex justify-content-center mb-1" v-if="loading">
         <b-spinner variant="primary" label="Loading..." />
       </div>
+    <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
     <b-row v-for="(row, index) in chunkedData" :key="index">
       <b-col cols="12">
         <b-card-group
@@ -167,8 +168,9 @@ export default {
     }
   },
   computed: {
+    // chunked berfungsi seperti slice untuk memilah data, this.data yaitu data yang di ambil dari API, kemudian angkanya di set sesuai kebutuhan (contoh card di view region)
     chunkedData() {
-      return _.chunk(this.data, 4)
+      return _.chunk(this.data, 3)
     },
   },
   // created adalah fungsi bawaan dari vue yang berfungsi saat halaman di load maka fungsi ini yang akan pertama kali di panggil

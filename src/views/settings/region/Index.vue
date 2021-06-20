@@ -139,7 +139,7 @@ export default {
   methods: {
     getData(){
       this.loading = true;
-      this.$http.get('/regency').then(res => { 
+      this.$http.get('/regency', { params: this.query }).then(res => { 
         this.data = res.data.data;
         this.loading = false;
       });

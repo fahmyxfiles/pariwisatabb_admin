@@ -5,14 +5,15 @@
       <b-form-group>
         <div class="d-flex align-items-center">
           <b-button
-            v-ripple.400="'rgba(40, 199, 111, 0.15)'"
+            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
             variant="outline-primary"
+            @click="addModal()"
           >
             <feather-icon
               icon="PlusIcon"
               class="mr-50"
             />
-            <span class="align-middle">New Role</span>
+            <span class="align-middle">Add</span>
           </b-button>
         </div>
       </b-form-group>
@@ -60,7 +61,7 @@
       >
         <span v-if="props.column.field === 'permissions'">
           <b-row v-for="permission in props.row.permissions" :key="permission.id">
-            <span class="permission-badge" >
+            <span class="spacer" >
               <b-badge variant="light-primary">
                 {{ permission.action | uppercase}}
               </b-badge>
@@ -72,7 +73,7 @@
         </span>
         <!-- Column: Action -->
         <span v-else-if="props.column.field === 'action'">
-          <div class="actions-button">
+          <div class="spacer">
             <b-button
               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
               variant="outline-primary"
@@ -155,29 +156,52 @@
     <b-modal
       ref="modal-input"
       centered
+      :title="modalTitle"
+      :no-close-on-backdrop="true"
     >
-      Bonbon caramels muffin.
-      Chocolate bar oat cake cookie pastry dragée pastry.
-      Carrot cake chocolate tootsie roll chocolate bar candy canes biscuit.
-      Gummies bonbon apple pie fruitcake icing biscuit apple pie jelly-o sweet roll.
-      Toffee sugar plum sugar plum jelly-o jujubes bonbon dessert carrot cake.
-      Cookie dessert tart muffin topping donut icing fruitcake. Sweet roll cotton candy dragée danish Candy canes chocolate bar cookie.
-      Gingerbread apple pie oat cake. Carrot cake fruitcake bear claw. Pastry gummi bears marshmallow jelly-o.
+      <b-form>
+        <b-form-group>
+          <label for="roleName">Role Name :</label>
+          <b-form-input
+            id="roleName"
+            type="text"
+            placeholder="Role Name"
+            v-model="params.name"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="permissions">Permissions</label>
+          <v-select
+            v-model="params.permissions"
+            multiple
+            :options="availablePermissions" 
+            :reduce="permissions => permissions.id" 
+            label="name"
+            :close-on-select="false"
+          />
+        </b-form-group>
+      </b-form>
     </b-modal>
   </b-card>
 </template>
 
 <script>
 import {
-  BRow, BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
+  BForm, BRow, BCol, BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import store from '@/store/index'
+import VSelect from 'vue-select'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
+    ToastificationContent,
+    VSelect,
+    BForm,
     BRow, 
+    BCol, 
     BInputGroup,
     BInputGroupAppend, 
     BButton, 
@@ -203,13 +227,18 @@ export default {
         limit: 15,
         page: 1,
       },
-      fillableKey: ['name', 'permissions'],
+      modalTitle: '',
+      availablePermissions: [],
       params: null,
+      defaultParams: {
+        'name' : '',
+        'permissions' : [],
+      },
       loading: true,
       dir: false,
       columns: [
         {
-          label: 'Role',
+          label: 'Name',
           field: 'name',
         },
         {
@@ -232,15 +261,92 @@ export default {
         this.loading = false;
       });
     },
-    editModal(item){
-      this.params = {};
-      this.fillableKey.forEach(key => this.params[key] = item[key]);
-      this.$refs['modal-input'].onOk = () => this.editData(this.params);
+    getAvailablePermissions(){
+      this.$http.get('/role/getAvailablePermissions').then(res => { 
+        this.availablePermissions = res.data.data;
+      });
+    },
+    toastErrorMsg(errMsg){
+      if(typeof errMsg === 'object' && errMsg !== null){
+        const keys = Object.keys(errMsg);
+        // iterate over object
+        keys.forEach((key, index) => {
+            console.log(`${key}: ${errMsg[key]}`);
+            var errArray = errMsg[key];
+            errArray.forEach(_text => {
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Error',
+                  icon: 'AlertCircleIcon',
+                  text: _text,
+                  variant: 'danger',
+                },
+              },
+              {
+                position: 'bottom-center',
+                timeout: 6000,
+              });
+            });
+        });
+      }
+      else {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error',
+            icon: 'AlertCircleIcon',
+            text: errMsg,
+            variant: 'danger',
+          },
+        },
+        {
+          position: 'bottom-center',
+          timeout: 6000,
+        });
+      }
+    },
+    initDefaultParams(){
+      this.params = JSON.parse(JSON.stringify(this.defaultParams));
+    },
+    addModal(){
+      this.initDefaultParams();
+      this.modalTitle = "Add Access Control";
+      this.$refs['modal-input'].onOk = () => this.addData(this.params);
       this.$refs['modal-input'].show();
     },
-    editData(item){
-      console.log("editData(item)", item);
-      this.$refs['modal-input'].hide();
+    addData(params){
+      this.$http.post('/role', params)
+      .then(res => {
+        this.$refs['modal-input'].hide();
+        this.getData();
+      }).catch(err => {
+        var errMsg = err.response.data.data;
+        this.toastErrorMsg(errMsg);
+      });
+    },
+    editModal(item){
+      this.initDefaultParams();
+      this.modalTitle = "Edit Access Control : " + item.name;
+      var _permissions = [];
+      for(var i = 0; i < item.permissions.length; i++){
+        _permissions.push(item.permissions[i].id);
+      }
+      this.params.name = item.name;
+      this.params.permissions = _permissions
+      this.$refs['modal-input'].onOk = () => this.editData(item.id, this.params);
+      this.$refs['modal-input'].show();
+    },
+    editData(id, params){
+      params["_method"] = "PUT";
+      this.$http.post('/role/' + id, params)
+      .then(res => {
+        this.$refs['modal-input'].hide();
+        this.getData();
+      }).catch(err => {
+        var errMsg = err.response.data.data;
+        this.toastErrorMsg(errMsg);
+      });
     },
     deleteData(item) {
       this.$swal({
@@ -248,7 +354,7 @@ export default {
         text: "Access Control " + item.name + " will be removed. All user with this Access Control need to be updated with new Access Control.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Yes',
         customClass: {
           confirmButton: 'btn btn-primary',
           cancelButton: 'btn btn-outline-danger ml-1',
@@ -256,14 +362,20 @@ export default {
         buttonsStyling: false,
       }).then(result => {
         if (result.value) {
-          this.$swal({
-            icon: 'success',
-            title: 'Deleted!',
-            text: 'Access Control has been deleted.',
-            customClass: {
-              confirmButton: 'btn btn-success',
-            },
-          })
+          this.$http.delete('/role/' + item.id).then(res => {
+            this.$swal({
+              icon: 'success',
+              title: 'Deleted!',
+              text: 'Access Control has been deleted.',
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            });
+            this.getData();
+          }).catch(err => {
+            var errMsg = err.response.data.data;
+            this.toastErrorMsg(errMsg);
+          });
         }
       })
     },
@@ -286,7 +398,9 @@ export default {
     },
   },
   created() {
+    this.initDefaultParams();
     this.getData();
+    this.getAvailablePermissions();
   },
 }
 </script>
@@ -294,7 +408,7 @@ export default {
 
 <style lang="scss" >
 @import '@core/scss/vue/libs/vue-good-table.scss';
-.permission-badge {
+.spacer {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -304,16 +418,5 @@ export default {
     margin-top: 0;
     margin-bottom: 0.5rem;
   }
-}
-.actions-button {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-    & > * {
-      margin-left: 0.5rem;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-    }
 }
 </style>

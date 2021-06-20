@@ -40,7 +40,7 @@
         <b-spinner variant="primary" label="Loading..." />
       </div>
     <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
-    <b-row v-for="(row, index) in chunkedData" :key="index">
+    <b-row v-show="!loading" v-for="(row, index) in chunkedData" :key="index">
       <b-col cols="12">
         <b-card-group
           deck
@@ -90,13 +90,16 @@
 
 <script>
 import {
-  BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
+  BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import _ from 'lodash'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
+    ToastificationContent,
+    BAlert,
     BSpinner, 
     BFormInput, 
     BInputGroupAppend, 
@@ -146,8 +149,26 @@ export default {
     getData(){
       this.loading = true;
       this.$http.get('/regency', { params: this.query }).then(res => { 
-        this.data = res.data.data;
         this.loading = false;
+        var _data = res.data.data;
+        if(_data.length > 0){
+          this.data = _data;
+        }
+        else {
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Error',
+              icon: 'AlertCircleIcon',
+              text: "Tidak ada data ditemukan",
+              variant: 'danger',
+            },
+          },
+          {
+            position: 'top-center',
+            timeout: 6000,
+          });
+        }
       });
     },
     getAvailableProvinces(){

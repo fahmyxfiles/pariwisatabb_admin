@@ -65,7 +65,8 @@
                   no-body
                 >
                   <b-card-body>
-                    <b-card-title>{{ regency.name }}</b-card-title>
+                    <small class="text-muted">{{ availableProvinces.find(x => x.id === regency.province_id).name }}</small>
+                    <b-card-title style="margin-top: 5px;">{{ regency.name }}</b-card-title>
                     <b-card-text>
                       {{ regency.description }}
                     </b-card-text>
@@ -75,6 +76,7 @@
                       v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                       variant="outline-primary"
                       class="btn-icon rounded-circle"
+                      @click="editModal(regency)"
                     >
                       <feather-icon icon="Edit2Icon" />
                     </b-button>
@@ -142,10 +144,13 @@
           <b-form-radio-group
             v-model="params.timezone_offset"
             :options="timezoneOptions"
-            class="demo-inline-spacing"
-            name="radio-validation"
+            class="spacer"
           >
           </b-form-radio-group>
+        </b-form-group>
+        <b-form-group>
+          <label for="image">Image (Aspect Ratio 16:9):</label>
+          <vue-dropzone ref="dropzone" id="dropzone" :options="dropzoneOptions" @vdropzone-file-added="dropzone_added"></vue-dropzone>
         </b-form-group>
       </b-form>
     </b-modal>
@@ -154,15 +159,18 @@
 
 <script>
 import {
-  BFormTextarea, BFormRadioGroup, BOverlay, BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
+  BForm, BFormTextarea, BFormRadioGroup, BOverlay, BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import _ from 'lodash'
 import VSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import vueDropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
 export default {
   components: {
+    vueDropzone,
     BFormTextarea,
     VSelect,
     BFormRadioGroup,
@@ -170,6 +178,7 @@ export default {
     ToastificationContent,
     BAlert,
     BSpinner, 
+    BForm,
     BFormInput, 
     BInputGroupAppend, 
     BFormGroup, 
@@ -193,6 +202,17 @@ export default {
   // data apa saja yang akan di gunakan pada komponen
   data() {
     return {
+      dropzoneOptions: {
+        url: 'http://localhost',
+        maxFilesize: 2.0,
+        maxFiles: 1,
+        autoProcessQueue: false,
+        thumbnailWidth: 360,
+        thumbnailHeight: 202,
+        addRemoveLinks: false,
+        acceptedFiles: "image/*",
+      },
+      dropzoneSelectedFile: null,
       query : {
         keyword: '',
         limit: 15,
@@ -317,9 +337,43 @@ export default {
       this.modalTitle = "Add Region";
       this.$refs['modal-input'].onOk = () => this.addData(this.params);
       this.$refs['modal-input'].show();
+      this.$nextTick(() => {
+        this.$refs.dropzone.removeAllFiles();
+      });
     },
     addData(params){
-      this.$http.post('/region', params)
+      params.image = this.dropzoneSelectedFile.dataURL;
+      this.$http.post('/regency', params)
+      .then(res => {
+        this.$refs['modal-input'].hide();
+        this.getData();
+      }).catch(err => {
+        var errMsg = err.response.data.data;
+        this.toastErrorMsg(errMsg);
+      });
+    },
+    editModal(item){
+      this.initDefaultParams();
+      this.modalTitle = "Edit Region : " + item.name;
+      this.params.province_id = item.province_id;
+      this.params.name = item.name;
+      this.params.description = item.description;
+      this.params.timezone_offset = item.timezone_offset;
+      this.$refs['modal-input'].onOk = () => this.editData(item.id, this.params);
+      this.$refs['modal-input'].show();
+      this.$nextTick(() => {
+        var fileExt = item.image_filename.split('.').pop();
+        var file = { size: 1, type: "image/" + fileExt };
+        var url = this.imagePath + item.image_filename;
+        this.$refs.dropzone.removeAllFiles();
+        this.$refs.dropzone.manuallyAddFile(file, url);
+        $(".dz-message").remove();
+      });
+    },
+    editData(id, params){
+      params.image = this.dropzoneSelectedFile.dataURL;
+      params["_method"] = "PUT";
+      this.$http.post('/regency/' + id, params)
       .then(res => {
         this.$refs['modal-input'].hide();
         this.getData();
@@ -359,6 +413,12 @@ export default {
         }
       })
     },
+    dropzone_added(file) {
+      if (this.dropzoneSelectedFile !== null) {
+        this.$refs.dropzone.removeFile(this.dropzoneSelectedFile) 
+      }
+      this.dropzoneSelectedFile = file;
+    } 
   },
   filters: {
     uppercase: function(v) {
@@ -380,3 +440,31 @@ export default {
 
 }
 </script>
+<style lang="scss" >
+@import '@core/scss/vue/libs/vue-good-table.scss';
+.spacer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  & > * {
+    margin-left: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+.dropzone .dz-preview .dz-image {
+  width: 360px;
+  height: 202px;
+}
+.vue-dropzone {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.dz-progress {
+  display: none !important;
+}
+.dz-details {
+  display: none !important;
+}
+</style>

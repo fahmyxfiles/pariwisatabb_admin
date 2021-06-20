@@ -8,7 +8,9 @@ import store from './store'
 import App from './App.vue'
 
 import VueMoment from 'vue-moment';
-import Skeleton from 'vue-loading-skeleton';
+import Skeleton from 'vue-loading-skeleton'
+import jQuery from 'jquery'
+
 
 // Global Components
 import './global-components'
@@ -50,6 +52,9 @@ require('@core/scss/core.scss')
 require('@/assets/scss/style.scss')
 
 Vue.config.productionTip = false
+
+window.jQuery = jQuery
+window.$ = jQuery
 
 Vue.prototype.$imagePath = 'http://127.0.0.1:8000/'
 

@@ -77,7 +77,7 @@
               >
                 <feather-icon icon="TrashIcon" />
               </b-button>
-                <small class="text-muted ml-1">Last updated 3 mins ago</small>
+                <small class="text-muted ml-1">Last updated {{ regency.updated_at | moment("from", "now") }}</small>
             </b-card-footer>
           </b-card>
         </b-card-group>

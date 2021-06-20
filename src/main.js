@@ -7,6 +7,8 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 
+import VueMoment from 'vue-moment';
+
 // Global Components
 import './global-components'
 
@@ -29,6 +31,9 @@ Vue.use(ModalPlugin)
 
 // Composition API
 Vue.use(VueCompositionAPI)
+
+// Vue Moment
+Vue.use(VueMoment);
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard

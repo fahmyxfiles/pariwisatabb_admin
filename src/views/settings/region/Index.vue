@@ -167,19 +167,21 @@ export default {
           this.data = _data;
         }
         else {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Error',
-              icon: 'AlertCircleIcon',
-              text: "No Regency found",
-              variant: 'danger',
+          if(this.query.keyword){
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error',
+                icon: 'AlertCircleIcon',
+                text: "No Regency found",
+                variant: 'danger',
+              },
             },
-          },
-          {
-            position: 'top-center',
-            timeout: 6000,
-          });
+            {
+              position: 'top-center',
+              timeout: 6000,
+            });
+          }
         }
         this.$nextTick(() => {
           this.loading = false;
@@ -228,7 +230,7 @@ export default {
                 },
               },
               {
-                position: 'bottom-center',
+                position: 'top-center',
                 timeout: 6000,
               });
             });
@@ -245,7 +247,7 @@ export default {
           },
         },
         {
-          position: 'bottom-center',
+          position: 'top-center',
           timeout: 6000,
         });
       }

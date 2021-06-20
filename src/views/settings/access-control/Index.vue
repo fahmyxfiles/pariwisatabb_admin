@@ -260,8 +260,30 @@ export default {
     getData() {
       this.loading = true;
       this.$http.get('/role',{ params: this.query }).then(res => { 
-        this.rows = res.data.data;
-        this.loading = false;
+        var _data = res.data.data;
+        if(_data.length > 0){
+          this.rows = _data;
+        }
+        else {
+          if(this.query.keyword){
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Error',
+                icon: 'AlertCircleIcon',
+                text: "No data found",
+                variant: 'danger',
+              },
+            },
+            {
+              position: 'top-center',
+              timeout: 6000,
+            });
+          }
+        }
+        this.$nextTick(() => {
+          this.loading = false;
+        });
       }).catch(err => {
         if(err.response){
           var errMsg = err.response.data.data;
@@ -306,7 +328,7 @@ export default {
                 },
               },
               {
-                position: 'bottom-center',
+                position: 'top-center',
                 timeout: 6000,
               });
             });
@@ -323,7 +345,7 @@ export default {
           },
         },
         {
-          position: 'bottom-center',
+          position: 'top-center',
           timeout: 6000,
         });
       }

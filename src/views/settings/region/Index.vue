@@ -82,6 +82,12 @@
                 <small class="text-muted ml-1">Last updated {{ regency.updated_at | moment("from", "now") }}</small>
             </b-card-footer>
           </b-card>
+          <b-card
+            v-for="_idx in 3-row.length"
+            :key="_idx"
+            no-body
+          >
+          </b-card>
         </b-card-group>
       </b-col>
     </b-row>
@@ -150,7 +156,6 @@ export default {
     getData(){
       this.loading = true;
       this.$http.get('/regency', { params: this.query }).then(res => { 
-        this.loading = false;
         var _data = res.data.data;
         if(_data.length > 0){
           this.data = _data;
@@ -161,7 +166,7 @@ export default {
             props: {
               title: 'Error',
               icon: 'AlertCircleIcon',
-              text: "Tidak ada data ditemukan",
+              text: "No Regency found",
               variant: 'danger',
             },
           },
@@ -170,6 +175,9 @@ export default {
             timeout: 6000,
           });
         }
+        this.$nextTick(() => {
+            this.loading = false;
+        });
       });
     },
     getAvailableProvinces(){

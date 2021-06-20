@@ -117,6 +117,7 @@ export default {
   directives: {
     Ripple,
   },
+  // data apa saja yang akan di gunakan pada komponen
   data() {
     return {
       query : {
@@ -129,10 +130,14 @@ export default {
       params: null,
       defaultParams: {
         'name' : '',
-        'permissions' : [],
+        'province_id' : 0,
+        'description' : '',
+        'image' : null,
+        'timezone_offset' : null,
       },
       loading: true,
       data: [],
+      // $imagepath adalah variabel global bawaan vue yang di definisikan di main.js, berfungsi untuk mendifinisikan lokasi backend laravel untuk import img dari backend laravel
       imagePath: this.$imagePath,
     }
   },
@@ -166,6 +171,7 @@ export default {
       return _.chunk(this.data, 4)
     },
   },
+  // created adalah fungsi bawaan dari vue yang berfungsi saat halaman di load maka fungsi ini yang akan pertama kali di panggil
   created(){
     this.initDefaultParams();
     this.getData();

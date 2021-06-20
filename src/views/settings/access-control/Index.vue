@@ -1,157 +1,161 @@
 <template>
-  <b-card title="Access Control">
-    <!-- search input -->
-    <div class="custom-search d-flex justify-content-between">
-      <b-form-group>
-        <div class="d-flex align-items-center">
-          <b-button
-            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-            variant="outline-primary"
-            @click="addModal()"
-          >
-            <feather-icon
-              icon="PlusIcon"
-              class="mr-50"
-            />
-            <span class="align-middle">Add</span>
-          </b-button>
-        </div>
-      </b-form-group>
-      <b-form-group>
-        <div class="d-flex align-items-center">
-          <b-input-group>
-            <b-form-input
-              v-model="query.keyword"
-              placeholder="Search"
-              type="text"
-              class="d-inline-block"
-            />
-            <b-input-group-append>
-              <b-button variant="outline-primary" @click="getData()">
-                <feather-icon icon="SearchIcon" />
+  <div>
+    <b-card title="Access Control">
+      <b-overlay
+        :show="loading"
+        spinner-variant="primary"
+        rounded="sm"
+      >
+      <div>
+        <!-- search input -->
+        <div class="custom-search d-flex justify-content-between">
+          <b-form-group>
+            <div class="d-flex align-items-center">
+              <b-button
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                variant="outline-primary"
+                @click="addModal()"
+              >
+                <feather-icon
+                  icon="PlusIcon"
+                  class="mr-50"
+                />
+                <span class="align-middle">Add</span>
               </b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </div>
-      </b-form-group>
-    </div>
-
-    <!-- table -->
-    <vue-good-table
-      :columns="columns"
-      :rows="rows"
-      :select-options="{
-        enabled: false,
-      }"
-      :pagination-options="{
-        enabled: true,
-        perPage:query.limit
-      }"
-      :isLoading="loading" 
-    >
-      <template slot="loadingContent">
-        <div class="d-flex justify-content-center mb-1">
-          <b-spinner variant="primary" label="Loading..." />
-        </div>
-      </template>
-      <template
-        slot="table-row"
-        slot-scope="props"
-      >
-        <span v-if="props.column.field === 'permissions'">
-          <b-row v-for="permission in props.row.permissions" :key="permission.id">
-            <span class="spacer" >
-              <b-badge variant="light-primary">
-                {{ permission.action | uppercase}}
-              </b-badge>
-              <b-badge variant="light-success">
-                {{ permission.subject | uppercase}}
-              </b-badge>
-            </span>
-          </b-row>
-        </span>
-        <!-- Column: Action -->
-        <span v-else-if="props.column.field === 'action'">
-          <div class="spacer">
-            <b-button
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              variant="outline-primary"
-              @click="editModal(props.row)"
-            >
-              <feather-icon
-                  icon="Edit2Icon"
-                  size="12"
-              />
-              Edit
-            </b-button>
-            <b-button
-              v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-              variant="outline-danger"
-              @click="deleteData(props.row)"
-            >
-              <feather-icon
-                  icon="TrashIcon"
-                  size="12"
-              />
-              Delete
-            </b-button>
-          </div>
-        </span>
-
-        <!-- Column: Common -->
-        <span v-else>
-          {{ props.formattedRow[props.column.field] }}
-        </span>
-      </template>
-
-      <!-- pagination -->
-      <template
-        slot="pagination-bottom"
-        slot-scope="props"
-      >
-        <div class="d-flex justify-content-between flex-wrap">
-          <div class="d-flex align-items-center mb-0 mt-1">
-            <span class="text-nowrap ">
-              Showing 1 to
-            </span>
-            <b-form-select
-              v-model="query.limit"
-              :options="['5','15','30']"
-              class="mx-1"
-              @input="(value)=>props.perPageChanged({currentPerPage:value})"
-            />
-            <span class="text-nowrap"> of {{ props.total }} entries </span>
-          </div>
-          <div>
-            <b-pagination
-              :value="1"
-              :total-rows="props.total"
-              :per-page="query.limit"
-              first-number
-              last-number
-              align="right"
-              prev-class="prev-item"
-              next-class="next-item"
-              class="mt-1 mb-0"
-              @input="(value)=>props.pageChanged({currentPage:value})"
-            >
-              <template #prev-text>
-                <feather-icon
-                  icon="ChevronLeftIcon"
-                  size="18"
+            </div>
+          </b-form-group>
+          <b-form-group>
+            <div class="d-flex align-items-center">
+              <b-input-group>
+                <b-form-input
+                  v-model="query.keyword"
+                  placeholder="Search"
+                  type="text"
+                  class="d-inline-block"
                 />
-              </template>
-              <template #next-text>
-                <feather-icon
-                  icon="ChevronRightIcon"
-                  size="18"
-                />
-              </template>
-            </b-pagination>
-          </div>
+                <b-input-group-append>
+                  <b-button variant="outline-primary" @click="getData()">
+                    <feather-icon icon="SearchIcon" />
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </div>
+          </b-form-group>
         </div>
-      </template>
-    </vue-good-table>
+
+        <!-- table -->
+        <vue-good-table
+          :columns="columns"
+          :rows="rows"
+          :select-options="{
+            enabled: false,
+          }"
+          :pagination-options="{
+            enabled: true,
+            perPage:query.limit
+          }"
+        >
+          <template
+            slot="table-row"
+            slot-scope="props"
+          >
+            <span v-if="props.column.field === 'permissions'">
+              <b-row v-for="permission in props.row.permissions" :key="permission.id">
+                <span class="spacer" >
+                  <b-badge variant="light-primary">
+                    {{ permission.action | uppercase}}
+                  </b-badge>
+                  <b-badge variant="light-success">
+                    {{ permission.subject | uppercase}}
+                  </b-badge>
+                </span>
+              </b-row>
+            </span>
+            <!-- Column: Action -->
+            <span v-else-if="props.column.field === 'action'">
+              <div class="spacer">
+                <b-button
+                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                  variant="outline-primary"
+                  @click="editModal(props.row)"
+                >
+                  <feather-icon
+                      icon="Edit2Icon"
+                      size="12"
+                  />
+                  Edit
+                </b-button>
+                <b-button
+                  v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+                  variant="outline-danger"
+                  @click="deleteData(props.row)"
+                >
+                  <feather-icon
+                      icon="TrashIcon"
+                      size="12"
+                  />
+                  Delete
+                </b-button>
+              </div>
+            </span>
+
+            <!-- Column: Common -->
+            <span v-else>
+              {{ props.formattedRow[props.column.field] }}
+            </span>
+          </template>
+
+          <!-- pagination -->
+          <template
+            slot="pagination-bottom"
+            slot-scope="props"
+          >
+            <div class="d-flex justify-content-between flex-wrap">
+              <div class="d-flex align-items-center mb-0 mt-1">
+                <span class="text-nowrap ">
+                  Showing 1 to
+                </span>
+                <b-form-select
+                  v-model="query.limit"
+                  :options="['5','15','30']"
+                  class="mx-1"
+                  @input="(value)=>props.perPageChanged({currentPerPage:value})"
+                />
+                <span class="text-nowrap"> of {{ props.total }} entries </span>
+              </div>
+              <div>
+                <b-pagination
+                  :value="1"
+                  :total-rows="props.total"
+                  :per-page="query.limit"
+                  first-number
+                  last-number
+                  align="right"
+                  prev-class="prev-item"
+                  next-class="next-item"
+                  class="mt-1 mb-0"
+                  @input="(value)=>props.pageChanged({currentPage:value})"
+                >
+                  <template #prev-text>
+                    <feather-icon
+                      icon="ChevronLeftIcon"
+                      size="18"
+                    />
+                  </template>
+                  <template #next-text>
+                    <feather-icon
+                      icon="ChevronRightIcon"
+                      size="18"
+                    />
+                  </template>
+                </b-pagination>
+              </div>
+            </div>
+          </template>
+        </vue-good-table>
+      </div>
+      </b-overlay>
+    </b-card>
     <b-modal
       ref="modal-input"
       centered
@@ -181,12 +185,12 @@
         </b-form-group>
       </b-form>
     </b-modal>
-  </b-card>
+  </div>
 </template>
 
 <script>
 import {
-  BForm, BRow, BCol, BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
+  BOverlay, BForm, BRow, BCol, BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
@@ -196,6 +200,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 
 export default {
   components: {
+    BOverlay,
     ToastificationContent,
     VSelect,
     BForm,
@@ -257,12 +262,31 @@ export default {
       this.$http.get('/role',{ params: this.query }).then(res => { 
         this.rows = res.data.data;
         this.loading = false;
+      }).catch(err => {
+        if(err.response){
+          var errMsg = err.response.data.data;
+          if(errMsg){
+            return this.toastErrorMsg(errMsg);
+          }
+        }
+        return this.toastErrorMsg(err.message);
       });
     },
     getAvailablePermissions(){
       this.$http.get('/role/getAvailablePermissions').then(res => { 
         this.availablePermissions = res.data.data;
+      }).catch(err => {
+        if(err.response){
+          var errMsg = err.response.data.data;
+          if(errMsg){
+            return this.toastErrorMsg(errMsg);
+          }
+        }
+        return this.toastErrorMsg(err.message);
       });
+    },
+    initDefaultParams(){
+      this.params = JSON.parse(JSON.stringify(this.defaultParams));
     },
     toastErrorMsg(errMsg){
       if(typeof errMsg === 'object' && errMsg !== null){
@@ -303,9 +327,6 @@ export default {
           timeout: 6000,
         });
       }
-    },
-    initDefaultParams(){
-      this.params = JSON.parse(JSON.stringify(this.defaultParams));
     },
     addModal(){
       this.initDefaultParams();

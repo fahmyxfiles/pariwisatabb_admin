@@ -1,103 +1,108 @@
 <template>
   <div>
     <b-card title="Region">
-      <!-- search input -->
-      <div class="custom-search d-flex justify-content-between">
-        <b-form-group>
-          <div class="d-flex align-items-center">
-            <b-button
-              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-              variant="outline-primary"
-              @click="addModal()"
-            >
-              <feather-icon
-                icon="PlusIcon"
-                class="mr-50"
-              />
-              <span class="align-middle">Add</span>
-            </b-button>
-          </div>
-        </b-form-group>
-        <b-form-group>
-          <div class="d-flex align-items-center">
-            <b-input-group>
-              <b-form-input
-                v-model="query.keyword"
-                placeholder="Search"
-                type="text"
-                class="d-inline-block"
-              />
-              <b-input-group-append>
-                <b-button variant="outline-primary" @click="getData()">
-                  <feather-icon icon="SearchIcon" />
+      <b-overlay
+        :show="loading"
+        spinner-variant="primary"
+        rounded="sm"
+      >
+        <div>
+          <!-- search input -->
+          <div class="custom-search d-flex justify-content-between">
+            <b-form-group>
+              <div class="d-flex align-items-center">
+                <b-button
+                  v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                  variant="outline-primary"
+                  @click="addModal()"
+                >
+                  <feather-icon
+                    icon="PlusIcon"
+                    class="mr-50"
+                  />
+                  <span class="align-middle">Add</span>
                 </b-button>
-              </b-input-group-append>
-            </b-input-group>
+              </div>
+            </b-form-group>
+            <b-form-group>
+              <div class="d-flex align-items-center">
+                <b-input-group>
+                  <b-form-input
+                    v-model="query.keyword"
+                    placeholder="Search"
+                    type="text"
+                    class="d-inline-block"
+                  />
+                  <b-input-group-append>
+                    <b-button variant="outline-primary" @click="getData()">
+                      <feather-icon icon="SearchIcon" />
+                    </b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </div>
+            </b-form-group>
           </div>
-        </b-form-group>
-      </div>
-      <div class="d-flex justify-content-center mb-1" v-if="loading">
-        <b-spinner variant="primary" label="Loading..." />
-      </div>
-    <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
-    <b-row v-show="!loading" v-for="(row, index) in chunkedData" :key="index">
-      <b-col cols="12">
-        <b-card-group
-          deck
-          class="mb-0"
-        >
+          <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
+          <b-row v-for="(row, index) in chunkedData" :key="index">
+            <b-col cols="12">
+              <b-card-group
+                deck
+                class="mb-0"
+              >
 
-          <!-- card 1 -->
-          <b-card
-            v-for="regency in row"
-            :key="regency.id"
-            :img-src="imagePath + regency.image_filename"
-            :img-alt="regency.name"
-            img-top
-            no-body
-          >
-            <b-card-body>
-              <b-card-title>{{ regency.name }}</b-card-title>
-              <b-card-text>
-                {{ regency.description }}
-              </b-card-text>
-            </b-card-body>
-            <b-card-footer>
-              <b-button
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                variant="outline-primary"
-                class="btn-icon rounded-circle"
-              >
-                <feather-icon icon="Edit2Icon" />
-              </b-button>
-              <b-button
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                variant="outline-danger"
-                class="btn-icon rounded-circle"
-                style="margin-left: 5px;"
-                @click="deleteData(regency)"
-              >
-                <feather-icon icon="TrashIcon" />
-              </b-button>
-                <small class="text-muted ml-1">Last updated {{ regency.updated_at | moment("from", "now") }}</small>
-            </b-card-footer>
-          </b-card>
-          <b-card
-            v-for="_idx in 3-row.length"
-            :key="_idx"
-            no-body
-          >
-          </b-card>
-        </b-card-group>
-      </b-col>
-    </b-row>
+                <!-- card 1 -->
+                <b-card
+                  v-for="regency in row"
+                  :key="regency.id"
+                  :img-src="imagePath + regency.image_filename"
+                  :img-alt="regency.name"
+                  img-top
+                  no-body
+                >
+                  <b-card-body>
+                    <b-card-title>{{ regency.name }}</b-card-title>
+                    <b-card-text>
+                      {{ regency.description }}
+                    </b-card-text>
+                  </b-card-body>
+                  <b-card-footer>
+                    <b-button
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-primary"
+                      class="btn-icon rounded-circle"
+                    >
+                      <feather-icon icon="Edit2Icon" />
+                    </b-button>
+                    <b-button
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-danger"
+                      class="btn-icon rounded-circle"
+                      style="margin-left: 5px;"
+                      @click="deleteData(regency)"
+                    >
+                      <feather-icon icon="TrashIcon" />
+                    </b-button>
+                      <small class="text-muted ml-1">Last updated {{ regency.updated_at | moment("from", "now") }}</small>
+                  </b-card-footer>
+                </b-card>
+                <b-card
+                  v-for="_idx in 3-row.length"
+                  :key="_idx"
+                  no-body
+                >
+                </b-card>
+              </b-card-group>
+            </b-col>
+          </b-row>
+        </div>
+      </b-overlay>
     </b-card>
   </div>
 </template>
 
 <script>
 import {
-  BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
+  BOverlay, BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import _ from 'lodash'
@@ -105,6 +110,7 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 
 export default {
   components: {
+    BOverlay,
     ToastificationContent,
     BAlert,
     BSpinner, 
@@ -176,13 +182,29 @@ export default {
           });
         }
         this.$nextTick(() => {
-            this.loading = false;
+          this.loading = false;
         });
+      }).catch(err => {
+        if(err.response){
+          var errMsg = err.response.data.data;
+          if(errMsg){
+            return this.toastErrorMsg(errMsg);
+          }
+        }
+        return this.toastErrorMsg(err.message);
       });
     },
     getAvailableProvinces(){
       this.$http.get('/regency/getAvailableProvinces').then(res => { 
         this.availableProvinces = res.data.data;
+      }).catch(err => {
+        if(err.response){
+          var errMsg = err.response.data.data;
+          if(errMsg){
+            return this.toastErrorMsg(errMsg);
+          }
+        }
+        return this.toastErrorMsg(err.message);
       });
     },
     initDefaultParams(){

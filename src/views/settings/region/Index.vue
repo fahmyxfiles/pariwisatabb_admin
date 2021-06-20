@@ -42,6 +42,11 @@
               </div>
             </b-form-group>
           </div>
+          <div class="text-center" v-if="data.length == 0">
+            <p class="mb-2 pb-75">
+              No data to show
+            </p>
+          </div>
           <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
           <b-row v-for="(row, index) in chunkedData" :key="index">
             <b-col cols="12">
@@ -97,19 +102,70 @@
         </div>
       </b-overlay>
     </b-card>
+    <b-modal
+      ref="modal-input"
+      centered
+      :title="modalTitle"
+      :no-close-on-backdrop="true"
+    >
+      <b-form>
+        <b-form-group>
+          <label for="provinces">Provinces</label>
+          <v-select
+            v-model="params.province_id"
+            :options="availableProvinces" 
+            :reduce="provinces => provinces.id" 
+            label="name"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="regionName">Region Name :</label>
+          <b-form-input
+            id="regionName"
+            type="text"
+            placeholder="Region Name"
+            v-model="params.name"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="description">Description :</label>
+          <b-form-textarea
+            id="description"
+            placeholder="Description"
+            rows="3"
+            no-resize
+            v-model="params.description"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="timezone">Timezone :</label>
+          <b-form-radio-group
+            v-model="params.timezone_offset"
+            :options="timezoneOptions"
+            class="demo-inline-spacing"
+            name="radio-validation"
+          >
+          </b-form-radio-group>
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import {
-  BOverlay, BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
+  BFormTextarea, BFormRadioGroup, BOverlay, BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import _ from 'lodash'
+import VSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
+    BFormTextarea,
+    VSelect,
+    BFormRadioGroup,
     BOverlay,
     ToastificationContent,
     BAlert,
@@ -152,6 +208,11 @@ export default {
         'image' : null,
         'timezone_offset' : null,
       },
+      timezoneOptions: [
+        { text: 'GMT+7', value: 25200 },
+        { text: 'GMT+8', value: 28800 },
+        { text: 'GMT+9', value: 32400 },
+      ],
       loading: true,
       data: [],
       // $imagepath adalah variabel global bawaan vue yang di definisikan di main.js, berfungsi untuk mendifinisikan lokasi backend laravel untuk import img dari backend laravel
@@ -173,7 +234,7 @@ export default {
               props: {
                 title: 'Error',
                 icon: 'AlertCircleIcon',
-                text: "No Regency found",
+                text: "No data found with specified keyword",
                 variant: 'danger',
               },
             },
@@ -217,7 +278,6 @@ export default {
         const keys = Object.keys(errMsg);
         // iterate over object
         keys.forEach((key, index) => {
-            console.log(`${key}: ${errMsg[key]}`);
             var errArray = errMsg[key];
             errArray.forEach(_text => {
               this.$toast({
@@ -253,7 +313,20 @@ export default {
       }
     },
     addModal(){
-
+      this.initDefaultParams();
+      this.modalTitle = "Add Region";
+      this.$refs['modal-input'].onOk = () => this.addData(this.params);
+      this.$refs['modal-input'].show();
+    },
+    addData(params){
+      this.$http.post('/region', params)
+      .then(res => {
+        this.$refs['modal-input'].hide();
+        this.getData();
+      }).catch(err => {
+        var errMsg = err.response.data.data;
+        this.toastErrorMsg(errMsg);
+      });
     },
     deleteData(item) {
       this.$swal({

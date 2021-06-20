@@ -194,7 +194,6 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
-import store from '@/store/index'
 import VSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -271,7 +270,7 @@ export default {
               props: {
                 title: 'Error',
                 icon: 'AlertCircleIcon',
-                text: "No data found",
+                text: "No data found with specified keyword",
                 variant: 'danger',
               },
             },
@@ -315,7 +314,6 @@ export default {
         const keys = Object.keys(errMsg);
         // iterate over object
         keys.forEach((key, index) => {
-            console.log(`${key}: ${errMsg[key]}`);
             var errArray = errMsg[key];
             errArray.forEach(_text => {
               this.$toast({

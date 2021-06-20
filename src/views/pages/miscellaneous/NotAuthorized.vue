@@ -2,9 +2,6 @@
   <div class="misc-wrapper">
     <b-link class="brand-logo">
       <vuexy-logo />
-      <h2 class="brand-text text-primary ml-1">
-        Vuexy
-      </h2>
     </b-link>
 
     <div class="misc-inner p-2 p-sm-3">
@@ -13,7 +10,7 @@
           You are not authorized! 🔐
         </h2>
         <p class="mb-2">
-          You don’t have permission to access this page. Go Home!!
+          You don’t have permission to access this page.
         </p>
         <b-button
           variant="primary"

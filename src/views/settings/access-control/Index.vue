@@ -40,7 +40,6 @@
     <vue-good-table
       :columns="columns"
       :rows="rows"
-      :rtl="direction"
       :select-options="{
         enabled: false,
       }"
@@ -235,7 +234,6 @@ export default {
         'permissions' : [],
       },
       loading: true,
-      dir: false,
       columns: [
         {
           label: 'Name',
@@ -384,18 +382,6 @@ export default {
     uppercase: function(v) {
       return v.toUpperCase();
     }
-  },
-  computed: {
-    direction() {
-      if (store.state.appConfig.isRTL) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.dir = true
-        return this.dir
-      }
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.dir = false
-      return this.dir
-    },
   },
   created() {
     this.initDefaultParams();

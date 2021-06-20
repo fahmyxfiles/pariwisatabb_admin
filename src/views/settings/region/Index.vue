@@ -75,6 +75,7 @@
                 variant="outline-danger"
                 class="btn-icon rounded-circle"
                 style="margin-left: 5px;"
+                @click="deleteData(regency)"
               >
                 <feather-icon icon="TrashIcon" />
               </b-button>
@@ -179,8 +180,79 @@ export default {
     initDefaultParams(){
       this.params = JSON.parse(JSON.stringify(this.defaultParams));
     },
+    toastErrorMsg(errMsg){
+      if(typeof errMsg === 'object' && errMsg !== null){
+        const keys = Object.keys(errMsg);
+        // iterate over object
+        keys.forEach((key, index) => {
+            console.log(`${key}: ${errMsg[key]}`);
+            var errArray = errMsg[key];
+            errArray.forEach(_text => {
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Error',
+                  icon: 'AlertCircleIcon',
+                  text: _text,
+                  variant: 'danger',
+                },
+              },
+              {
+                position: 'bottom-center',
+                timeout: 6000,
+              });
+            });
+        });
+      }
+      else {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Error',
+            icon: 'AlertCircleIcon',
+            text: errMsg,
+            variant: 'danger',
+          },
+        },
+        {
+          position: 'bottom-center',
+          timeout: 6000,
+        });
+      }
+    },
     addModal(){
 
+    },
+    deleteData(item) {
+      this.$swal({
+        title: 'Are you sure?',
+        text: "Regency " + item.name + " will be removed. All user with this Regency need to be updated with new Regency.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      }).then(result => {
+        if (result.value) {
+          this.$http.delete('/regency/' + item.id).then(res => {
+            this.$swal({
+              icon: 'success',
+              title: 'Deleted!',
+              text: 'Regency has been deleted.',
+              customClass: {
+                confirmButton: 'btn btn-success',
+              },
+            });
+            this.getData();
+          }).catch(err => {
+            var errMsg = err.response.data.data;
+            this.toastErrorMsg(errMsg);
+          });
+        }
+      })
     },
   },
   filters: {

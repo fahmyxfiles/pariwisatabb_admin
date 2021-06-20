@@ -62,7 +62,22 @@
               </b-card-text>
             </b-card-body>
             <b-card-footer>
-              <small class="text-muted">Last updated 3 mins ago</small>
+              <b-button
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                variant="outline-primary"
+                class="btn-icon rounded-circle"
+              >
+                <feather-icon icon="Edit2Icon" />
+              </b-button>
+              <b-button
+                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                variant="outline-danger"
+                class="btn-icon rounded-circle"
+                style="margin-left: 5px;"
+              >
+                <feather-icon icon="TrashIcon" />
+              </b-button>
+                <small class="text-muted ml-1">Last updated 3 mins ago</small>
             </b-card-footer>
           </b-card>
         </b-card-group>

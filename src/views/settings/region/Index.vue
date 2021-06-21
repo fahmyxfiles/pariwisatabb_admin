@@ -248,6 +248,7 @@ export default {
           this.data = _data;
         }
         else {
+          // jika datanya kosong dan ada keyword yang di masukkan/mengetik maka jalankan toast
           if(this.query.keyword){
             this.$toast({
               component: ToastificationContent,

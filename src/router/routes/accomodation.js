@@ -2,7 +2,7 @@ export default [{
         path: '/hotel/list',
         name: 'hotel-list',
         component: () =>
-            import ('@/views/apps/calendar/Calendar.vue'),
+            import ('@/views/accomodation/hotel/Index.vue'),
     },
     {
         path: '/hotel/facitilies',

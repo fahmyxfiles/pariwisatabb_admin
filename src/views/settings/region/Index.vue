@@ -65,7 +65,7 @@
                   no-body
                 >
                   <b-card-body>
-                    <small class="text-muted">{{ availableProvinces.find(x => x.id === regency.province_id).name }}</small>
+                    <small class="text-muted">{{ getProvince(regency.province_id) }}</small>
                     <b-card-title style="margin-top: 5px;">{{ regency.name }}</b-card-title>
                     <b-card-text>
                       {{ regency.description }}
@@ -289,6 +289,13 @@ export default {
         }
         return this.toastErrorMsg(err.message);
       });
+    },
+    getProvince(id){
+      var prov = this.availableProvinces.find(x => x.id === id);
+      if(prov){
+        return prov.name;
+      }
+      return '';
     },
     initDefaultParams(){
       this.params = JSON.parse(JSON.stringify(this.defaultParams));

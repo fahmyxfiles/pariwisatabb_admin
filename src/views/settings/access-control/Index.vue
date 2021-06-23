@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Access Control">
+    <b-card>
       <b-overlay
         :show="loading"
         spinner-variant="primary"

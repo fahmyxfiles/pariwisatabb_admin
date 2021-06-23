@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Region">
+    <b-card>
       <b-overlay
         :show="loading"
         spinner-variant="primary"
@@ -350,7 +350,9 @@ export default {
       });
     },
     addData(params){
-      params.image = this.dropzoneSelectedFile.dataURL;
+      if(this.dropzoneSelectedFile){
+        params.image = this.dropzoneSelectedFile.dataURL;
+      }
       this.$http.post('/regency', params)
       .then(res => {
         this.$refs['modal-input'].hide();

@@ -1,11 +1,7 @@
 <template>
   <div>
     <b-card>
-      <b-overlay
-        :show="loading"
-        spinner-variant="primary"
-        rounded="sm"
-      >
+      <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
         <div>
           <!-- search input -->
           <div class="custom-search d-flex justify-content-between">
@@ -16,10 +12,7 @@
                   variant="outline-primary"
                   @click="addModal()"
                 >
-                  <feather-icon
-                    icon="PlusIcon"
-                    class="mr-50"
-                  />
+                  <feather-icon icon="PlusIcon" class="mr-50" />
                   <span class="align-middle">Add</span>
                 </b-button>
               </div>
@@ -50,11 +43,7 @@
           <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
           <b-row v-for="(row, index) in chunkedData" :key="index">
             <b-col cols="12">
-              <b-card-group
-                deck
-                class="mb-0"
-              >
-
+              <b-card-group class="mb-0">
                 <!-- card 1 -->
                 <b-card
                   v-for="regency in row"
@@ -65,8 +54,12 @@
                   no-body
                 >
                   <b-card-body>
-                    <small class="text-muted">{{ getProvince(regency.province_id) }}</small>
-                    <b-card-title style="margin-top: 5px;">{{ regency.name }}</b-card-title>
+                    <small class="text-muted">{{
+                      getProvince(regency.province_id)
+                    }}</small>
+                    <b-card-title style="margin-top: 5px;">{{
+                      regency.name
+                    }}</b-card-title>
                     <b-card-text>
                       {{ regency.description }}
                     </b-card-text>
@@ -89,14 +82,13 @@
                     >
                       <feather-icon icon="TrashIcon" />
                     </b-button>
-                      <small class="text-muted ml-1">Last updated {{ regency.updated_at | moment("from", "now") }}</small>
+                    <small class="text-muted ml-1"
+                      >Last updated
+                      {{ regency.updated_at | moment("from", "now") }}</small
+                    >
                   </b-card-footer>
                 </b-card>
-                <b-card
-                  v-for="_idx in 3-row.length"
-                  :key="_idx"
-                  no-body
-                >
+                <b-card v-for="_idx in 3 - row.length" :key="_idx" no-body>
                 </b-card>
               </b-card-group>
             </b-col>
@@ -115,8 +107,8 @@
           <label for="provinces">Provinces</label>
           <v-select
             v-model="params.province_id"
-            :options="availableProvinces" 
-            :reduce="provinces => provinces.id" 
+            :options="availableProvinces"
+            :reduce="(provinces) => provinces.id"
             label="name"
           />
         </b-form-group>
@@ -150,7 +142,12 @@
         </b-form-group>
         <b-form-group>
           <label for="image">Image (Aspect Ratio 16:9):</label>
-          <vue-dropzone ref="dropzone" id="dropzone" :options="dropzoneOptions" @vdropzone-file-added="dropzone_added"></vue-dropzone>
+          <vue-dropzone
+            ref="dropzone"
+            id="dropzone"
+            :options="dropzoneOptions"
+            @vdropzone-file-added="dropzone_added"
+          ></vue-dropzone>
         </b-form-group>
       </b-form>
     </b-modal>
@@ -159,14 +156,35 @@
 
 <script>
 import {
-  BForm, BFormTextarea, BFormRadioGroup, BOverlay, BAlert, BSpinner, BFormInput, BInputGroupAppend, BFormGroup, BInputGroup, BCardGroup, BCardFooter, BCard, BCardText, BButton, BRow, BCol, BImg, BCardBody, BCardTitle, BCardSubTitle, BLink,
-} from 'bootstrap-vue'
-import Ripple from 'vue-ripple-directive'
-import _ from 'lodash'
-import VSelect from 'vue-select'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import vueDropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+  BForm,
+  BFormTextarea,
+  BFormRadioGroup,
+  BOverlay,
+  BAlert,
+  BSpinner,
+  BFormInput,
+  BInputGroupAppend,
+  BFormGroup,
+  BInputGroup,
+  BCardGroup,
+  BCardFooter,
+  BCard,
+  BCardText,
+  BButton,
+  BRow,
+  BCol,
+  BImg,
+  BCardBody,
+  BCardTitle,
+  BCardSubTitle,
+  BLink,
+} from "bootstrap-vue";
+import Ripple from "vue-ripple-directive";
+import _ from "lodash";
+import VSelect from "vue-select";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import vueDropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
 
 export default {
   components: {
@@ -177,14 +195,14 @@ export default {
     BOverlay,
     ToastificationContent,
     BAlert,
-    BSpinner, 
+    BSpinner,
     BForm,
-    BFormInput, 
-    BInputGroupAppend, 
-    BFormGroup, 
-    BInputGroup, 
-    BCardGroup, 
-    BCardFooter, 
+    BFormInput,
+    BInputGroupAppend,
+    BFormGroup,
+    BInputGroup,
+    BCardGroup,
+    BCardFooter,
     BCard,
     BCardText,
     BButton,
@@ -203,7 +221,7 @@ export default {
   data() {
     return {
       dropzoneOptions: {
-        url: 'http://localhost',
+        url: "http://localhost",
         maxFilesize: 2.0,
         maxFiles: 1,
         autoProcessQueue: false,
@@ -213,166 +231,179 @@ export default {
         acceptedFiles: "image/*",
       },
       dropzoneSelectedFile: null,
-      query : {
-        keyword: '',
+      query: {
+        keyword: "",
         limit: 15,
         page: 1,
       },
-      modalTitle: '',
+      modalTitle: "",
       availableProvinces: [],
       params: null,
       defaultParams: {
-        'name' : '',
-        'province_id' : 0,
-        'description' : '',
-        'image' : null,
-        'timezone_offset' : null,
+        name: "",
+        province_id: 0,
+        description: "",
+        image: null,
+        timezone_offset: null,
       },
       timezoneOptions: [
-        { text: 'GMT+7', value: 25200 },
-        { text: 'GMT+8', value: 28800 },
-        { text: 'GMT+9', value: 32400 },
+        { text: "GMT+7", value: 25200 },
+        { text: "GMT+8", value: 28800 },
+        { text: "GMT+9", value: 32400 },
       ],
       loading: true,
       data: [],
       // $imagepath adalah variabel global bawaan vue yang di definisikan di main.js, berfungsi untuk mendifinisikan lokasi backend laravel untuk import img dari backend laravel
       imagePath: this.$imagePath,
-    }
+    };
   },
   methods: {
-    getData(){
+    getData() {
       this.loading = true;
-      this.$http.get('/regency', { params: this.query }).then(res => { 
-        var _data = res.data.data;
-        if(_data.length > 0){
-          this.data = _data;
-        }
-        else {
-          // jika datanya kosong dan ada keyword yang di masukkan/mengetik maka jalankan toast
-          if(this.query.keyword){
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: 'Error',
-                icon: 'AlertCircleIcon',
-                text: "No data found with specified keyword",
-                variant: 'danger',
-              },
-            },
-            {
-              position: 'top-center',
-              timeout: 6000,
-            });
+      this.$http
+        .get("/regency", { params: this.query })
+        .then((res) => {
+          var _data = res.data.data;
+          if (_data.length > 0) {
+            this.data = _data;
+          } else {
+            // jika datanya kosong dan ada keyword yang di masukkan/mengetik maka jalankan toast
+            if (this.query.keyword) {
+              this.$toast(
+                {
+                  component: ToastificationContent,
+                  props: {
+                    title: "Error",
+                    icon: "AlertCircleIcon",
+                    text: "No data found with specified keyword",
+                    variant: "danger",
+                  },
+                },
+                {
+                  position: "top-center",
+                  timeout: 6000,
+                }
+              );
+            }
           }
-        }
-        this.$nextTick(() => {
-          this.loading = false;
+          this.$nextTick(() => {
+            this.loading = false;
+          });
+        })
+        .catch((err) => {
+          if (err.response) {
+            var errMsg = err.response.data.data;
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg);
+            }
+          }
+          return this.toastErrorMsg(err.message);
         });
-      }).catch(err => {
-        if(err.response){
-          var errMsg = err.response.data.data;
-          if(errMsg){
-            return this.toastErrorMsg(errMsg);
-          }
-        }
-        return this.toastErrorMsg(err.message);
-      });
     },
-    getAvailableProvinces(){
-      this.$http.get('/regency/getAvailableProvinces').then(res => { 
-        this.availableProvinces = res.data.data;
-      }).catch(err => {
-        if(err.response){
-          var errMsg = err.response.data.data;
-          if(errMsg){
-            return this.toastErrorMsg(errMsg);
+    getAvailableProvinces() {
+      this.$http
+        .get("/regency/getAvailableProvinces")
+        .then((res) => {
+          this.availableProvinces = res.data.data;
+        })
+        .catch((err) => {
+          if (err.response) {
+            var errMsg = err.response.data.data;
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg);
+            }
           }
-        }
-        return this.toastErrorMsg(err.message);
-      });
+          return this.toastErrorMsg(err.message);
+        });
     },
-    getProvince(id){
-      var prov = this.availableProvinces.find(x => x.id === id);
-      if(prov){
+    getProvince(id) {
+      var prov = this.availableProvinces.find((x) => x.id === id);
+      if (prov) {
         return prov.name;
       }
-      return '';
+      return "";
     },
-    initDefaultParams(){
+    initDefaultParams() {
       this.params = JSON.parse(JSON.stringify(this.defaultParams));
     },
-    toastErrorMsg(errMsg){
-      if(typeof errMsg === 'object' && errMsg !== null){
+    toastErrorMsg(errMsg) {
+      if (typeof errMsg === "object" && errMsg !== null) {
         const keys = Object.keys(errMsg);
         // iterate over object
         keys.forEach((key, index) => {
-            var errArray = errMsg[key];
-            errArray.forEach(_text => {
-              this.$toast({
+          var errArray = errMsg[key];
+          errArray.forEach((_text) => {
+            this.$toast(
+              {
                 component: ToastificationContent,
                 props: {
-                  title: 'Error',
-                  icon: 'AlertCircleIcon',
+                  title: "Error",
+                  icon: "AlertCircleIcon",
                   text: _text,
-                  variant: 'danger',
+                  variant: "danger",
                 },
               },
               {
-                position: 'top-center',
+                position: "top-center",
                 timeout: 6000,
-              });
-            });
+              }
+            );
+          });
         });
-      }
-      else {
-        this.$toast({
-          component: ToastificationContent,
-          props: {
-            title: 'Error',
-            icon: 'AlertCircleIcon',
-            text: errMsg,
-            variant: 'danger',
+      } else {
+        this.$toast(
+          {
+            component: ToastificationContent,
+            props: {
+              title: "Error",
+              icon: "AlertCircleIcon",
+              text: errMsg,
+              variant: "danger",
+            },
           },
-        },
-        {
-          position: 'top-center',
-          timeout: 6000,
-        });
+          {
+            position: "top-center",
+            timeout: 6000,
+          }
+        );
       }
     },
-    addModal(){
+    addModal() {
       this.initDefaultParams();
       this.modalTitle = "Add Region";
-      this.$refs['modal-input'].onOk = () => this.addData(this.params);
-      this.$refs['modal-input'].show();
+      this.$refs["modal-input"].onOk = () => this.addData(this.params);
+      this.$refs["modal-input"].show();
       this.$nextTick(() => {
         this.$refs.dropzone.removeAllFiles();
       });
     },
-    addData(params){
-      if(this.dropzoneSelectedFile){
+    addData(params) {
+      if (this.dropzoneSelectedFile) {
         params.image = this.dropzoneSelectedFile.dataURL;
       }
-      this.$http.post('/regency', params)
-      .then(res => {
-        this.$refs['modal-input'].hide();
-        this.getData();
-      }).catch(err => {
-        var errMsg = err.response.data.data;
-        this.toastErrorMsg(errMsg);
-      });
+      this.$http
+        .post("/regency", params)
+        .then((res) => {
+          this.$refs["modal-input"].hide();
+          this.getData();
+        })
+        .catch((err) => {
+          var errMsg = err.response.data.data;
+          this.toastErrorMsg(errMsg);
+        });
     },
-    editModal(item){
+    editModal(item) {
       this.initDefaultParams();
       this.modalTitle = "Edit Region : " + item.name;
       this.params.province_id = item.province_id;
       this.params.name = item.name;
       this.params.description = item.description;
       this.params.timezone_offset = item.timezone_offset;
-      this.$refs['modal-input'].onOk = () => this.editData(item.id, this.params);
-      this.$refs['modal-input'].show();
+      this.$refs["modal-input"].onOk = () =>
+        this.editData(item.id, this.params);
+      this.$refs["modal-input"].show();
       this.$nextTick(() => {
-        var fileExt = item.image_filename.split('.').pop();
+        var fileExt = item.image_filename.split(".").pop();
         var file = { size: 1, type: "image/" + fileExt };
         var url = this.imagePath + item.image_filename;
         this.$refs.dropzone.removeAllFiles();
@@ -380,78 +411,85 @@ export default {
         $(".dz-message").remove();
       });
     },
-    editData(id, params){
+    editData(id, params) {
       params.image = this.dropzoneSelectedFile.dataURL;
       params["_method"] = "PUT";
-      this.$http.post('/regency/' + id, params)
-      .then(res => {
-        this.$refs['modal-input'].hide();
-        this.getData();
-      }).catch(err => {
-        var errMsg = err.response.data.data;
-        this.toastErrorMsg(errMsg);
-      });
+      this.$http
+        .post("/regency/" + id, params)
+        .then((res) => {
+          this.$refs["modal-input"].hide();
+          this.getData();
+        })
+        .catch((err) => {
+          var errMsg = err.response.data.data;
+          this.toastErrorMsg(errMsg);
+        });
     },
     deleteData(item) {
       this.$swal({
-        title: 'Are you sure?',
-        text: "Regency " + item.name + " will be removed. All user with this Regency need to be updated with new Regency.",
-        icon: 'warning',
+        title: "Are you sure?",
+        text:
+          "Regency " +
+          item.name +
+          " will be removed. All user with this Regency need to be updated with new Regency.",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes',
+        confirmButtonText: "Yes",
         customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1',
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-outline-danger ml-1",
         },
         buttonsStyling: false,
-      }).then(result => {
+      }).then((result) => {
         if (result.value) {
-          this.$http.delete('/regency/' + item.id).then(res => {
-            this.$swal({
-              icon: 'success',
-              title: 'Deleted!',
-              text: 'Regency has been deleted.',
-              customClass: {
-                confirmButton: 'btn btn-success',
-              },
+          this.$http
+            .delete("/regency/" + item.id)
+            .then((res) => {
+              this.$swal({
+                icon: "success",
+                title: "Deleted!",
+                text: "Regency has been deleted.",
+                customClass: {
+                  confirmButton: "btn btn-success",
+                },
+              });
+              this.getData();
+            })
+            .catch((err) => {
+              var errMsg = err.response.data.data;
+              this.toastErrorMsg(errMsg);
             });
-            this.getData();
-          }).catch(err => {
-            var errMsg = err.response.data.data;
-            this.toastErrorMsg(errMsg);
-          });
         }
-      })
+      });
     },
     dropzone_added(file) {
       if (this.dropzoneSelectedFile !== null) {
-        this.$refs.dropzone.removeFile(this.dropzoneSelectedFile) 
+        this.$refs.dropzone.removeFile(this.dropzoneSelectedFile);
       }
       this.dropzoneSelectedFile = file;
-    } 
+    },
   },
   filters: {
     uppercase: function(v) {
       return v.toUpperCase();
-    }
+    },
   },
   computed: {
     // chunked berfungsi seperti slice untuk memilah data, this.data yaitu data yang di ambil dari API, kemudian angkanya di set sesuai kebutuhan (contoh card di view region)
     chunkedData() {
-      return _.chunk(this.data, 3)
+      return _.chunk(this.data, 3);
     },
   },
   // created adalah fungsi bawaan dari vue yang berfungsi saat halaman di load maka fungsi ini yang akan pertama kali di panggil
-  created(){
+  created() {
     this.initDefaultParams();
     this.getData();
     this.getAvailableProvinces();
   },
-
-}
+};
 </script>
-<style lang="scss" >
-@import '@core/scss/vue/libs/vue-good-table.scss';
+<style lang="scss">
+@import "@core/scss/vue/libs/vue-good-table.scss";
 .spacer {
   display: flex;
   flex-wrap: wrap;

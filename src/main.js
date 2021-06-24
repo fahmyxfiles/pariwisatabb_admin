@@ -56,7 +56,7 @@ Vue.config.productionTip = false
 window.jQuery = jQuery
 window.$ = jQuery
 
-Vue.prototype.$imagePath = 'http://127.0.0.1:8000/'
+Vue.prototype.$imagePath = 'http://server.mymoments.web.id:8000/'
 
 new Vue({
   router,

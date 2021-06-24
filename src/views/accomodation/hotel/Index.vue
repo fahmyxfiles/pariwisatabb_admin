@@ -48,7 +48,7 @@
                   <b-card
                     v-for="(hotel, hotelIndex) in row"
                     :key="hotelIndex"
-                    :img-src="require('@/assets/images/slider/03.jpg')"
+                    :img-src="imagePath + getMainImage(hotel.images)"
                     :img-alt="hotel.name"
                     img-top
                     no-body
@@ -83,10 +83,8 @@
 <script>
 import {
   BFormTextarea,
-  VSelect,
   BFormRadioGroup,
   BOverlay,
-  ToastificationContent,
   BAlert,
   BSpinner,
   BForm,
@@ -107,6 +105,8 @@ import {
   BCardBody,
   BCardTitle,
 } from "bootstrap-vue";
+import VSelect from "vue-select";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import Ripple from "vue-ripple-directive";
 import _ from "lodash";
 
@@ -161,6 +161,7 @@ export default {
         rooms: [],
         facilities: [],
       },
+      imagePath: this.$imagePath,
     };
   },
   computed: {
@@ -210,6 +211,13 @@ export default {
           }
           return this.toastErrorMsg(err.message);
         });
+    },
+    getMainImage(images) {
+      var image = images.find((x) => x.type === 'main');
+      if (image) {
+        return image.image_filename;
+      }
+      return "";
     },
     initDefaultParams() {
       this.params = JSON.parse(JSON.stringify(this.defaultParams));

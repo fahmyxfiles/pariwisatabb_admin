@@ -1,9 +1,9 @@
 <template>
   <div>
     <b-card>
-      <b-row>
-        <b-col cols="12">
-          <!-- search input -->
+      <!-- search input -->
+      <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
+        <div>
           <div class="custom-search d-flex justify-content-between">
             <b-form-group>
               <div class="d-flex align-items-center">
@@ -40,69 +40,42 @@
               No data to show
             </p>
           </div>
-        </b-col>
-        <b-col cols="12">
-          <b-card-group class="mb-0">
-            <!-- card 1 -->
-            <b-card
-              :img-src="require('@/assets/images/slider/01.jpg')"
-              img-alt="Card image cap"
-              img-top
-              no-body
-            >
-              <b-card-body>
-                <b-card-title>Zenith Hotel</b-card-title>
-                <b-card-text>
-                  Zenith Hotel baubau merupakan hotel yang sangat bagus di
-                  baubau saat ini, namun di kenal dengan harganya yang terlalu
-                  mahal (too expensive).
-                </b-card-text>
-              </b-card-body>
-              <b-card-footer>
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </b-card-footer>
-            </b-card>
-
-            <!-- card 2 -->
-            <b-card
-              :img-src="require('@/assets/images/slider/05.jpg')"
-              img-alt="Card image cap"
-              img-top
-              no-body
-            >
-              <b-card-body>
-                <b-card-title>Calista Hotel</b-card-title>
-                <b-card-text>
-                  Hotel ini adalah hotel yang berlokasi di blabla, dan saat ini
-                  menjadi hotel yang sangat hits karena biaya kamarnya yang
-                  tidak terlalu mahal.
-                </b-card-text>
-              </b-card-body>
-              <b-card-footer>
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </b-card-footer>
-            </b-card>
-
-            <!-- card 3 -->
-            <b-card
-              :img-src="require('@/assets/images/slider/03.jpg')"
-              img-alt="Card image cap"
-              img-top
-              no-body
-            >
-              <b-card-body>
-                <b-card-title>Galaxy Inn</b-card-title>
-                <b-card-text>
-                  Hotel .
-                </b-card-text>
-              </b-card-body>
-              <b-card-footer>
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </b-card-footer>
-            </b-card>
-          </b-card-group>
-        </b-col>
-      </b-row>
+          <div v-if="data.length > 0">
+            <b-row v-for="(row, rowIndex) in chunkedData" :key="rowIndex">
+              <b-col cols="12">
+                <b-card-group class="mb-0" v-if="data.length > 0">
+                  <!-- card 1 -->
+                  <b-card
+                    v-for="(hotel, hotelIndex) in row"
+                    :key="hotelIndex"
+                    :img-src="require('@/assets/images/slider/03.jpg')"
+                    :img-alt="hotel.name"
+                    img-top
+                    no-body
+                  >
+                    <b-card-body>
+                      <b-card-title>{{ hotel.name }}</b-card-title>
+                      <b-card-text
+                        >{{ hotel.address }},
+                        {{ hotel.regency.name }}</b-card-text
+                      >
+                    </b-card-body>
+                    <b-card-footer>
+                      <small class="text-muted ml-1"
+                        >Last updated
+                        {{ hotel.updated_at | moment("from", "now") }}
+                      </small>
+                    </b-card-footer>
+                  </b-card>
+                  <!-- mengisi sisa slot jika tidak ada, karena di set default 3 card -->
+                  <b-card v-for="_idx in 3 - row.length" :key="_idx" no-body>
+                  </b-card>
+                </b-card-group>
+              </b-col>
+            </b-row>
+          </div>
+        </div>
+      </b-overlay>
     </b-card>
   </div>
 </template>
@@ -135,6 +108,7 @@ import {
   BCardTitle,
 } from "bootstrap-vue";
 import Ripple from "vue-ripple-directive";
+import _ from "lodash";
 
 export default {
   components: {
@@ -173,6 +147,7 @@ export default {
         limit: 6,
         page: 1,
       },
+      loading: true,
       data: [],
       params: null,
       defaultParams: {
@@ -188,7 +163,11 @@ export default {
       },
     };
   },
-  computed: {},
+  computed: {
+    chunkedData() {
+      return _.chunk(this.data, 3);
+    },
+  },
   methods: {
     getData() {
       this.loading = true;

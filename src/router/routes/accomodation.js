@@ -5,6 +5,12 @@ export default [{
             import ('@/views/accomodation/hotel/Index.vue'),
     },
     {
+        path: '/hotel/view/:id',
+        name: 'hotel-view',
+        component: () =>
+            import ('@/views/accomodation/hotel/View.vue'),
+    },
+    {
         path: '/hotel/facitilies',
         name: 'hotel-facilities',
         component: () =>

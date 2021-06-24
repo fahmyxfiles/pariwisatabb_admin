@@ -134,6 +134,8 @@ import {
   BCardBody,
   BCardTitle,
 } from "bootstrap-vue";
+import Ripple from "vue-ripple-directive";
+
 export default {
   components: {
     BFormTextarea,
@@ -161,6 +163,9 @@ export default {
     BCardBody,
     BCardTitle,
   },
+  directives: {
+    Ripple,
+  },
   data() {
     return {
       query: {
@@ -169,6 +174,18 @@ export default {
         page: 1,
       },
       data: [],
+      params: null,
+      defaultParams: {
+        regency_id: 0,
+        name: "",
+        address: "",
+        postal_code: 0,
+        description: "",
+        regency: null,
+        images: [],
+        rooms: [],
+        facilities: [],
+      },
     };
   },
   computed: {},
@@ -215,6 +232,55 @@ export default {
           return this.toastErrorMsg(err.message);
         });
     },
+    initDefaultParams() {
+      this.params = JSON.parse(JSON.stringify(this.defaultParams));
+    },
+    toastErrorMsg(errMsg) {
+      if (typeof errMsg === "object" && errMsg !== null) {
+        const keys = Object.keys(errMsg);
+        // iterate over object
+        keys.forEach((key, index) => {
+          var errArray = errMsg[key];
+          errArray.forEach((_text) => {
+            this.$toast(
+              {
+                component: ToastificationContent,
+                props: {
+                  title: "Error",
+                  icon: "AlertCircleIcon",
+                  text: _text,
+                  variant: "danger",
+                },
+              },
+              {
+                position: "top-center",
+                timeout: 6000,
+              }
+            );
+          });
+        });
+      } else {
+        this.$toast(
+          {
+            component: ToastificationContent,
+            props: {
+              title: "Error",
+              icon: "AlertCircleIcon",
+              text: errMsg,
+              variant: "danger",
+            },
+          },
+          {
+            position: "top-center",
+            timeout: 6000,
+          }
+        );
+      }
+    },
+  },
+  created() {
+    this.initDefaultParams();
+    this.getData();
   },
 };
 </script>

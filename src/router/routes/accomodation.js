@@ -5,7 +5,7 @@ export default [{
             import ('@/views/accomodation/hotel/Index.vue'),
     },
     {
-        path: '/hotel/view/:id',
+        path: '/hotel/view',
         name: 'hotel-view',
         component: () =>
             import ('@/views/accomodation/hotel/View.vue'),

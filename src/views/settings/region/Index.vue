@@ -40,59 +40,61 @@
               No data to show
             </p>
           </div>
-          <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
-          <b-row v-for="(row, index) in chunkedData" :key="index">
-            <b-col cols="12">
-              <b-card-group class="mb-0">
-                <!-- card 1 -->
-                <b-card
-                  v-for="regency in row"
-                  :key="regency.id"
-                  :img-src="imagePath + regency.image_filename"
-                  :img-alt="regency.name"
-                  img-top
-                  no-body
-                >
-                  <b-card-body>
-                    <small class="text-muted">{{
-                      getProvince(regency.province_id)
-                    }}</small>
-                    <b-card-title style="margin-top: 5px;">{{
-                      regency.name
-                    }}</b-card-title>
-                    <b-card-text>
-                      {{ regency.description }}
-                    </b-card-text>
-                  </b-card-body>
-                  <b-card-footer>
-                    <b-button
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-primary"
-                      class="btn-icon rounded-circle"
-                      @click="editModal(regency)"
-                    >
-                      <feather-icon icon="Edit2Icon" />
-                    </b-button>
-                    <b-button
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-danger"
-                      class="btn-icon rounded-circle"
-                      style="margin-left: 5px;"
-                      @click="deleteData(regency)"
-                    >
-                      <feather-icon icon="TrashIcon" />
-                    </b-button>
-                    <small class="text-muted ml-1"
-                      >Last updated
-                      {{ regency.updated_at | moment("from", "now") }}</small
-                    >
-                  </b-card-footer>
-                </b-card>
-                <b-card v-for="_idx in 3 - row.length" :key="_idx" no-body>
-                </b-card>
-              </b-card-group>
-            </b-col>
-          </b-row>
+          <div v-if="data.length > 0">
+            <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
+            <b-row v-for="(row, rowIndex) in chunkedData" :key="rowIndex">
+              <b-col cols="12">
+                <b-card-group class="mb-0">
+                  <!-- card 1 -->
+                  <b-card
+                    v-for="(regency, regencyIndex) in row"
+                    :key="regencyIndex"
+                    :img-src="imagePath + regency.image_filename"
+                    :img-alt="regency.name"
+                    img-top
+                    no-body
+                  >
+                    <b-card-body>
+                      <small class="text-muted">{{
+                        getProvince(regency.province_id)
+                      }}</small>
+                      <b-card-title style="margin-top: 5px;">{{
+                        regency.name
+                      }}</b-card-title>
+                      <b-card-text>
+                        {{ regency.description }}
+                      </b-card-text>
+                    </b-card-body>
+                    <b-card-footer>
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-primary"
+                        class="btn-icon rounded-circle"
+                        @click="editModal(regency)"
+                      >
+                        <feather-icon icon="Edit2Icon" />
+                      </b-button>
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-danger"
+                        class="btn-icon rounded-circle"
+                        style="margin-left: 5px;"
+                        @click="deleteData(regency)"
+                      >
+                        <feather-icon icon="TrashIcon" />
+                      </b-button>
+                      <small class="text-muted ml-1"
+                        >Last updated
+                        {{ regency.updated_at | moment("from", "now") }}
+                      </small>
+                    </b-card-footer>
+                  </b-card>
+                  <b-card v-for="_idx in 3 - row.length" :key="_idx" no-body>
+                  </b-card>
+                </b-card-group>
+              </b-col>
+            </b-row>
+          </div>
         </div>
       </b-overlay>
     </b-card>

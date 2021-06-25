@@ -33,20 +33,36 @@
 
     <!-- profile navbar -->
     <div class="profile-header-nav">
-      <b-navbar toggleable="md" type="light">
+      <b-navbar
+        toggleable="md"
+        type="light"
+      >
         <!-- toggle button -->
-        <b-navbar-toggle class="ml-auto" target="nav-text-collapse">
-          <feather-icon icon="AlignJustifyIcon" size="21" />
+        <b-navbar-toggle
+          class="ml-auto"
+          target="nav-text-collapse"
+        >
+          <feather-icon
+            icon="AlignJustifyIcon"
+            size="21"
+          />
         </b-navbar-toggle>
         <!--/ toggle button -->
 
         <!-- collapse -->
-        <b-collapse id="nav-text-collapse" is-nav>
-          <b-tabs v-model="currentTab" class="profile-tabs" @input="change">
-            <b-tab title="Home"></b-tab>
-            <b-tab title="Images"></b-tab>
-            <b-tab title="Rooms"></b-tab>
-            <b-tab title="Facilities"></b-tab>
+        <b-collapse
+          id="nav-text-collapse"
+          is-nav
+        >
+          <b-tabs
+            v-model="currentTab"
+            class="profile-tabs"
+            @input="change"
+          >
+            <b-tab title="Home" />
+            <b-tab title="Images" />
+            <b-tab title="Rooms" />
+            <b-tab title="Facilities" />
           </b-tabs>
         </b-collapse>
         <!--/ collapse -->
@@ -67,8 +83,8 @@ import {
   BTabs,
   BNavItem,
   BButton,
-} from "bootstrap-vue";
-import Ripple from "vue-ripple-directive";
+} from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
 
 export default {
   components: {
@@ -85,23 +101,23 @@ export default {
   directives: {
     Ripple,
   },
-  data() {
-    return {
-      currentTab: 0,
-    }
-  },
   props: {
     headerData: {
       type: Object,
       default: () => {},
     },
   },
-  methods : {
-    change(){
-      this.$emit("tab-changed", this.currentTab);
+  data() {
+    return {
+      currentTab: 0,
     }
-  }
-};
+  },
+  methods: {
+    change() {
+      this.$emit('tab-changed', this.currentTab)
+    },
+  },
+}
 </script>
 <style>
 .profile-title {

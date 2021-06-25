@@ -1,5 +1,5 @@
 export default [{
-    title: 'Dashboards',
-    icon: 'BarChartIcon',
-    route: 'dashboard',
-}, ]
+  title: 'Dashboards',
+  icon: 'BarChartIcon',
+  route: 'dashboard',
+}]

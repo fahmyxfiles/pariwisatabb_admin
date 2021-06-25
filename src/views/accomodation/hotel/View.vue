@@ -1,16 +1,32 @@
 <template>
-  <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
+  <b-overlay
+    :show="loading"
+    spinner-variant="primary"
+    rounded="sm"
+  >
     <div id="user-profile">
-      <hotel-header :header-data="headerData" @tab-changed="tabChanged" />
+      <hotel-header
+        :header-data="headerData"
+        @tab-changed="tabChanged"
+      />
       <!-- profile info  -->
       <section id="profile-info">
-        <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
+        <b-overlay
+          :show="tabLoading"
+          spinner-variant="primary"
+          rounded="sm"
+        >
           <b-row v-if="activeTab === 0">
             <!-- about suggested page and twitter feed -->
-            <b-col lg="3" cols="12" order="2" order-lg="1">
+            <b-col
+              lg="3"
+              cols="12"
+              order="2"
+              order-lg="1"
+            >
               <b-card>
                 <!-- about -->
-                <div class="" >
+                <div class="">
                   <h5 class="text-capitalize mb-75">
                     Name
                   </h5>
@@ -18,7 +34,7 @@
                     {{ hotelData.name }}
                   </b-card-text>
                 </div>
-                <div class="mt-2" >
+                <div class="mt-2">
                   <h5 class="text-capitalize mb-75">
                     Address
                   </h5>
@@ -26,7 +42,7 @@
                     {{ hotelData.address }}
                   </b-card-text>
                 </div>
-                <div class="mt-2" >
+                <div class="mt-2">
                   <h5 class="text-capitalize mb-75">
                     Description
                   </h5>
@@ -38,15 +54,27 @@
               <!--/ about suggested page and twitter feed -->
             </b-col>
             <!-- post -->
-            <b-col lg="6" cols="12" order="1" order-lg="2"> 
-              <b-card title="Location">
-                <GmapMarker ref="myMarker" :position="google && new google.maps.LatLng(1.38, 103.8)" />
+            <b-col
+              lg="6"
+              cols="12"
+              order="1"
+              order-lg="2"
+            >
+              <b-card title="Maps">
+                <div 
+                  id="map" 
+                  ref="map" 
+                />
               </b-card>
             </b-col>
             <!-- post -->
 
             <!-- latest photos suggestion and polls -->
-            <b-col lg="3" cols="12" order="3"> </b-col>
+            <b-col
+              lg="3"
+              cols="12"
+              order="3"
+            />
             <!--/ latest photos suggestion and polls -->
           </b-row>
         </b-overlay>
@@ -57,13 +85,13 @@
 </template>
 
 <script>
-import { BCardText, BCard, BOverlay, BRow, BCol } from "bootstrap-vue";
+import {
+  BCardText, BCard, BOverlay, BRow, BCol,
+} from 'bootstrap-vue'
 
-import HotelHeader from "./HotelHeader.vue";
+import { toastErrorMsg, getImageByType, createGoogleMap } from '@/libs/helpers'
 
-import { toastErrorMsg, getImageByType } from "@/libs/helpers.js";
-
-import {gmapApi} from 'vue2-google-maps'
+import HotelHeader from './HotelHeader.vue'
 
 export default {
   components: {
@@ -78,19 +106,19 @@ export default {
   data() {
     return {
       hotelData: {},
-      headerData: { 
-        name: '', 
-        address: '', 
-        headerImage: require('@/assets/images/profile/user-uploads/timeline.jpg'), 
-        mainImage: require('@/assets/images/placeholders/16-9.png')
+      headerData: {
+        name: '',
+        address: '',
+        headerImage: require('@/assets/images/profile/user-uploads/timeline.jpg'),
+        mainImage: require('@/assets/images/placeholders/16-9.png'),
       },
       hotelId: null,
       defaultParams: {
         regency_id: 0,
-        name: "",
-        address: "",
+        name: '',
+        address: '',
         postal_code: 0,
-        description: "",
+        description: '',
         regency: null,
         images: [],
         rooms: [],
@@ -101,63 +129,74 @@ export default {
       loading: true,
       tabLoading: false,
       activeTab: 0,
-    };
+      map: null,
+    }
   },
-  computed: {
-    google: gmapApi,
+  created() {
+    this.initDefaultParams()
+    this.hotelId = this.$route.params.id
+    // this.initDefaultParams();
+    this.getData()
   },
   methods: {
     toastErrorMsg,
+    createGoogleMap,
+    drawMap(){
+      return this.createGoogleMap(this.hotelData.map_coordinate, this.hotelData.map_center, this.$refs['map']);
+    },
     getData() {
-      this.loading = true;
+      this.loading = true
       this.$http
-        .get("/hotel/" + this.hotelId)
-        .then((res) => {
-          this.hotelData = res.data.data;
-          this.headerData = { 
-            name: this.hotelData.name, 
-            address: this.hotelData.address, 
-            headerImage: this.imagePath + getImageByType(this.hotelData.images, 'banner').image_filename, 
-            mainImage: this.imagePath + getImageByType(this.hotelData.images, 'main').image_filename 
-          };
-          this.loading = false;
+        .get(`/hotel/${this.hotelId}`)
+        .then(res => {
+          this.hotelData = res.data.data
+          this.headerData = {
+            name: this.hotelData.name,
+            address: this.hotelData.address,
+            headerImage: this.imagePath + getImageByType(this.hotelData.images, 'banner').image_filename,
+            mainImage: this.imagePath + getImageByType(this.hotelData.images, 'main').image_filename,
+          }
+          this.drawMap();
+          this.loading = false
         })
-        .catch((err) => {
+        .catch(err => {
           if (err.response) {
-            var errMsg = err.response.data.message;
+            const errMsg = err.response.data.message
             if (errMsg) {
               // Data not found
-              this.$router.push({ path: 'error-404' });
-              return this.toastErrorMsg(errMsg);
+              this.$router.push({ path: 'error-404' })
+              return this.toastErrorMsg(errMsg)
             }
           }
           this.$router.go(-1)
-          return this.toastErrorMsg(err.message);
-        });
+          return this.toastErrorMsg(err.message)
+        })
     },
     initDefaultParams() {
-      this.params = JSON.parse(JSON.stringify(this.defaultParams));
+      this.params = JSON.parse(JSON.stringify(this.defaultParams))
     },
     getImageByType,
-    tabChanged(tab){
-      this.activeTab = tab;
+    tabChanged(tab) {
+      this.activeTab = tab
+      this.tabLoading = true
       // Get Images
-      this.tabLoading = true;
-      // AXIOS GET
+      if(tab === 0){
+        this.$nextTick(() => {
+          this.drawMap();
+        });
+      }
       setTimeout(() => {
-        this.tabLoading = false;
-      }, 5000);
+        this.tabLoading = false
+      }, 1000);
     },
   },
-  created() {
-    this.initDefaultParams();
-    this.hotelId = this.$route.params.id;
-    // this.initDefaultParams();
-    this.getData();
-  },
-};
+}
 </script>
 
 <style lang="scss">
 @import "@core/scss/vue/pages/page-profile.scss";
+#map {
+  height: 600px;
+  background: gray;
+}
 </style>

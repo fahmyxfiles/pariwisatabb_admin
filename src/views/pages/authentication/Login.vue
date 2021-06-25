@@ -4,7 +4,10 @@
 
       <!-- Brand logo-->
       <b-link class="brand-logo">
-        <img :src="require(`@/assets/images/logo/logo_brand.png`)" height="75px">
+        <img
+          :src="require(`@/assets/images/logo/logo_brand.png`)"
+          height="75px"
+        >
       </b-link>
       <!-- /Brand logo-->
 
@@ -115,8 +118,14 @@
                 block
                 :disabled="invalid || loggingIn"
               >
-                <b-spinner v-if="loggingIn" small />
-                <span v-if="loggingIn" style="padding-left: 5px;">Logging in...</span>
+                <b-spinner
+                  v-if="loggingIn"
+                  small
+                />
+                <span
+                  v-if="loggingIn"
+                  style="padding-left: 5px;"
+                >Logging in...</span>
                 <span v-else>Login</span>
               </b-button>
             </b-form>
@@ -196,13 +205,13 @@ export default {
     login() {
       this.$refs.loginForm.validate().then(success => {
         if (success) {
-          this.loggingIn = true;
+          this.loggingIn = true
           this.$http.post('login', {
             email: this.userEmail,
             password: this.password,
           })
             .then(response => {
-              const resp = response.data.data;
+              const resp = response.data.data
               localStorage.setItem('accessToken', resp.token)
               localStorage.setItem('userData', JSON.stringify(resp.user))
               this.$ability.update(resp.user.abilities)
@@ -222,8 +231,8 @@ export default {
                   })
                 })
             }).catch(error => {
-                this.loggingIn = false;
-                this.$refs.loginForm.errors.email.push(error.response.data.message);
+              this.loggingIn = false
+              this.$refs.loginForm.errors.email.push(error.response.data.message)
             })
         }
       })

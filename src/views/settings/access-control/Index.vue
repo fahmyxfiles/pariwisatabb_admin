@@ -6,154 +6,160 @@
         spinner-variant="primary"
         rounded="sm"
       >
-      <div>
-        <!-- search input -->
-        <div class="custom-search d-flex justify-content-between">
-          <b-form-group>
-            <div class="d-flex align-items-center">
-              <b-button
-                v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                variant="outline-primary"
-                @click="addModal()"
-              >
-                <feather-icon
-                  icon="PlusIcon"
-                  class="mr-50"
-                />
-                <span class="align-middle">Add</span>
-              </b-button>
-            </div>
-          </b-form-group>
-          <b-form-group>
-            <div class="d-flex align-items-center">
-              <b-input-group>
-                <b-form-input
-                  v-model="query.keyword"
-                  placeholder="Search"
-                  type="text"
-                  class="d-inline-block"
-                />
-                <b-input-group-append>
-                  <b-button variant="outline-primary" @click="getData()">
-                    <feather-icon icon="SearchIcon" />
-                  </b-button>
-                </b-input-group-append>
-              </b-input-group>
-            </div>
-          </b-form-group>
-        </div>
-
-        <!-- table -->
-        <vue-good-table
-          :columns="columns"
-          :rows="rows"
-          :select-options="{
-            enabled: false,
-          }"
-          :pagination-options="{
-            enabled: true,
-            perPage:query.limit
-          }"
-        >
-          <template
-            slot="table-row"
-            slot-scope="props"
-          >
-            <span v-if="props.column.field === 'permissions'">
-              <b-row v-for="permission in props.row.permissions" :key="permission.id">
-                <span class="spacer" >
-                  <b-badge variant="light-primary">
-                    {{ permission.action | uppercase}}
-                  </b-badge>
-                  <b-badge variant="light-success">
-                    {{ permission.subject | uppercase}}
-                  </b-badge>
-                </span>
-              </b-row>
-            </span>
-            <!-- Column: Action -->
-            <span v-else-if="props.column.field === 'action'">
-              <div class="spacer">
+        <div>
+          <!-- search input -->
+          <div class="custom-search d-flex justify-content-between">
+            <b-form-group>
+              <div class="d-flex align-items-center">
                 <b-button
                   v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                   variant="outline-primary"
-                  @click="editModal(props.row)"
+                  @click="addModal()"
                 >
                   <feather-icon
+                    icon="PlusIcon"
+                    class="mr-50"
+                  />
+                  <span class="align-middle">Add</span>
+                </b-button>
+              </div>
+            </b-form-group>
+            <b-form-group>
+              <div class="d-flex align-items-center">
+                <b-input-group>
+                  <b-form-input
+                    v-model="query.keyword"
+                    placeholder="Search"
+                    type="text"
+                    class="d-inline-block"
+                  />
+                  <b-input-group-append>
+                    <b-button
+                      variant="outline-primary"
+                      @click="getData()"
+                    >
+                      <feather-icon icon="SearchIcon" />
+                    </b-button>
+                  </b-input-group-append>
+                </b-input-group>
+              </div>
+            </b-form-group>
+          </div>
+
+          <!-- table -->
+          <vue-good-table
+            :columns="columns"
+            :rows="rows"
+            :select-options="{
+              enabled: false,
+            }"
+            :pagination-options="{
+              enabled: true,
+              perPage:query.limit
+            }"
+          >
+            <template
+              slot="table-row"
+              slot-scope="props"
+            >
+              <span v-if="props.column.field === 'permissions'">
+                <b-row
+                  v-for="permission in props.row.permissions"
+                  :key="permission.id"
+                >
+                  <span class="spacer">
+                    <b-badge variant="light-primary">
+                      {{ permission.action | uppercase }}
+                    </b-badge>
+                    <b-badge variant="light-success">
+                      {{ permission.subject | uppercase }}
+                    </b-badge>
+                  </span>
+                </b-row>
+              </span>
+              <!-- Column: Action -->
+              <span v-else-if="props.column.field === 'action'">
+                <div class="spacer">
+                  <b-button
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    variant="outline-primary"
+                    @click="editModal(props.row)"
+                  >
+                    <feather-icon
                       icon="Edit2Icon"
                       size="12"
-                  />
-                  Edit
-                </b-button>
-                <b-button
-                  v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-                  variant="outline-danger"
-                  @click="deleteData(props.row)"
-                >
-                  <feather-icon
+                    />
+                    Edit
+                  </b-button>
+                  <b-button
+                    v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+                    variant="outline-danger"
+                    @click="deleteData(props.row)"
+                  >
+                    <feather-icon
                       icon="TrashIcon"
                       size="12"
+                    />
+                    Delete
+                  </b-button>
+                </div>
+              </span>
+
+              <!-- Column: Common -->
+              <span v-else>
+                {{ props.formattedRow[props.column.field] }}
+              </span>
+            </template>
+
+            <!-- pagination -->
+            <template
+              slot="pagination-bottom"
+              slot-scope="props"
+            >
+              <div class="d-flex justify-content-between flex-wrap">
+                <div class="d-flex align-items-center mb-0 mt-1">
+                  <span class="text-nowrap ">
+                    Showing 1 to
+                  </span>
+                  <b-form-select
+                    v-model="query.limit"
+                    :options="['5','15','30']"
+                    class="mx-1"
+                    @input="(value)=>props.perPageChanged({currentPerPage:value})"
                   />
-                  Delete
-                </b-button>
+                  <span class="text-nowrap"> of {{ props.total }} entries </span>
+                </div>
+                <div>
+                  <b-pagination
+                    :value="1"
+                    :total-rows="props.total"
+                    :per-page="query.limit"
+                    first-number
+                    last-number
+                    align="right"
+                    prev-class="prev-item"
+                    next-class="next-item"
+                    class="mt-1 mb-0"
+                    @input="(value)=>props.pageChanged({currentPage:value})"
+                  >
+                    <template #prev-text>
+                      <feather-icon
+                        icon="ChevronLeftIcon"
+                        size="18"
+                      />
+                    </template>
+                    <template #next-text>
+                      <feather-icon
+                        icon="ChevronRightIcon"
+                        size="18"
+                      />
+                    </template>
+                  </b-pagination>
+                </div>
               </div>
-            </span>
-
-            <!-- Column: Common -->
-            <span v-else>
-              {{ props.formattedRow[props.column.field] }}
-            </span>
-          </template>
-
-          <!-- pagination -->
-          <template
-            slot="pagination-bottom"
-            slot-scope="props"
-          >
-            <div class="d-flex justify-content-between flex-wrap">
-              <div class="d-flex align-items-center mb-0 mt-1">
-                <span class="text-nowrap ">
-                  Showing 1 to
-                </span>
-                <b-form-select
-                  v-model="query.limit"
-                  :options="['5','15','30']"
-                  class="mx-1"
-                  @input="(value)=>props.perPageChanged({currentPerPage:value})"
-                />
-                <span class="text-nowrap"> of {{ props.total }} entries </span>
-              </div>
-              <div>
-                <b-pagination
-                  :value="1"
-                  :total-rows="props.total"
-                  :per-page="query.limit"
-                  first-number
-                  last-number
-                  align="right"
-                  prev-class="prev-item"
-                  next-class="next-item"
-                  class="mt-1 mb-0"
-                  @input="(value)=>props.pageChanged({currentPage:value})"
-                >
-                  <template #prev-text>
-                    <feather-icon
-                      icon="ChevronLeftIcon"
-                      size="18"
-                    />
-                  </template>
-                  <template #next-text>
-                    <feather-icon
-                      icon="ChevronRightIcon"
-                      size="18"
-                    />
-                  </template>
-                </b-pagination>
-              </div>
-            </div>
-          </template>
-        </vue-good-table>
-      </div>
+            </template>
+          </vue-good-table>
+        </div>
       </b-overlay>
     </b-card>
     <b-modal
@@ -167,9 +173,9 @@
           <label for="roleName">Role Name :</label>
           <b-form-input
             id="roleName"
+            v-model="params.name"
             type="text"
             placeholder="Role Name"
-            v-model="params.name"
           />
         </b-form-group>
         <b-form-group>
@@ -177,8 +183,8 @@
           <v-select
             v-model="params.permissions"
             multiple
-            :options="availablePermissions" 
-            :reduce="permissions => permissions.id" 
+            :options="availablePermissions"
+            :reduce="permissions => permissions.id"
             label="name"
             :close-on-select="false"
           />
@@ -196,7 +202,7 @@ import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import VSelect from 'vue-select'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
-import { toastErrorMsg } from "@/libs/helpers.js";
+import { toastErrorMsg } from '@/libs/helpers'
 
 export default {
   components: {
@@ -204,11 +210,11 @@ export default {
     ToastificationContent,
     VSelect,
     BForm,
-    BRow, 
-    BCol, 
+    BRow,
+    BCol,
     BInputGroup,
-    BInputGroupAppend, 
-    BButton, 
+    BInputGroupAppend,
+    BButton,
     BSpinner,
     BCard,
     VueGoodTable,
@@ -224,9 +230,14 @@ export default {
   directives: {
     Ripple,
   },
+  filters: {
+    uppercase(v) {
+      return v.toUpperCase()
+    },
+  },
   data() {
     return {
-      query : {
+      query: {
         keyword: '',
         limit: 15,
         page: 1,
@@ -235,8 +246,8 @@ export default {
       availablePermissions: [],
       params: null,
       defaultParams: {
-        'name' : '',
-        'permissions' : [],
+        name: '',
+        permissions: [],
       },
       loading: true,
       columns: [
@@ -256,104 +267,106 @@ export default {
       rows: [],
     }
   },
+  created() {
+    this.initDefaultParams()
+    this.getData()
+    this.getAvailablePermissions()
+  },
   methods: {
     toastErrorMsg,
     getData() {
-      this.loading = true;
-      this.$http.get('/role',{ params: this.query }).then(res => { 
-        var _data = res.data.data;
-        if(_data.length > 0){
-          this.rows = _data;
-        }
-        else {
-          if(this.query.keyword){
-            this.$toast({
-              component: ToastificationContent,
-              props: {
-                title: 'Error',
-                icon: 'AlertCircleIcon',
-                text: "No data found with specified keyword",
-                variant: 'danger',
-              },
+      this.loading = true
+      this.$http.get('/role', { params: this.query }).then(res => {
+        const _data = res.data.data
+        if (_data.length > 0) {
+          this.rows = _data
+        } else if (this.query.keyword) {
+          this.$toast({
+            component: ToastificationContent,
+            props: {
+              title: 'Error',
+              icon: 'AlertCircleIcon',
+              text: 'No data found with specified keyword',
+              variant: 'danger',
             },
-            {
-              position: 'top-center',
-              timeout: 6000,
-            });
-          }
+          },
+          {
+            position: 'top-center',
+            timeout: 6000,
+          })
         }
         this.$nextTick(() => {
-          this.loading = false;
-        });
+          this.loading = false
+        })
       }).catch(err => {
-        if(err.response){
-          var errMsg = err.response.data.data;
-          if(errMsg){
-            return this.toastErrorMsg(errMsg);
+        if (err.response) {
+          const errMsg = err.response.data.data
+          if (errMsg) {
+            return this.toastErrorMsg(errMsg)
           }
         }
-        return this.toastErrorMsg(err.message);
-      });
+        return this.toastErrorMsg(err.message)
+      })
     },
-    getAvailablePermissions(){
-      this.$http.get('/role/getAvailablePermissions').then(res => { 
-        this.availablePermissions = res.data.data;
+    getAvailablePermissions() {
+      this.$http.get('/role/getAvailablePermissions').then(res => {
+        this.availablePermissions = res.data.data
       }).catch(err => {
-        if(err.response){
-          var errMsg = err.response.data.data;
-          if(errMsg){
-            return this.toastErrorMsg(errMsg);
+        if (err.response) {
+          const errMsg = err.response.data.data
+          if (errMsg) {
+            return this.toastErrorMsg(errMsg)
           }
         }
-        return this.toastErrorMsg(err.message);
-      });
+        return this.toastErrorMsg(err.message)
+      })
     },
-    initDefaultParams(){
-      this.params = JSON.parse(JSON.stringify(this.defaultParams));
+    initDefaultParams() {
+      this.params = JSON.parse(JSON.stringify(this.defaultParams))
     },
-    addModal(){
-      this.initDefaultParams();
-      this.modalTitle = "Add Access Control";
-      this.$refs['modal-input'].onOk = () => this.addData(this.params);
-      this.$refs['modal-input'].show();
+    addModal() {
+      this.initDefaultParams()
+      this.modalTitle = 'Add Access Control'
+      this.$refs['modal-input'].onOk = () => this.addData(this.params)
+      this.$refs['modal-input'].show()
     },
-    addData(params){
+    addData(params) {
       this.$http.post('/role', params)
-      .then(res => {
-        this.$refs['modal-input'].hide();
-        this.getData();
-      }).catch(err => {
-        var errMsg = err.response.data.data;
-        this.toastErrorMsg(errMsg);
-      });
+        .then(res => {
+          this.$refs['modal-input'].hide()
+          this.getData()
+        }).catch(err => {
+          const errMsg = err.response.data.data
+          this.toastErrorMsg(errMsg)
+        })
     },
-    editModal(item){
-      this.initDefaultParams();
-      this.modalTitle = "Edit Access Control : " + item.name;
-      var _permissions = [];
-      for(var i = 0; i < item.permissions.length; i++){
-        _permissions.push(item.permissions[i].id);
+    editModal(item) {
+      this.initDefaultParams()
+      this.modalTitle = `Edit Access Control : ${item.name}`
+      const _permissions = []
+      for (let i = 0; i < item.permissions.length; i++) {
+        _permissions.push(item.permissions[i].id)
       }
-      this.params.name = item.name;
+      this.params.name = item.name
       this.params.permissions = _permissions
-      this.$refs['modal-input'].onOk = () => this.editData(item.id, this.params);
-      this.$refs['modal-input'].show();
+      this.$refs['modal-input'].onOk = () => this.editData(item.id, this.params)
+      this.$refs['modal-input'].show()
     },
-    editData(id, params){
-      params["_method"] = "PUT";
-      this.$http.post('/role/' + id, params)
-      .then(res => {
-        this.$refs['modal-input'].hide();
-        this.getData();
-      }).catch(err => {
-        var errMsg = err.response.data.data;
-        this.toastErrorMsg(errMsg);
-      });
+    editData(id, params) {
+      params._method = 'PUT'
+      this.$http.post(`/role/${id}`, params)
+        .then(res => {
+          this.$refs['modal-input'].hide()
+          this.getData()
+        }).catch(err => {
+          const errMsg = err.response.data.data
+          this.toastErrorMsg(errMsg)
+        })
     },
     deleteData(item) {
       this.$swal({
         title: 'Are you sure?',
-        text: "Access Control " + item.name + " will be removed. All user with this Access Control need to be updated with new Access Control.",
+        text: `Access Control ${item.name} will be removed. All user with this Access Control need to be updated with new Access Control.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -364,7 +377,7 @@ export default {
         buttonsStyling: false,
       }).then(result => {
         if (result.value) {
-          this.$http.delete('/role/' + item.id).then(res => {
+          this.$http.delete(`/role/${item.id}`).then(res => {
             this.$swal({
               icon: 'success',
               title: 'Deleted!',
@@ -372,29 +385,18 @@ export default {
               customClass: {
                 confirmButton: 'btn btn-success',
               },
-            });
-            this.getData();
+            })
+            this.getData()
           }).catch(err => {
-            var errMsg = err.response.data.data;
-            this.toastErrorMsg(errMsg);
-          });
+            const errMsg = err.response.data.data
+            this.toastErrorMsg(errMsg)
+          })
         }
       })
     },
   },
-  filters: {
-    uppercase: function(v) {
-      return v.toUpperCase();
-    }
-  },
-  created() {
-    this.initDefaultParams();
-    this.getData();
-    this.getAvailablePermissions();
-  },
 }
 </script>
-
 
 <style lang="scss" >
 @import '@core/scss/vue/libs/vue-good-table.scss';

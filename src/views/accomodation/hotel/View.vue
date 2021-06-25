@@ -92,7 +92,10 @@
                   class="swiper-gallery gallery-top"
                   :options="swiperOptions"
                 >
-                  <swiper-slide v-for="(data, index) in swiperData" :key="index">
+                  <swiper-slide
+                    v-for="(data, index) in swiperData"
+                    :key="index"
+                  >
                     <b-img :src="data.img" fluid />
                   </swiper-slide>
 
@@ -112,10 +115,80 @@
                   class="swiper gallery-thumbs"
                   :options="swiperOptionThumbs"
                 >
-                  <swiper-slide v-for="(data, index) in swiperData" :key="index">
+                  <swiper-slide
+                    v-for="(data, index) in swiperData"
+                    :key="index"
+                  >
                     <b-img :src="data.img" fluid />
                   </swiper-slide>
                 </swiper>
+              </b-card>
+            </b-col>
+          </b-row>
+          <!-- Tab Room -->
+          <b-row v-if="activeTab === 2">
+            <b-col lg="12">
+              <b-card title="Accordion">
+                <b-card-text>
+                  <span>Turn a group of </span>
+                  <code>&lt;app-collapse&gt;</code>
+                  <span>
+                    components into an accordion by supplying an accordion group
+                    identifier via the
+                  </span>
+                  <code>accordion</code>
+                  <span>
+                    prop. Note that only one collapse in an accordion group can
+                    be open at a time.</span
+                  >
+                </b-card-text>
+
+                <app-collapse accordion>
+                  <app-collapse-item title="Accordion Item 1">
+                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
+                    croissant. Tootsie roll sweet candy bear claw chupa chups
+                    lollipop toffee. Macaroon donut liquorice powder candy
+                    carrot cake macaroon fruitcake. Cookie toffee lollipop
+                    cotton candy ice cream dragée soufflé. Cake tiramisu
+                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
+                    pie apple pie topping oat cake dessert. Soufflé icing
+                    caramels. Chocolate cake icing ice cream macaroon pie
+                    cheesecake liquorice apple pie.
+                  </app-collapse-item>
+                  <app-collapse-item title="Accordion Item 2">
+                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
+                    croissant. Tootsie roll sweet candy bear claw chupa chups
+                    lollipop toffee. Macaroon donut liquorice powder candy
+                    carrot cake macaroon fruitcake. Cookie toffee lollipop
+                    cotton candy ice cream dragée soufflé. Cake tiramisu
+                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
+                    pie apple pie topping oat cake dessert. Soufflé icing
+                    caramels. Chocolate cake icing ice cream macaroon pie
+                    cheesecake liquorice apple pie.
+                  </app-collapse-item>
+                  <app-collapse-item title="Accordion Item 3">
+                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
+                    croissant. Tootsie roll sweet candy bear claw chupa chups
+                    lollipop toffee. Macaroon donut liquorice powder candy
+                    carrot cake macaroon fruitcake. Cookie toffee lollipop
+                    cotton candy ice cream dragée soufflé. Cake tiramisu
+                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
+                    pie apple pie topping oat cake dessert. Soufflé icing
+                    caramels. Chocolate cake icing ice cream macaroon pie
+                    cheesecake liquorice apple pie.
+                  </app-collapse-item>
+                  <app-collapse-item title="Accordion Item 4">
+                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
+                    croissant. Tootsie roll sweet candy bear claw chupa chups
+                    lollipop toffee. Macaroon donut liquorice powder candy
+                    carrot cake macaroon fruitcake. Cookie toffee lollipop
+                    cotton candy ice cream dragée soufflé. Cake tiramisu
+                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
+                    pie apple pie topping oat cake dessert. Soufflé icing
+                    caramels. Chocolate cake icing ice cream macaroon pie
+                    cheesecake liquorice apple pie.
+                  </app-collapse-item>
+                </app-collapse>
               </b-card>
             </b-col>
           </b-row>
@@ -141,13 +214,16 @@ import {
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
-
+import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
+import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import HotelHeader from "./HotelHeader.vue";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
+    AppCollapse,
+    AppCollapseItem,
     BListGroup,
     BListGroupItem,
     BCardText,
@@ -273,9 +349,11 @@ export default {
       }
       if (tab === 1) {
         this.swiperData = [];
-        var commonImage = this.getImageByType(this.hotelData.images, 'common');
-        for(var i = 0; i < commonImage.length; i++){
-          this.swiperData.push({img: this.imagePath + commonImage[i].image_filename})
+        var commonImage = this.getImageByType(this.hotelData.images, "common");
+        for (var i = 0; i < commonImage.length; i++) {
+          this.swiperData.push({
+            img: this.imagePath + commonImage[i].image_filename,
+          });
         }
         // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
         this.$nextTick(() => {

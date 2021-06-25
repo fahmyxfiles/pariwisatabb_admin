@@ -60,12 +60,7 @@ export function createGoogleMap(coordinate, center, _map){
   var center_lat = parseFloat(map_center.split(",")[0])
   var center_lng = parseFloat(map_center.split(",")[1])
   var center_zoom = parseFloat(map_center.split(",")[2])
-  console.log(coord_lat);
-  console.log(coord_lng);
-  console.log(center_lat);
-  console.log(center_lng);
-  console.log(center_zoom);
-  this.map = new window.google.maps.Map(map, {
+  _map = new window.google.maps.Map(map, {
     center: { lat: center_lat, lng: center_lng },
     zoom: center_zoom,      
   });

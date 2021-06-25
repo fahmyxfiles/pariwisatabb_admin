@@ -201,13 +201,11 @@ import {
 import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import VSelect from 'vue-select'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { toastErrorMsg } from '@/libs/helpers'
 
 export default {
   components: {
     BOverlay,
-    ToastificationContent,
     VSelect,
     BForm,
     BRow,

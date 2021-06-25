@@ -206,7 +206,6 @@ import {
 import Ripple from 'vue-ripple-directive'
 import _ from 'lodash'
 import VSelect from 'vue-select'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import vueDropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { toastErrorMsg } from '@/libs/helpers'
@@ -218,7 +217,6 @@ export default {
     VSelect,
     BFormRadioGroup,
     BOverlay,
-    ToastificationContent,
     BAlert,
     BSpinner,
     BForm,

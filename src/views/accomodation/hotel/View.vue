@@ -88,9 +88,10 @@
               <b-card title="Gallery">
                 <!-- swiper1 -->
                 <swiper
-                  ref="swiperTop"
+                  ref="swiperCommonImage"
                   class="swiper-gallery gallery-top"
                   :options="swiperOptions"
+                  @slideChange="swiperSlideChange"
                 >
                   <swiper-slide v-for="(data, index) in swiperData" :key="index">
                     <b-img :src="data.img" fluid />
@@ -190,8 +191,7 @@ export default {
       /* eslint-disable global-require */
 
       swiperOptions: {
-        loop: true,
-        loopedSlides: 5,
+        loop: false,
         spaceBetween: 10,
         navigation: {
           nextEl: ".swiper-button-next",
@@ -199,8 +199,7 @@ export default {
         },
       },
       swiperOptionThumbs: {
-        loop: true,
-        loopedSlides: 5, // looped slides should be the same
+        loop: false,
         spaceBetween: 10,
         centeredSlides: true,
         slidesPerView: 4,
@@ -262,6 +261,11 @@ export default {
       this.params = JSON.parse(JSON.stringify(this.defaultParams));
     },
     getImageByType,
+    swiperSlideChange(){
+      console.log('Get ready to see the slide you are in')
+      console.log(this.$refs.swiperCommonImage.$swiper);
+      console.log(this.swiperData);
+    },
     tabChanged(tab) {
       this.activeTab = tab;
       this.tabLoading = true;
@@ -275,14 +279,14 @@ export default {
         this.swiperData = [];
         var commonImage = this.getImageByType(this.hotelData.images, 'common');
         for(var i = 0; i < commonImage.length; i++){
-          this.swiperData.push({img: this.imagePath + commonImage[i].image_filename})
+          this.swiperData.push({img: this.imagePath + commonImage[i].image_filename, id: commonImage[i].id})
         }
         // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
         this.$nextTick(() => {
-          const swiperTop = this.$refs.swiperTop.$swiper;
+          const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
           const swiperThumbs = this.$refs.swiperThumbs.$swiper;
-          swiperTop.controller.control = swiperThumbs;
-          swiperThumbs.controller.control = swiperTop;
+          swiperCommonImage.controller.control = swiperThumbs;
+          swiperThumbs.controller.control = swiperCommonImage;
         });
       }
       setTimeout(() => {

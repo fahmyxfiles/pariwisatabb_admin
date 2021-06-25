@@ -1,6 +1,5 @@
 export function getImageByType(images, type) {
     var image = images.filter((x) => x.type === type);
-    console.log(image);
     if (image) {
         if(image.length == 1){
         return image[0];

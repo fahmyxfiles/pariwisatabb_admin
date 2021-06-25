@@ -1,29 +1,55 @@
 <template>
   <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
     <div id="user-profile">
-      <hotel-header :header-data="headerData" />
+      <hotel-header :header-data="headerData" @tab-changed="tabChanged" />
       <!-- profile info  -->
       <section id="profile-info">
-        <b-row>
-          <!-- about suggested page and twitter feed -->
-          <b-col lg="3" cols="12" order="2" order-lg="1">
-            
-            <!--/ about suggested page and twitter feed -->
-          </b-col>
-          <!-- post -->
-          <b-col lg="6" cols="12" order="1" order-lg="2"> </b-col>
-          <!-- post -->
+        <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
+          <b-row v-if="activeTab === 0">
+            <!-- about suggested page and twitter feed -->
+            <b-col lg="3" cols="12" order="2" order-lg="1">
+              <b-card>
+                <!-- about -->
+                <div class="" >
+                  <h5 class="text-capitalize mb-75">
+                    Name
+                  </h5>
+                  <b-card-text>
+                    {{ hotelData.name }}
+                  </b-card-text>
+                </div>
+                <div class="mt-2" >
+                  <h5 class="text-capitalize mb-75">
+                    Address
+                  </h5>
+                  <b-card-text>
+                    {{ hotelData.address }}
+                  </b-card-text>
+                </div>
+                <div class="mt-2" >
+                  <h5 class="text-capitalize mb-75">
+                    Description
+                  </h5>
+                  <b-card-text>
+                    {{ hotelData.description }}
+                  </b-card-text>
+                </div>
+              </b-card>
+              <!--/ about suggested page and twitter feed -->
+            </b-col>
+            <!-- post -->
+            <b-col lg="6" cols="12" order="1" order-lg="2"> 
+              <b-card title="Location">
+                <GmapMarker ref="myMarker" :position="google && new google.maps.LatLng(1.38, 103.8)" />
+              </b-card>
+            </b-col>
+            <!-- post -->
 
-          <!-- latest photos suggestion and polls -->
-          <b-col lg="3" cols="12" order="3"> </b-col>
-          <!--/ latest photos suggestion and polls -->
-
-          <!-- load more  -->
-          <b-col cols="12" order="4">
-            <!-- <profile-bottom /> -->
-          </b-col>
-          <!--/ load more  -->
-        </b-row>
+            <!-- latest photos suggestion and polls -->
+            <b-col lg="3" cols="12" order="3"> </b-col>
+            <!--/ latest photos suggestion and polls -->
+          </b-row>
+        </b-overlay>
       </section>
       <!--/ profile info  -->
     </div>
@@ -31,14 +57,18 @@
 </template>
 
 <script>
-import { BOverlay, BRow, BCol } from "bootstrap-vue";
+import { BCardText, BCard, BOverlay, BRow, BCol } from "bootstrap-vue";
 
 import HotelHeader from "./HotelHeader.vue";
 
 import { toastErrorMsg, getImageByType } from "@/libs/helpers.js";
 
+import {gmapApi} from 'vue2-google-maps'
+
 export default {
   components: {
+    BCardText,
+    BCard,
     BOverlay,
     BRow,
     BCol,
@@ -69,9 +99,13 @@ export default {
       params: null,
       imagePath: this.$imagePath,
       loading: true,
+      tabLoading: false,
+      activeTab: 0,
     };
   },
-  computed: {},
+  computed: {
+    google: gmapApi,
+  },
   methods: {
     toastErrorMsg,
     getData() {
@@ -86,7 +120,6 @@ export default {
             headerImage: this.imagePath + getImageByType(this.hotelData.images, 'banner').image_filename, 
             mainImage: this.imagePath + getImageByType(this.hotelData.images, 'main').image_filename 
           };
-          console.log(this.headerData);
           this.loading = false;
         })
         .catch((err) => {
@@ -106,6 +139,15 @@ export default {
       this.params = JSON.parse(JSON.stringify(this.defaultParams));
     },
     getImageByType,
+    tabChanged(tab){
+      this.activeTab = tab;
+      // Get Images
+      this.tabLoading = true;
+      // AXIOS GET
+      setTimeout(() => {
+        this.tabLoading = false;
+      }, 5000);
+    },
   },
   created() {
     this.initDefaultParams();

@@ -42,34 +42,11 @@
 
         <!-- collapse -->
         <b-collapse id="nav-text-collapse" is-nav>
-          <b-tabs pills class="profile-tabs mt-1 mt-md-0" nav-class="mb-0">
-            <template #tabs-start>
-              <b-nav-item role="presentation" active class="font-weight-bold">
-                <span class="d-none d-md-block">Main</span>
-                <feather-icon icon="HomeIcon" class="d-block d-md-none" />
-              </b-nav-item>
-              <b-nav-item role="presentation" class="font-weight-bold">
-                <span class="d-none d-md-block">Images</span>
-                <feather-icon icon="ImageIcon" class="d-block d-md-none" />
-              </b-nav-item>
-              <b-nav-item role="presentation" class="font-weight-bold">
-                <span class="d-none d-md-block">Rooms</span>
-                <feather-icon icon="TvIcon" class="d-block d-md-none" />
-              </b-nav-item>
-              <b-nav-item role="presentation" class="font-weight-bold">
-                <span class="d-none d-md-block">Facilities</span>
-                <feather-icon icon="InfoIcon" class="d-block d-md-none" />
-              </b-nav-item>
-            </template>
-
-            <!-- edit buttons -->
-            <template #tabs-end>
-              <b-button variant="primary" class="ml-auto">
-                <feather-icon icon="EditIcon" class="d-block d-md-none" />
-                <span class="font-weight-bold d-none d-md-block">Edit</span>
-              </b-button>
-            </template>
-            <!-- edit buttons -->
+          <b-tabs v-model="currentTab" class="profile-tabs" @input="change">
+            <b-tab title="Home"></b-tab>
+            <b-tab title="Images"></b-tab>
+            <b-tab title="Rooms"></b-tab>
+            <b-tab title="Facilities"></b-tab>
           </b-tabs>
         </b-collapse>
         <!--/ collapse -->
@@ -86,6 +63,7 @@ import {
   BNavbar,
   BNavbarToggle,
   BCollapse,
+  BTab,
   BTabs,
   BNavItem,
   BButton,
@@ -95,6 +73,7 @@ import Ripple from "vue-ripple-directive";
 export default {
   components: {
     BCard,
+    BTab,
     BTabs,
     BButton,
     BNavItem,
@@ -106,12 +85,22 @@ export default {
   directives: {
     Ripple,
   },
+  data() {
+    return {
+      currentTab: 0,
+    }
+  },
   props: {
     headerData: {
       type: Object,
       default: () => {},
     },
   },
+  methods : {
+    change(){
+      this.$emit("tab-changed", this.currentTab);
+    }
+  }
 };
 </script>
 <style>

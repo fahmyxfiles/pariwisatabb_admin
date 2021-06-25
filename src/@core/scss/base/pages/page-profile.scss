@@ -25,12 +25,16 @@
 
       // profile image
       .profile-img {
-        height: 8.92rem;
-        width: 8.92rem;
+        height: auto;
+        width: 240px;
         border: 0.357rem solid $white;
         background-color: $white;
         border-radius: $card-border-radius;
         box-shadow: $box-shadow;
+      }
+      .profile-title {
+        margin-left: 3rem;
+        padding: 5px;
       }
     }
 
@@ -121,25 +125,28 @@
   .profile-header-nav {
     .profile-tabs {
       width: 100%;
-      margin-left: 13.2rem;
+      margin-left: 21.5rem;;
     }
   }
 }
 
 // profile img and title
-@include media-breakpoint-down(xs) {
+@include media-breakpoint-down(sm) {
   #user-profile {
     .profile-header {
       .profile-img-container {
         .profile-img {
-          height: 100px;
-          width: 100px;
+          display: none;
         }
         .profile-title {
           h2 {
             font-size: 1.5rem;
           }
+          margin-left: 9px;
+          padding: 1px;
+          margin-bottom: 40px;
         }
+        left: 5px;
       }
     }
   }

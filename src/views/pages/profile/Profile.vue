@@ -13,16 +13,7 @@
         <!--/ about suggested page and twitter feed -->
 
         <!-- post -->
-<<<<<<< Updated upstream
         <b-col lg="6" cols="12" order="1" order-lg="2">
-=======
-        <b-col
-          lg="6"
-          cols="12"
-          order="1"
-          order-lg="2"
-        > 
->>>>>>> Stashed changes
           <profile-post :posts="profileData.post" />
         </b-col>
         <!-- post -->

@@ -48,19 +48,40 @@
                   <b-card
                     v-for="(hotel, hotelIndex) in row"
                     :key="hotelIndex"
-                    :img-src="imagePath + getMainImage(hotel.images)"
-                    :img-alt="hotel.name"
                     img-top
                     no-body
                   >
+                    <router-link :to="{ name: 'hotel-view', params: { id: hotel.id }}"><b-card-img :src="imagePath + getImageByType(hotel.images, 'main').image_filename" :alt="hotel.name"/> </router-link>
                     <b-card-body>
-                      <b-card-title>{{ hotel.name }}</b-card-title>
+                      <b-card-title>
+                        <router-link :to="{ name: 'hotel-view', params: { id: hotel.id }}">
+                          {{ hotel.name }}
+                        </router-link>
+                      </b-card-title>
                       <b-card-text
                         >{{ hotel.address }},
                         {{ hotel.regency.name }}</b-card-text
                       >
                     </b-card-body>
                     <b-card-footer>
+                      <router-link :to="{ name: 'hotel-view', params: { id: hotel.id }}">
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-primary"
+                          class="btn-icon rounded-circle"
+                        >
+                          <feather-icon icon="EyeIcon" />
+                        </b-button>
+                      </router-link>
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-danger"
+                        class="btn-icon rounded-circle"
+                        style="margin-left: 5px;"
+                        @click="deleteData(hotel)"
+                      >
+                        <feather-icon icon="TrashIcon" />
+                      </b-button>
                       <small class="text-muted ml-1"
                         >Last updated
                         {{ hotel.updated_at | moment("from", "now") }}
@@ -82,6 +103,7 @@
 
 <script>
 import {
+  BCardImg,
   BFormTextarea,
   BFormRadioGroup,
   BOverlay,
@@ -109,9 +131,11 @@ import VSelect from "vue-select";
 import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 import Ripple from "vue-ripple-directive";
 import _ from "lodash";
+import { toastErrorMsg, getImageByType } from "@/libs/helpers.js";
 
 export default {
   components: {
+    BCardImg,
     BFormTextarea,
     VSelect,
     BFormRadioGroup,
@@ -149,18 +173,6 @@ export default {
       },
       loading: true,
       data: [],
-      params: null,
-      defaultParams: {
-        regency_id: 0,
-        name: "",
-        address: "",
-        postal_code: 0,
-        description: "",
-        regency: null,
-        images: [],
-        rooms: [],
-        facilities: [],
-      },
       imagePath: this.$imagePath,
     };
   },
@@ -170,6 +182,7 @@ export default {
     },
   },
   methods: {
+    toastErrorMsg, 
     getData() {
       this.loading = true;
       this.$http
@@ -212,61 +225,9 @@ export default {
           return this.toastErrorMsg(err.message);
         });
     },
-    getMainImage(images) {
-      var image = images.find((x) => x.type === 'main');
-      if (image) {
-        return image.image_filename;
-      }
-      return "";
-    },
-    initDefaultParams() {
-      this.params = JSON.parse(JSON.stringify(this.defaultParams));
-    },
-    toastErrorMsg(errMsg) {
-      if (typeof errMsg === "object" && errMsg !== null) {
-        const keys = Object.keys(errMsg);
-        // iterate over object
-        keys.forEach((key, index) => {
-          var errArray = errMsg[key];
-          errArray.forEach((_text) => {
-            this.$toast(
-              {
-                component: ToastificationContent,
-                props: {
-                  title: "Error",
-                  icon: "AlertCircleIcon",
-                  text: _text,
-                  variant: "danger",
-                },
-              },
-              {
-                position: "top-center",
-                timeout: 6000,
-              }
-            );
-          });
-        });
-      } else {
-        this.$toast(
-          {
-            component: ToastificationContent,
-            props: {
-              title: "Error",
-              icon: "AlertCircleIcon",
-              text: errMsg,
-              variant: "danger",
-            },
-          },
-          {
-            position: "top-center",
-            timeout: 6000,
-          }
-        );
-      }
-    },
+    getImageByType,
   },
   created() {
-    this.initDefaultParams();
     this.getData();
   },
 };

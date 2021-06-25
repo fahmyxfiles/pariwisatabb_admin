@@ -1,7 +1,7 @@
 <template>
   <b-card
     class="profile-header mb-2"
-    :img-src="require('@/assets/images/profile/user-uploads/timeline.jpg')"
+    :img-src="headerData.headerImage"
     img-top
     alt="cover photo"
     body-class="p-0"
@@ -11,19 +11,19 @@
       <div class="profile-img-container d-flex align-items-center">
         <div class="profile-img">
           <b-img
-            :src="require('@/assets/images/portrait/small/avatar-s-2.jpg')"
+            :src="headerData.mainImage"
             rounded
             fluid
-            alt="profile photo"
+            :alt="headerData.name"
           />
         </div>
         <!-- profile title -->
-        <div class="profile-title ml-3">
+        <div class="profile-title rounded">
           <h2 class="text-white">
-            Dope
+            {{ headerData.name }}
           </h2>
-          <p class="text-white">
-            Tampan
+          <p class="text-white mb-0">
+            {{ headerData.address }}
           </p>
         </div>
         <!--/ profile title -->
@@ -45,20 +45,20 @@
           <b-tabs pills class="profile-tabs mt-1 mt-md-0" nav-class="mb-0">
             <template #tabs-start>
               <b-nav-item role="presentation" active class="font-weight-bold">
-                <span class="d-none d-md-block">Feed</span>
-                <feather-icon icon="RssIcon" class="d-block d-md-none" />
+                <span class="d-none d-md-block">Main</span>
+                <feather-icon icon="HomeIcon" class="d-block d-md-none" />
               </b-nav-item>
               <b-nav-item role="presentation" class="font-weight-bold">
-                <span class="d-none d-md-block">About</span>
-                <feather-icon icon="InfoIcon" class="d-block d-md-none" />
-              </b-nav-item>
-              <b-nav-item role="presentation" class="font-weight-bold">
-                <span class="d-none d-md-block">Photos</span>
+                <span class="d-none d-md-block">Images</span>
                 <feather-icon icon="ImageIcon" class="d-block d-md-none" />
               </b-nav-item>
               <b-nav-item role="presentation" class="font-weight-bold">
-                <span class="d-none d-md-block">Friends</span>
-                <feather-icon icon="UsersIcon" class="d-block d-md-none" />
+                <span class="d-none d-md-block">Rooms</span>
+                <feather-icon icon="TvIcon" class="d-block d-md-none" />
+              </b-nav-item>
+              <b-nav-item role="presentation" class="font-weight-bold">
+                <span class="d-none d-md-block">Facilities</span>
+                <feather-icon icon="InfoIcon" class="d-block d-md-none" />
               </b-nav-item>
             </template>
 
@@ -114,3 +114,10 @@ export default {
   },
 };
 </script>
+<style>
+.profile-title {
+  background-color: #00000066;
+  padding: 5px;
+  margin-bottom: 15px;
+}
+</style>

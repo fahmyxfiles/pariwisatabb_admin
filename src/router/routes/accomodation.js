@@ -3,12 +3,38 @@ export default [{
         name: 'hotel-list',
         component: () =>
             import ('@/views/accomodation/hotel/Index.vue'),
+        meta: {
+            pageTitle: 'Hotel List',
+            breadcrumb: [{
+                    text: 'Hotel',
+                },
+                {
+                    text: 'List',
+                    active: true,
+                },
+            ],
+        },
     },
     {
-        path: '/hotel/view',
+        path: '/hotel/view/:id',
         name: 'hotel-view',
         component: () =>
             import ('@/views/accomodation/hotel/View.vue'),
+        meta: {
+            pageTitle: 'Hotel View',
+            breadcrumb: [{
+                    text: 'Hotel',
+                },
+                {
+                    text: 'List',
+                    to: '/hotel/list'
+                },
+                {
+                    text: 'View',
+                    active: true,
+                },
+            ],
+        },
     },
     {
         path: '/hotel/facitilies',

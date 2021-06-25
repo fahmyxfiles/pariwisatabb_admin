@@ -84,38 +84,40 @@
             <!--/ latest photos suggestion and polls -->
           </b-row>
           <b-row v-if="activeTab === 1">
-            <b-card title="Gallery">
-              <!-- swiper1 -->
-              <swiper
-                ref="swiperTop"
-                class="swiper-gallery gallery-top"
-                :options="swiperOptions"
-              >
-                <swiper-slide v-for="(data, index) in swiperData" :key="index">
-                  <b-img :src="data.img" fluid />
-                </swiper-slide>
+            <b-col lg="12">
+              <b-card title="Gallery">
+                <!-- swiper1 -->
+                <swiper
+                  ref="swiperTop"
+                  class="swiper-gallery gallery-top"
+                  :options="swiperOptions"
+                >
+                  <swiper-slide v-for="(data, index) in swiperData" :key="index">
+                    <b-img :src="data.img" fluid />
+                  </swiper-slide>
 
-                <div
-                  slot="button-next"
-                  class="swiper-button-next swiper-button-white"
-                />
-                <div
-                  slot="button-prev"
-                  class="swiper-button-prev swiper-button-white"
-                />
-              </swiper>
+                  <div
+                    slot="button-next"
+                    class="swiper-button-next swiper-button-white"
+                  />
+                  <div
+                    slot="button-prev"
+                    class="swiper-button-prev swiper-button-white"
+                  />
+                </swiper>
 
-              <!-- swiper2 Thumbs -->
-              <swiper
-                ref="swiperThumbs"
-                class="swiper gallery-thumbs"
-                :options="swiperOptionThumbs"
-              >
-                <swiper-slide v-for="(data, index) in swiperData" :key="index">
-                  <b-img :src="data.img" fluid />
-                </swiper-slide>
-              </swiper>
-            </b-card>
+                <!-- swiper2 Thumbs -->
+                <swiper
+                  ref="swiperThumbs"
+                  class="swiper gallery-thumbs"
+                  :options="swiperOptionThumbs"
+                >
+                  <swiper-slide v-for="(data, index) in swiperData" :key="index">
+                    <b-img :src="data.img" fluid />
+                  </swiper-slide>
+                </swiper>
+              </b-card>
+            </b-col>
           </b-row>
         </b-overlay>
       </section>
@@ -184,13 +186,7 @@ export default {
       tabLoading: false,
       activeTab: 0,
       map: null,
-      swiperData: [
-        { img: require("@/assets/images/banner/banner-11.jpg") },
-        { img: require("@/assets/images/banner/banner-12.jpg") },
-        { img: require("@/assets/images/banner/banner-13.jpg") },
-        { img: require("@/assets/images/banner/banner-15.jpg") },
-        { img: require("@/assets/images/banner/banner-16.jpg") },
-      ],
+      swiperData: [],
       /* eslint-disable global-require */
 
       swiperOptions: {
@@ -276,6 +272,11 @@ export default {
         });
       }
       if (tab === 1) {
+        this.swiperData = [];
+        var commonImage = this.getImageByType(this.hotelData.images, 'common');
+        for(var i = 0; i < commonImage.length; i++){
+          this.swiperData.push({img: this.imagePath + commonImage[i].image_filename})
+        }
         // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
         this.$nextTick(() => {
           const swiperTop = this.$refs.swiperTop.$swiper;

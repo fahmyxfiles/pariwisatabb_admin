@@ -43,7 +43,7 @@
           <div v-if="data.length > 0">
             <b-row v-for="(row, rowIndex) in chunkedData" :key="rowIndex">
               <b-col cols="12">
-                <b-card-group class="mb-0" v-if="data.length > 0">
+                <b-card-group class="mb-0" deck>
                   <!-- card 1 -->
                   <b-card
                     v-for="(hotel, hotelIndex) in row"

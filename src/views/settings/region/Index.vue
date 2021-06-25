@@ -44,7 +44,7 @@
             <!-- :key harus ada karena menggunakan vue 3, isi string dalam key harus sama dengan parameter kedua setelah v-for -->
             <b-row v-for="(row, rowIndex) in chunkedData" :key="rowIndex">
               <b-col cols="12">
-                <b-card-group class="mb-0">
+                <b-card-group class="mb-0" deck>
                   <!-- card 1 -->
                   <b-card
                     v-for="(regency, regencyIndex) in row"

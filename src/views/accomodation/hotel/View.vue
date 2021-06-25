@@ -129,65 +129,37 @@
           <!-- Tab Room -->
           <b-row v-if="activeTab === 2">
             <b-col lg="12">
-              <b-card title="Accordion">
-                <b-card-text>
-                  <span>Turn a group of </span>
-                  <code>&lt;app-collapse&gt;</code>
-                  <span>
-                    components into an accordion by supplying an accordion group
-                    identifier via the
-                  </span>
-                  <code>accordion</code>
-                  <span>
-                    prop. Note that only one collapse in an accordion group can
-                    be open at a time.</span
-                  >
-                </b-card-text>
-
+              <b-card title="Hotel Room">
                 <app-collapse accordion>
-                  <app-collapse-item title="Accordion Item 1">
-                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
-                    croissant. Tootsie roll sweet candy bear claw chupa chups
-                    lollipop toffee. Macaroon donut liquorice powder candy
-                    carrot cake macaroon fruitcake. Cookie toffee lollipop
-                    cotton candy ice cream dragée soufflé. Cake tiramisu
-                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
-                    pie apple pie topping oat cake dessert. Soufflé icing
-                    caramels. Chocolate cake icing ice cream macaroon pie
-                    cheesecake liquorice apple pie.
-                  </app-collapse-item>
-                  <app-collapse-item title="Accordion Item 2">
-                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
-                    croissant. Tootsie roll sweet candy bear claw chupa chups
-                    lollipop toffee. Macaroon donut liquorice powder candy
-                    carrot cake macaroon fruitcake. Cookie toffee lollipop
-                    cotton candy ice cream dragée soufflé. Cake tiramisu
-                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
-                    pie apple pie topping oat cake dessert. Soufflé icing
-                    caramels. Chocolate cake icing ice cream macaroon pie
-                    cheesecake liquorice apple pie.
-                  </app-collapse-item>
-                  <app-collapse-item title="Accordion Item 3">
-                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
-                    croissant. Tootsie roll sweet candy bear claw chupa chups
-                    lollipop toffee. Macaroon donut liquorice powder candy
-                    carrot cake macaroon fruitcake. Cookie toffee lollipop
-                    cotton candy ice cream dragée soufflé. Cake tiramisu
-                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
-                    pie apple pie topping oat cake dessert. Soufflé icing
-                    caramels. Chocolate cake icing ice cream macaroon pie
-                    cheesecake liquorice apple pie.
-                  </app-collapse-item>
-                  <app-collapse-item title="Accordion Item 4">
-                    Cheesecake cotton candy bonbon muffin cupcake tiramisu
-                    croissant. Tootsie roll sweet candy bear claw chupa chups
-                    lollipop toffee. Macaroon donut liquorice powder candy
-                    carrot cake macaroon fruitcake. Cookie toffee lollipop
-                    cotton candy ice cream dragée soufflé. Cake tiramisu
-                    lollipop wafer pie soufflé dessert tart. Biscuit ice cream
-                    pie apple pie topping oat cake dessert. Soufflé icing
-                    caramels. Chocolate cake icing ice cream macaroon pie
-                    cheesecake liquorice apple pie.
+                  <app-collapse-item v-for="(room, index) in hotelData.rooms" :key="index" :title="room.name">
+                    {{ room.description }}
+
+                    <b-row>
+                      <b-col md="4">
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Number of Guest
+                        </h5>
+                        <b-card-text>
+                          {{ room.num_of_guest }}
+                        </b-card-text>
+                      </b-col>
+                      <b-col md="4">
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Room size
+                        </h5>
+                        <b-card-text>
+                          {{ room.room_size }} &#13217;
+                        </b-card-text>
+                      </b-col>
+                      <b-col md="4">
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Bed size
+                        </h5>
+                        <b-card-text class="text-capitalize">
+                          {{ room.bed_size }}
+                        </b-card-text>
+                      </b-col>
+                    </b-row>
                   </app-collapse-item>
                 </app-collapse>
               </b-card>

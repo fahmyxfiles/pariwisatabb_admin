@@ -39,27 +39,11 @@
                 <!-- about -->
                 <div class="">
                   <h5 class="text-capitalize mb-75">
-                    Name
+                    Rooms
                   </h5>
-                  <b-card-text>
-                    kambing
-                  </b-card-text>
-                </div>
-                <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    asd
-                  </h5>
-                  <b-card-text>
-                    sdadad
-                  </b-card-text>
-                </div>
-                <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    Description
-                  </h5>
-                  <b-card-text>
-                    asdasd
-                  </b-card-text>
+                  <b-list-group>
+                    <b-list-group-item v-for="(room, index) in hotelData.rooms" :key="index">{{ room.name }}</b-list-group-item>
+                  </b-list-group>
                 </div>
               </b-card>
               <!--/ about suggested page and twitter feed -->
@@ -80,23 +64,9 @@
                     Facilities
                   </h5>
                   <b-card-text>
-                    Kamar
-                  </b-card-text>
-                </div>
-                <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    Bed
-                  </h5>
-                  <b-card-text>
-                    Kamar
-                  </b-card-text>
-                </div>
-                <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    Description
-                  </h5>
-                  <b-card-text>
-                    asdasd
+                    <ul class="pl-2">
+                      <li style="margin-top: 0.3rem" v-for="(facility, index) in hotelData.facilities" :key="index">{{ facility.name }}</li>
+                    </ul>
                   </b-card-text>
                 </div>
               </b-card>
@@ -112,7 +82,7 @@
 </template>
 
 <script>
-import { BCardText, BCard, BOverlay, BRow, BCol } from "bootstrap-vue";
+import { BListGroup, BListGroupItem, BCardText, BCard, BOverlay, BRow, BCol } from "bootstrap-vue";
 
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
 
@@ -120,6 +90,8 @@ import HotelHeader from "./HotelHeader.vue";
 
 export default {
   components: {
+    BListGroup, 
+    BListGroupItem, 
     BCardText,
     BCard,
     BOverlay,
@@ -170,7 +142,8 @@ export default {
       return this.createGoogleMap(
         this.hotelData.map_coordinate,
         this.hotelData.map_center,
-        this.$refs["map"]
+        this.$refs["map"],
+        this.map,
       );
     },
     getData() {

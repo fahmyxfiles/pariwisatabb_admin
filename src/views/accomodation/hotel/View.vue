@@ -42,7 +42,11 @@
                     Rooms
                   </h5>
                   <b-list-group>
-                    <b-list-group-item v-for="(room, index) in hotelData.rooms" :key="index">{{ room.name }}</b-list-group-item>
+                    <b-list-group-item
+                      v-for="(room, index) in hotelData.rooms"
+                      :key="index"
+                      >{{ room.name }}</b-list-group-item
+                    >
                   </b-list-group>
                 </div>
               </b-card>
@@ -65,7 +69,13 @@
                   </h5>
                   <b-card-text>
                     <ul class="pl-2">
-                      <li style="margin-top: 0.3rem" v-for="(facility, index) in hotelData.facilities" :key="index">{{ facility.name }}</li>
+                      <li
+                        style="margin-top: 0.3rem"
+                        v-for="(facility, index) in hotelData.facilities"
+                        :key="index"
+                      >
+                        {{ facility.name }}
+                      </li>
                     </ul>
                   </b-card-text>
                 </div>
@@ -73,7 +83,40 @@
             </b-col>
             <!--/ latest photos suggestion and polls -->
           </b-row>
-          <!-- <b-row v-if="activeTab === 1"> </b-row> -->
+          <b-row v-if="activeTab === 1">
+            <b-card title="Gallery">
+              <!-- swiper1 -->
+              <swiper
+                ref="swiperTop"
+                class="swiper-gallery gallery-top"
+                :options="swiperOptions"
+              >
+                <swiper-slide v-for="(data, index) in swiperData" :key="index">
+                  <b-img :src="data.img" fluid />
+                </swiper-slide>
+
+                <div
+                  slot="button-next"
+                  class="swiper-button-next swiper-button-white"
+                />
+                <div
+                  slot="button-prev"
+                  class="swiper-button-prev swiper-button-white"
+                />
+              </swiper>
+
+              <!-- swiper2 Thumbs -->
+              <swiper
+                ref="swiperThumbs"
+                class="swiper gallery-thumbs"
+                :options="swiperOptionThumbs"
+              >
+                <swiper-slide v-for="(data, index) in swiperData" :key="index">
+                  <b-img :src="data.img" fluid />
+                </swiper-slide>
+              </swiper>
+            </b-card>
+          </b-row>
         </b-overlay>
       </section>
       <!--/ profile info  -->
@@ -82,21 +125,35 @@
 </template>
 
 <script>
-import { BListGroup, BListGroupItem, BCardText, BCard, BOverlay, BRow, BCol } from "bootstrap-vue";
+import {
+  BListGroup,
+  BListGroupItem,
+  BCardText,
+  BCard,
+  BOverlay,
+  BRow,
+  BCol,
+  BImg,
+} from "bootstrap-vue";
 
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import "swiper/css/swiper.css";
 
 import HotelHeader from "./HotelHeader.vue";
 
 export default {
   components: {
-    BListGroup, 
-    BListGroupItem, 
+    Swiper,
+    SwiperSlide,
+    BListGroup,
+    BListGroupItem,
     BCardText,
     BCard,
     BOverlay,
     BRow,
     BCol,
+    BImg,
 
     HotelHeader,
   },
@@ -127,6 +184,33 @@ export default {
       tabLoading: false,
       activeTab: 0,
       map: null,
+      swiperData: [
+        { img: require("@/assets/images/banner/banner-11.jpg") },
+        { img: require("@/assets/images/banner/banner-12.jpg") },
+        { img: require("@/assets/images/banner/banner-13.jpg") },
+        { img: require("@/assets/images/banner/banner-15.jpg") },
+        { img: require("@/assets/images/banner/banner-16.jpg") },
+      ],
+      /* eslint-disable global-require */
+
+      swiperOptions: {
+        loop: true,
+        loopedSlides: 5,
+        spaceBetween: 10,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      },
+      swiperOptionThumbs: {
+        loop: true,
+        loopedSlides: 5, // looped slides should be the same
+        spaceBetween: 10,
+        centeredSlides: true,
+        slidesPerView: 4,
+        touchRatio: 0.2,
+        slideToClickedSlide: true,
+      },
     };
   },
   created() {
@@ -143,7 +227,7 @@ export default {
         this.hotelData.map_coordinate,
         this.hotelData.map_center,
         this.$refs["map"],
-        this.map,
+        this.map
       );
     },
     getData() {
@@ -191,6 +275,15 @@ export default {
           this.drawMap();
         });
       }
+      if (tab === 1) {
+        // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
+        this.$nextTick(() => {
+          const swiperTop = this.$refs.swiperTop.$swiper;
+          const swiperThumbs = this.$refs.swiperThumbs.$swiper;
+          swiperTop.controller.control = swiperThumbs;
+          swiperThumbs.controller.control = swiperTop;
+        });
+      }
       setTimeout(() => {
         this.tabLoading = false;
       }, 1000);
@@ -201,6 +294,7 @@ export default {
 
 <style lang="scss">
 @import "@core/scss/vue/pages/page-profile.scss";
+@import "@core/scss/vue/libs/swiper.scss";
 #map {
   height: 600px;
   background: gray;

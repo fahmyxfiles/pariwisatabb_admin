@@ -6,7 +6,7 @@
       <span>.</span>
     </b-card-text>
 
-    <b-button-group>
+    <b-button-group class="mb-2">
       <b-button
         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
         variant="outline-primary"
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import { BButtonGroup, BButton, BCardText } from 'bootstrap-vue'
-import BCardCode from '@core/components/b-card-code'
-import Ripple from 'vue-ripple-directive'
-import { codeBasic } from './code'
+import { BButtonGroup, BButton, BCardText } from "bootstrap-vue";
+import BCardCode from "@core/components/b-card-code";
+import Ripple from "vue-ripple-directive";
+import { codeBasic } from "./code";
 
 export default {
   components: {
@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       codeBasic,
-    }
+    };
   },
-}
+};
 </script>

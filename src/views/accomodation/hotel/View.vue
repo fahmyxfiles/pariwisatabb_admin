@@ -86,6 +86,26 @@
           <b-row v-if="activeTab === 1">
             <b-col lg="12">
               <b-card title="Gallery">
+                <b-button-group>
+                  <b-button
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    variant="outline-primary"
+                  >
+                    First
+                  </b-button>
+                  <b-button
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    variant="outline-primary"
+                  >
+                    Second
+                  </b-button>
+                  <b-button
+                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                    variant="outline-primary"
+                  >
+                    Third
+                  </b-button>
+                </b-button-group>
                 <!-- swiper1 -->
                 <swiper
                   ref="swiperCommonImage"
@@ -215,6 +235,8 @@ import {
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
+import { BButtonGroup, BButton } from "bootstrap-vue";
+import Ripple from "vue-ripple-directive";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import HotelHeader from "./HotelHeader.vue";
@@ -222,9 +244,12 @@ import HotelHeader from "./HotelHeader.vue";
 export default {
   components: {
     Swiper,
+    Ripple,
     SwiperSlide,
     AppCollapse,
     AppCollapseItem,
+    BButtonGroup,
+    BButton,
     BListGroup,
     BListGroupItem,
     BCardText,
@@ -235,6 +260,9 @@ export default {
     BImg,
 
     HotelHeader,
+  },
+  directives: {
+    Ripple,
   },
   data() {
     return {

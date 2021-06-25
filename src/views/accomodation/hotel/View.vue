@@ -86,24 +86,20 @@
           <b-row v-if="activeTab === 1">
             <b-col lg="12">
               <b-card title="Gallery">
-                <b-button-group>
+                <b-button-group class="mb-2">
                   <b-button
                     v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                     variant="outline-primary"
                   >
-                    First
+                    <feather-icon icon="ImageIcon" />
+                    Replace
                   </b-button>
                   <b-button
                     v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                    variant="outline-primary"
+                    variant="outline-danger"
                   >
-                    Second
-                  </b-button>
-                  <b-button
-                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                    variant="outline-primary"
-                  >
-                    Third
+                    <feather-icon icon="TrashIcon" />
+                    Delete
                   </b-button>
                 </b-button-group>
                 <!-- swiper1 -->

@@ -188,6 +188,17 @@
           <b-row v-show="activeTab === 2">
             <b-col lg="12">
               <b-card title="Hotel Room">
+                <b-form-group class="ml-1">
+                  <div class="d-flex align-items-center">
+                    <b-button
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-primary"
+                    >
+                      <feather-icon icon="PlusIcon" class="mr-50" />
+                      <span class="align-middle">Add</span>
+                    </b-button>
+                  </div>
+                </b-form-group>
                 <app-collapse accordion>
                   <app-collapse-item
                     v-for="(room, index) in hotelData.rooms"
@@ -221,6 +232,9 @@
                         </b-card-text>
                       </b-col>
                     </b-row>
+                    <h5 class="text-capitalize mb-75 mt-2">
+                      Pricing
+                    </h5>
 
                     <b-table-lite
                       class="mt-2"
@@ -267,10 +281,22 @@
           <b-row v-show="activeTab === 3">
             <b-col md="12">
               <b-card title="Hotel Facilities">
-                <div class="group-wrapper" v-for="(facilityCategory, index) in availableFacilityCategories" :key="index">
+                <div
+                  class="group-wrapper"
+                  v-for="(facilityCategory,
+                  index) in availableFacilityCategories"
+                  :key="index"
+                >
                   <div class="group-title">{{ facilityCategory.name }}</div>
                   <div class="group-content">
-                    <div class="facility-item" v-for="(facility, index) in getAvailableFacilityByCategoryId(facilityCategory.id)" :key="index">
+                    <div
+                      class="facility-item"
+                      v-for="(facility,
+                      index) in getAvailableFacilityByCategoryId(
+                        facilityCategory.id
+                      )"
+                      :key="index"
+                    >
                       <div class="facility-check-box">
                         <b-form-checkbox
                           value=""
@@ -282,6 +308,14 @@
                     </div>
                   </div>
                 </div>
+                <b-row class="justify-content-center">
+                  <b-button
+                    v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                    variant="info"
+                  >
+                    Save
+                  </b-button>
+                </b-row>
               </b-card>
             </b-col>
           </b-row>
@@ -306,6 +340,7 @@ import {
   BButton,
   BTableLite,
   BFormCheckbox,
+  BFormGroup,
 } from "bootstrap-vue";
 
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
@@ -322,6 +357,7 @@ import HotelHeader from "./HotelHeader.vue";
 export default {
   components: {
     vueDropzone,
+    BFormGroup,
     BCardCode,
     BTableLite,
     Swiper,
@@ -416,17 +452,17 @@ export default {
   },
   created() {
     this.initDefaultParams();
-    this.getAvailableFacilityCategories()
-    this.getAvailableFacilities()
+    this.getAvailableFacilityCategories();
+    this.getAvailableFacilities();
     this.hotelId = this.$route.params.id;
     // this.initDefaultParams();
     this.getData();
   },
   methods: {
-    getAvailableFacilityByCategoryId(id){
+    getAvailableFacilityByCategoryId(id) {
       return this.availableFacilities.filter((facility) => {
-        return facility.category_id == id
-      })
+        return facility.category_id == id;
+      });
     },
     editRoomPricingModal(data) {
       console.log(data);
@@ -438,11 +474,11 @@ export default {
     createGoogleMap,
     parseRoomPricing(pricings) {
       return pricings.map((pricing) => {
-        if(pricing.type == 'Weekday'){
-          pricing.date = 'Mon to Fri'
+        if (pricing.type == "Weekday") {
+          pricing.date = "Mon to Fri";
         }
-        if(pricing.type == 'Weekend'){
-          pricing.date = 'Sat and Sun'
+        if (pricing.type == "Weekend") {
+          pricing.date = "Sat and Sun";
         }
         return {
           id: pricing.id,
@@ -481,35 +517,35 @@ export default {
     },
     getAvailableFacilityCategories() {
       this.$http
-        .get('/facility/getAvailableCategoriesByType/hotel')
-        .then(res => {
-          this.availableFacilityCategories = res.data.data
+        .get("/facility/getAvailableCategoriesByType/hotel")
+        .then((res) => {
+          this.availableFacilityCategories = res.data.data;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     getAvailableFacilities() {
       this.$http
-        .get('/facility/getAllFacility')
-        .then(res => {
-          this.availableFacilities = res.data.data
+        .get("/facility/getAllFacility")
+        .then((res) => {
+          this.availableFacilities = res.data.data;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     getData() {
       this.loading = true;

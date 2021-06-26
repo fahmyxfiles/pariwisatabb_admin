@@ -241,7 +241,7 @@
                           class="btn-icon rounded-circle"
                           @click="editRoomPricingModal(data.item)"
                         >
-                          <feather-icon icon="EyeIcon" />
+                          <feather-icon icon="Edit2Icon" />
                         </b-button>
 
                         <b-button

@@ -52,7 +52,7 @@ export function toastErrorMsg(errMsg) {
     )
   }
 }
-export function createGoogleMap(coordinate, center, _map, thisMap) {
+export function createGoogleMap(coordinate, center, _map, thisMap, thisMarker) {
   const map_coordinate = coordinate
   const map_center = center
   const coord_lat = parseFloat(map_coordinate.split(',')[0])
@@ -64,7 +64,7 @@ export function createGoogleMap(coordinate, center, _map, thisMap) {
     center: { lat: center_lat, lng: center_lng },
     zoom: center_zoom,
   })
-  new window.google.maps.Marker({
+  thisMarker = new window.google.maps.Marker({
     position: { lat: coord_lat, lng: coord_lng },
     map: thisMap,
   })

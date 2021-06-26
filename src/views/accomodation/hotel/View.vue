@@ -280,7 +280,7 @@
           </b-row>
           <b-row v-show="activeTab === 3">
             <b-col md="12">
-              <b-card title="Hotel Facilities">
+              <b-card title="Hotel Facilities" v-if="availableFacilityCategories.length > 0">
                 <div
                   class="group-wrapper"
                   v-for="(facilityCategory,
@@ -382,8 +382,8 @@ export default {
   },
   data() {
     return {
-      availableFacilityCategories: null,
-      availableFacilities: null,
+      availableFacilityCategories: [],
+      availableFacilities: [],
       dropzoneImageOptions: {
         url: "url",
         maxFilesize: 5.0,
@@ -419,6 +419,7 @@ export default {
       tabLoading: false,
       activeTab: 0,
       map: null,
+      marker: null,
       swiperData: [],
       /* eslint-disable global-require */
 
@@ -512,7 +513,8 @@ export default {
         this.hotelData.map_coordinate,
         this.hotelData.map_center,
         this.$refs.map,
-        this.map
+        this.map,
+        this.marker
       );
     },
     getAvailableFacilityCategories() {
@@ -576,7 +578,8 @@ export default {
               this.getImageByType(this.hotelData.images, "banner").id
             }`
           );
-          this.drawMap();
+          this.drawMap()
+          console.log(this.marker)
           this.swiperData = [];
           const commonImage = this.getImageByType(
             this.hotelData.images,

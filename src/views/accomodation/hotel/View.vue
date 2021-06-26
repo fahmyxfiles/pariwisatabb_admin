@@ -222,6 +222,7 @@
                     </b-row>
 
                     <b-table-lite
+                      class="mt-2"
                       hover
                       :items="parseRoomPricing(room.pricings)"
                     />

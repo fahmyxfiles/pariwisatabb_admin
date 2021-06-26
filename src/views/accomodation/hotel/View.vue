@@ -85,7 +85,7 @@
           </b-row>
           <b-row v-show="activeTab === 1">
             <b-col lg="12">
-              <b-card title="Hotel Gallery">
+              <b-card title="Hotel Images">
                 <b-row>
                   <b-col md="6">
                     <h4>Main Image (Aspect Ratio 16:9)</h4>
@@ -407,6 +407,12 @@ export default {
     createGoogleMap,
     parseRoomPricing(pricings) {
       return pricings.map((pricing) => {
+        if(pricing.type == 'Weekday'){
+          pricing.date = 'Mon to Fri'
+        }
+        if(pricing.type == 'Weekend'){
+          pricing.date = 'Sat and Sun'
+        }
         return {
           id: pricing.id,
           type: pricing.type,

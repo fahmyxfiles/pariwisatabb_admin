@@ -84,6 +84,7 @@
                       ref="dropzoneMainImage"
                       :options="dropzoneImageOptions"
                       @vdropzone-file-added="dropzoneMainImageAdded"
+                      @vdropzone-sending="dropzoneMainImageSending"
                       class="mb-2"
                     />
                   </b-col>
@@ -98,7 +99,7 @@
                     />
                   </b-col>
                 </b-row>
-                <h4 class="text-center">Common Image</h4>
+                <h4 class="text-center mt-2">Common Image</h4>
                 <b-row class="justify-content-center">
                   <b-col md="6">
                     <!-- swiper1 -->
@@ -266,11 +267,7 @@ export default {
   data() {
     return {
       dropzoneImageOptions: {
-        url:
-          this.$http.defaults.baseURL +
-          "/hotel/" +
-          this.$route.params.id +
-          "/images",
+        url: 'http://localhost',
         maxFilesize: 5.0,
         maxFiles: 1,
         autoProcessQueue: true,
@@ -342,6 +339,11 @@ export default {
       }
       this.dropzoneMainImageSelectedFile = file;
     },
+    dropzoneMainImageSending(file, xhr, formData){
+      console.log(xhr);
+      formData.append('imageId', this.getImageByType(this.hotelData.images, "main").id);
+      formData.append('_method', "PUT");
+    },
     dropzoneBannerImageAdded(file) {
       if (this.dropzoneBannerImageSelectedFile !== null) {
         this.$refs.dropzoneBannerImage.removeFile(
@@ -369,10 +371,10 @@ export default {
             address: this.hotelData.address,
             headerImage:
               this.imagePath +
-              getImageByType(this.hotelData.images, "banner").image_filename,
+              this.getImageByType(this.hotelData.images, "banner").image_filename,
             mainImage:
               this.imagePath +
-              getImageByType(this.hotelData.images, "main").image_filename,
+              this.getImageByType(this.hotelData.images, "main").image_filename,
           };
           this.drawMap();
           this.swiperData = [];

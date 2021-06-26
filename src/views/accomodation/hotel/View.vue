@@ -234,10 +234,20 @@
                         </b-card-text>
                       </b-col>
                     </b-row>
-                    <h5 class="text-capitalize mb-75 mt-2">
-                      Pricing
-                    </h5>
-
+                    <div class="d-flex justify-content-between">
+                      <h5 class="text-capitalize mb-75 mt-2">
+                        Pricing
+                      </h5>
+                      <b-form-group class="ml-1" style="margin-top:5px;">
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-primary"
+                        >
+                          <feather-icon icon="PlusIcon" class="mr-50" />
+                          <span class="align-middle">Add</span>
+                        </b-button>
+                      </b-form-group>
+                    </div>
                     <b-table-lite
                       class="mt-2"
                       hover

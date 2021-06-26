@@ -266,57 +266,17 @@
           </b-row>
           <b-row v-show="activeTab === 3">
             <b-col md="12">
-              <b-card>
-                <div class="group-wrapper text-white">
-                  <div class="group-title">Fasilitas Tersedia</div>
+              <b-card title="Hotel Facilities">
+                <div class="group-wrapper" v-for="(facilityCategory, index) in availableFacilityCategories" :key="index">
+                  <div class="group-title">{{ facilityCategory.name }}</div>
                   <div class="group-content">
                     <div class="facility-item">
-                      <div class="facility-check-box">
+                      <div class="facility-check-box" v-for="(facility, index) in getAvailableFacilityByCategoryId(facilityCategory.id)" :key="index">
                         <b-form-checkbox
                           value=""
                           class="custom-control-primary"
                         >
-                          <div class="facility-label">Manula</div>
-                        </b-form-checkbox>
-                      </div>
-                    </div>
-                    <div class="facility-item">
-                      <div class="facility-check-box">
-                        <b-form-checkbox
-                          value=""
-                          class="custom-control-primary"
-                        >
-                          <div class="facility-label">Manula</div>
-                        </b-form-checkbox>
-                      </div>
-                    </div>
-                    <div class="facility-item">
-                      <div class="facility-check-box">
-                        <b-form-checkbox
-                          value=""
-                          class="custom-control-primary"
-                        >
-                          <div class="facility-label">Manula</div>
-                        </b-form-checkbox>
-                      </div>
-                    </div>
-                    <div class="facility-item">
-                      <div class="facility-check-box">
-                        <b-form-checkbox
-                          value=""
-                          class="custom-control-primary"
-                        >
-                          <div class="facility-label">Manula</div>
-                        </b-form-checkbox>
-                      </div>
-                    </div>
-                    <div class="facility-item">
-                      <div class="facility-check-box">
-                        <b-form-checkbox
-                          value=""
-                          class="custom-control-primary"
-                        >
-                          <div class="facility-label">Manula</div>
+                          <div class="facility-label">{{ facility.name }}</div>
                         </b-form-checkbox>
                       </div>
                     </div>
@@ -386,6 +346,8 @@ export default {
   },
   data() {
     return {
+      availableFacilityCategories: null,
+      availableFacilities: null,
       dropzoneImageOptions: {
         url: "url",
         maxFilesize: 5.0,
@@ -454,11 +416,20 @@ export default {
   },
   created() {
     this.initDefaultParams();
+    this.getAvailableFacilityCategories()
+    this.getAvailableFacilities()
     this.hotelId = this.$route.params.id;
     // this.initDefaultParams();
     this.getData();
   },
   methods: {
+    getAvailableFacilityByCategoryId(id){
+      console.log(this.availableFacilities)
+      console.log(id)
+      return this.availableFacilities.filter((facility) => {
+        return facility.category_id == id
+      })
+    },
     editRoomPricingModal(data) {
       console.log(data);
     },
@@ -509,6 +480,38 @@ export default {
         this.$refs.map,
         this.map
       );
+    },
+    getAvailableFacilityCategories() {
+      this.$http
+        .get('/facility/getAvailableCategoriesByType/hotel')
+        .then(res => {
+          this.availableFacilityCategories = res.data.data
+        })
+        .catch(err => {
+          if (err.response) {
+            const errMsg = err.response.data.data
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg)
+            }
+          }
+          return this.toastErrorMsg(err.message)
+        })
+    },
+    getAvailableFacilities() {
+      this.$http
+        .get('/facility')
+        .then(res => {
+          this.availableFacilities = res.data.data
+        })
+        .catch(err => {
+          if (err.response) {
+            const errMsg = err.response.data.data
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg)
+            }
+          }
+          return this.toastErrorMsg(err.message)
+        })
     },
     getData() {
       this.loading = true;

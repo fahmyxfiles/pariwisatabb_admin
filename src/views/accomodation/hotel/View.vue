@@ -5,31 +5,25 @@
       <!-- profile info  -->
       <section id="profile-info">
         <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
-          <b-row v-if="activeTab === 0">
+          <b-row v-show="activeTab === 0">
             <!-- about suggested page and twitter feed -->
             <b-col lg="3" cols="12" order="2" order-lg="1">
               <b-card>
                 <!-- about -->
                 <div class="">
-                  <h5 class="text-capitalize mb-75">
-                    Name
-                  </h5>
+                  <h5 class="text-capitalize mb-75">Name</h5>
                   <b-card-text>
                     {{ hotelData.name }}
                   </b-card-text>
                 </div>
                 <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    Address
-                  </h5>
+                  <h5 class="text-capitalize mb-75">Address</h5>
                   <b-card-text>
                     {{ hotelData.address }}
                   </b-card-text>
                 </div>
                 <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    Description
-                  </h5>
+                  <h5 class="text-capitalize mb-75">Description</h5>
                   <b-card-text>
                     {{ hotelData.description }}
                   </b-card-text>
@@ -38,9 +32,7 @@
               <b-card>
                 <!-- about -->
                 <div class="">
-                  <h5 class="text-capitalize mb-75">
-                    Rooms
-                  </h5>
+                  <h5 class="text-capitalize mb-75">Rooms</h5>
                   <b-list-group>
                     <b-list-group-item
                       v-for="(room, index) in hotelData.rooms"
@@ -64,9 +56,7 @@
             <b-col lg="3" cols="12" order="3">
               <b-card>
                 <div class="">
-                  <h5 class="text-capitalize mb-75">
-                    Facilities
-                  </h5>
+                  <h5 class="text-capitalize mb-75">Facilities</h5>
                   <b-card-text>
                     <ul class="pl-2">
                       <li
@@ -83,71 +73,113 @@
             </b-col>
             <!--/ latest photos suggestion and polls -->
           </b-row>
-          <b-row v-if="activeTab === 1">
+          <b-row v-show="activeTab === 1">
             <b-col lg="12">
-              <b-card title="Gallery">
-                <b-button-group class="mb-2">
-                  <b-button
-                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                    variant="outline-primary"
-                  >
-                    <feather-icon icon="ImageIcon" />
-                    Replace
-                  </b-button>
-                  <b-button
-                    v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                    variant="outline-danger"
-                  >
-                    <feather-icon icon="TrashIcon" />
-                    Delete
-                  </b-button>
-                </b-button-group>
-                <!-- swiper1 -->
-                <swiper
-                  ref="swiperCommonImage"
-                  class="swiper-gallery gallery-top"
-                  :options="swiperOptions"
-                  @slideChange="swiperSlideChange"
-                >
-                  <swiper-slide
-                    v-for="(data, index) in swiperData"
-                    :key="index"
-                  >
-                    <b-img :src="data.img" fluid />
-                  </swiper-slide>
+              <b-card title="Hotel Gallery">
+                <b-row>
+                  <b-col md="6">
+                    <h4>Main Image (Aspect Ratio 16:9)</h4>
+                    <vue-dropzone
+                      id="dropzoneMainImage"
+                      ref="dropzoneMainImage"
+                      :options="dropzoneImageOptions"
+                      @vdropzone-file-added="dropzoneMainImageAdded"
+                      class="mb-2"
+                    />
+                  </b-col>
+                  <b-col md="6">
+                    <h4>Banner Image (Aspect Ratio 15:4)</h4>
+                    <vue-dropzone
+                      id="dropzoneBannerImage"
+                      ref="dropzoneBannerImage"
+                      :options="dropzoneImageOptions"
+                      @vdropzone-file-added="dropzoneBannerImageAdded"
+                      class="mb-2"
+                    />
+                  </b-col>
+                </b-row>
+                <h4 class="text-center">Common Image</h4>
+                <b-row class="justify-content-center">
+                  <b-col md="6">
+                    <!-- swiper1 -->
+                    <swiper
+                      ref="swiperCommonImage"
+                      class="swiper-gallery gallery-top"
+                      :options="swiperOptions"
+                      @slideChange="swiperSlideChange"
+                    >
+                      <swiper-slide
+                        v-for="(data, index) in swiperData"
+                        :key="index"
+                      >
+                        <b-img :src="data.img" fluid />
+                      </swiper-slide>
 
-                  <div
-                    slot="button-next"
-                    class="swiper-button-next swiper-button-white"
-                  />
-                  <div
-                    slot="button-prev"
-                    class="swiper-button-prev swiper-button-white"
-                  />
-                </swiper>
+                      <div
+                        slot="button-next"
+                        class="swiper-button-next swiper-button-white"
+                      />
+                      <div
+                        slot="button-prev"
+                        class="swiper-button-prev swiper-button-white"
+                      />
+                    </swiper>
 
-                <!-- swiper2 Thumbs -->
-                <swiper
-                  ref="swiperThumbs"
-                  class="swiper gallery-thumbs"
-                  :options="swiperOptionThumbs"
-                >
-                  <swiper-slide
-                    v-for="(data, index) in swiperData"
-                    :key="index"
-                  >
-                    <b-img :src="data.img" fluid />
-                  </swiper-slide>
-                </swiper>
+                    <!-- swiper2 Thumbs -->
+                    <swiper
+                      ref="swiperThumbs"
+                      class="swiper gallery-thumbs"
+                      :options="swiperOptionThumbs"
+                    >
+                      <swiper-slide
+                        v-for="(data, index) in swiperData"
+                        :key="index"
+                      >
+                        <b-img :src="data.img" fluid />
+                      </swiper-slide>
+                    </swiper>
+                  </b-col>
+                </b-row>
+                <b-row class="justify-content-center">
+                  <b-col md="6">
+                    <b-button-group class="mt-2 d-flex justify-content-center">
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-primary"
+                      >
+                        <feather-icon icon="PlusIcon" />
+                        Add
+                      </b-button>
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-primary"
+                      >
+                        <feather-icon icon="ImageIcon" />
+                        Replace
+                      </b-button>
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-danger"
+                      >
+                        <feather-icon icon="TrashIcon" />
+                        Delete
+                      </b-button>
+                    </b-button-group>
+                  </b-col>
+                </b-row>
               </b-card>
             </b-col>
           </b-row>
           <!-- Tab Room -->
-          <b-row v-if="activeTab === 2">
+          <b-row v-show="activeTab === 2">
             <b-col lg="12">
               <b-card title="Hotel Room">
                 <app-collapse accordion>
-                  <app-collapse-item v-for="(room, index) in hotelData.rooms" :key="index" :title="room.name">
+                  <app-collapse-item
+                    v-for="(room, index) in hotelData.rooms"
+                    :key="index"
+                    :title="room.name"
+                  >
                     {{ room.description }}
 
                     <b-row>
@@ -160,17 +192,13 @@
                         </b-card-text>
                       </b-col>
                       <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">
-                          Room size
-                        </h5>
+                        <h5 class="text-capitalize mb-75 mt-2">Room size</h5>
                         <b-card-text>
                           {{ room.room_size }} &#13217;
                         </b-card-text>
                       </b-col>
                       <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">
-                          Bed size
-                        </h5>
+                        <h5 class="text-capitalize mb-75 mt-2">Bed size</h5>
                         <b-card-text class="text-capitalize">
                           {{ room.bed_size }}
                         </b-card-text>
@@ -198,21 +226,24 @@ import {
   BRow,
   BCol,
   BImg,
+  BButtonGroup,
+  BButton,
 } from "bootstrap-vue";
 
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
-import { BButtonGroup, BButton } from "bootstrap-vue";
 import Ripple from "vue-ripple-directive";
+import vueDropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import HotelHeader from "./HotelHeader.vue";
 
 export default {
   components: {
+    vueDropzone,
     Swiper,
-    Ripple,
     SwiperSlide,
     AppCollapse,
     AppCollapseItem,
@@ -234,6 +265,20 @@ export default {
   },
   data() {
     return {
+      dropzoneImageOptions: {
+        url:
+          this.$http.defaults.baseURL +
+          "/hotel/" +
+          this.$route.params.id +
+          "/images",
+        maxFilesize: 5.0,
+        maxFiles: 1,
+        autoProcessQueue: true,
+        addRemoveLinks: false,
+        acceptedFiles: "image/*",
+      },
+      dropzoneMainImageSelectedFile: null,
+      dropzoneBannerImageSelectedFile: null,
       hotelData: {},
       headerData: {
         name: "",
@@ -289,6 +334,22 @@ export default {
   methods: {
     toastErrorMsg,
     createGoogleMap,
+    dropzoneMainImageAdded(file) {
+      if (this.dropzoneMainImageSelectedFile !== null) {
+        this.$refs.dropzoneMainImage.removeFile(
+          this.dropzoneMainImageSelectedFile
+        );
+      }
+      this.dropzoneMainImageSelectedFile = file;
+    },
+    dropzoneBannerImageAdded(file) {
+      if (this.dropzoneBannerImageSelectedFile !== null) {
+        this.$refs.dropzoneBannerImage.removeFile(
+          this.dropzoneBannerImageSelectedFile
+        );
+      }
+      this.dropzoneBannerImageSelectedFile = file;
+    },
     drawMap() {
       return this.createGoogleMap(
         this.hotelData.map_coordinate,
@@ -314,6 +375,43 @@ export default {
               getImageByType(this.hotelData.images, "main").image_filename,
           };
           this.drawMap();
+          this.swiperData = [];
+          var commonImage = this.getImageByType(
+            this.hotelData.images,
+            "common"
+          );
+          for (var i = 0; i < commonImage.length; i++) {
+            this.swiperData.push({
+              img: this.imagePath + commonImage[i].image_filename,
+              id: commonImage[i].id,
+            });
+          }
+          // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
+          this.$nextTick(() => {
+            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
+            const swiperThumbs = this.$refs.swiperThumbs.$swiper;
+            swiperCommonImage.controller.control = swiperThumbs;
+            swiperThumbs.controller.control = swiperCommonImage;
+          });
+          this.$nextTick(() => {
+            var mainImage = this.getImageByType(this.hotelData.images, "main");
+            const fileExt = mainImage.image_filename.split(".").pop();
+            const file = { size: 1, type: `image/${fileExt}` };
+            const url = this.imagePath + mainImage.image_filename;
+            this.$refs.dropzoneMainImage.removeAllFiles();
+            this.$refs.dropzoneMainImage.manuallyAddFile(file, url);
+          });
+          this.$nextTick(() => {
+            var bannerImage = this.getImageByType(
+              this.hotelData.images,
+              "banner"
+            );
+            const fileExt = bannerImage.image_filename.split(".").pop();
+            const file = { size: 1, type: `image/${fileExt}` };
+            const url = this.imagePath + bannerImage.image_filename;
+            this.$refs.dropzoneBannerImage.removeAllFiles();
+            this.$refs.dropzoneBannerImage.manuallyAddFile(file, url);
+          });
           this.loading = false;
         })
         .catch((err) => {
@@ -333,37 +431,10 @@ export default {
       this.params = JSON.parse(JSON.stringify(this.defaultParams));
     },
     getImageByType,
-    swiperSlideChange() {
-      console.log("Get ready to see the slide you are in");
-      console.log(this.$refs.swiperCommonImage.$swiper);
-      console.log(this.swiperData);
-    },
+    swiperSlideChange() {},
     tabChanged(tab) {
-      this.activeTab = tab;
       this.tabLoading = true;
-      // Get Images
-      if (tab === 0) {
-        this.$nextTick(() => {
-          this.drawMap();
-        });
-      }
-      if (tab === 1) {
-        this.swiperData = [];
-        var commonImage = this.getImageByType(this.hotelData.images, "common");
-        for (var i = 0; i < commonImage.length; i++) {
-          this.swiperData.push({
-            img: this.imagePath + commonImage[i].image_filename,
-            id: commonImage[i].id,
-          });
-        }
-        // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
-        this.$nextTick(() => {
-          const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
-          const swiperThumbs = this.$refs.swiperThumbs.$swiper;
-          swiperCommonImage.controller.control = swiperThumbs;
-          swiperThumbs.controller.control = swiperCommonImage;
-        });
-      }
+      this.activeTab = tab;
       setTimeout(() => {
         this.tabLoading = false;
       }, 1000);
@@ -378,5 +449,17 @@ export default {
 #map {
   height: 600px;
   background: gray;
+}
+
+.dropzone .dz-preview .dz-image img {
+  width: inherit !important;
+  height: fit-content !important;
+  max-height: 230px;
+}
+.dz-progress {
+  display: none !important;
+}
+.dz-details {
+  display: none !important;
 }
 </style>

@@ -1,7 +1,7 @@
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export function getImageByType(images, type) {
-  const image = images.filter(x => x.type === type)
+  const image = images.filter(x => x.type === type && x.hotel_room_id == null)
   if (image) {
     if (image.length == 1) {
       return image[0]

@@ -264,6 +264,67 @@
               </b-card>
             </b-col>
           </b-row>
+          <b-row v-show="activeTab === 3">
+            <b-col md="12">
+              <b-card>
+                <div class="group-wrapper text-white">
+                  <div class="group-title">Fasilitas Tersedia</div>
+                  <div class="group-content">
+                    <div class="facility-item">
+                      <div class="facility-check-box">
+                        <b-form-checkbox
+                          value=""
+                          class="custom-control-primary"
+                        >
+                          <div class="facility-label">Manula</div>
+                        </b-form-checkbox>
+                      </div>
+                    </div>
+                    <div class="facility-item">
+                      <div class="facility-check-box">
+                        <b-form-checkbox
+                          value=""
+                          class="custom-control-primary"
+                        >
+                          <div class="facility-label">Manula</div>
+                        </b-form-checkbox>
+                      </div>
+                    </div>
+                    <div class="facility-item">
+                      <div class="facility-check-box">
+                        <b-form-checkbox
+                          value=""
+                          class="custom-control-primary"
+                        >
+                          <div class="facility-label">Manula</div>
+                        </b-form-checkbox>
+                      </div>
+                    </div>
+                    <div class="facility-item">
+                      <div class="facility-check-box">
+                        <b-form-checkbox
+                          value=""
+                          class="custom-control-primary"
+                        >
+                          <div class="facility-label">Manula</div>
+                        </b-form-checkbox>
+                      </div>
+                    </div>
+                    <div class="facility-item">
+                      <div class="facility-check-box">
+                        <b-form-checkbox
+                          value=""
+                          class="custom-control-primary"
+                        >
+                          <div class="facility-label">Manula</div>
+                        </b-form-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </b-card>
+            </b-col>
+          </b-row>
         </b-overlay>
       </section>
       <!--/ profile info  -->
@@ -284,6 +345,7 @@ import {
   BButtonGroup,
   BButton,
   BTableLite,
+  BFormCheckbox,
 } from "bootstrap-vue";
 
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
@@ -316,7 +378,7 @@ export default {
     BRow,
     BCol,
     BImg,
-
+    BFormCheckbox,
     HotelHeader,
   },
   directives: {
@@ -380,13 +442,13 @@ export default {
       },
       roomPricingFields: [
         // A virtual column that doesn't exist in items
-        'No',
+        "No",
         // A regular column
-        'type',
-        'date',
-        'price',
+        "type",
+        "date",
+        "price",
         // A virtual column made up from two fields
-        { key: 'action', label: 'Action' }
+        { key: "action", label: "Action" },
       ],
     };
   },
@@ -397,11 +459,11 @@ export default {
     this.getData();
   },
   methods: {
-    editRoomPricingModal(data){
-      console.log(data)
+    editRoomPricingModal(data) {
+      console.log(data);
     },
-    deleteRoomPricing(data){
-      console.log(data)
+    deleteRoomPricing(data) {
+      console.log(data);
     },
     toastErrorMsg,
     createGoogleMap,
@@ -561,5 +623,49 @@ export default {
 }
 .dz-details {
   display: none !important;
+}
+.group-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 24px;
+}
+.group-title {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #35405a;
+  margin-bottom: 4px;
+  padding-top: 4px;
+  width: 24%;
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
+}
+.group-content {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #dee2ee;
+}
+.facility-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+.facility-icon {
+  margin-right: 16px;
+}
+.facility-label {
+  font-size: 14px;
+  line-height: 22px;
+  color: #35405a;
 }
 </style>

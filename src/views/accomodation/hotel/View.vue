@@ -11,19 +11,25 @@
               <b-card>
                 <!-- about -->
                 <div class="">
-                  <h5 class="text-capitalize mb-75">Name</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Name
+                  </h5>
                   <b-card-text>
                     {{ hotelData.name }}
                   </b-card-text>
                 </div>
                 <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">Address</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Address
+                  </h5>
                   <b-card-text>
                     {{ hotelData.address }}
                   </b-card-text>
                 </div>
                 <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">Description</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Description
+                  </h5>
                   <b-card-text>
                     {{ hotelData.description }}
                   </b-card-text>
@@ -32,7 +38,9 @@
               <b-card>
                 <!-- about -->
                 <div class="">
-                  <h5 class="text-capitalize mb-75">Rooms</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Rooms
+                  </h5>
                   <b-list-group>
                     <b-list-group-item
                       v-for="(room, index) in hotelData.rooms"
@@ -56,13 +64,15 @@
             <b-col lg="3" cols="12" order="3">
               <b-card>
                 <div class="">
-                  <h5 class="text-capitalize mb-75">Facilities</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Facilities
+                  </h5>
                   <b-card-text>
                     <ul class="pl-2">
                       <li
-                        style="margin-top: 0.3rem"
                         v-for="(facility, index) in hotelData.facilities"
                         :key="index"
+                        style="margin-top: 0.3rem"
                       >
                         {{ facility.name }}
                       </li>
@@ -83,8 +93,9 @@
                       id="dropzoneMainImage"
                       ref="dropzoneMainImage"
                       :options="dropzoneImageOptions"
-                      @vdropzone-file-added="dropzoneMainImageAdded"
                       class="mb-2"
+                      @vdropzone-file-added="dropzoneMainImageAdded"
+                      @vdropzone-sending="dropzoneMainImageSending"
                     />
                   </b-col>
                   <b-col md="6">
@@ -93,12 +104,14 @@
                       id="dropzoneBannerImage"
                       ref="dropzoneBannerImage"
                       :options="dropzoneImageOptions"
-                      @vdropzone-file-added="dropzoneBannerImageAdded"
                       class="mb-2"
+                      @vdropzone-file-added="dropzoneBannerImageAdded"
                     />
                   </b-col>
                 </b-row>
-                <h4 class="text-center">Common Image</h4>
+                <h4 class="text-center mt-2">
+                  Common Image
+                </h4>
                 <b-row class="justify-content-center">
                   <b-col md="6">
                     <!-- swiper1 -->
@@ -181,6 +194,32 @@
                     :title="room.name"
                   >
                     {{ room.description }}
+                    <b-row>
+                      <b-col md="4">
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Number of Guest
+                        </h5>
+                        <b-card-text>
+                          {{ room.num_of_guest }}
+                        </b-card-text>
+                      </b-col>
+                      <b-col md="4">
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Room size
+                        </h5>
+                        <b-card-text>
+                          {{ room.room_size }} &#13217;
+                        </b-card-text>
+                      </b-col>
+                      <b-col md="4">
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Bed size
+                        </h5>
+                        <b-card-text class="text-capitalize">
+                          {{ room.bed_size }}
+                        </b-card-text>
+                      </b-col>
+                    </b-row>
 
                     <b-table-lite
                       hover
@@ -252,11 +291,7 @@ export default {
   data() {
     return {
       dropzoneImageOptions: {
-        url:
-          this.$http.defaults.baseURL +
-          "/hotel/" +
-          this.$route.params.id +
-          "/images",
+        url: "url",
         maxFilesize: 5.0,
         maxFiles: 1,
         autoProcessQueue: true,
@@ -337,6 +372,9 @@ export default {
       }
       this.dropzoneMainImageSelectedFile = file;
     },
+    dropzoneMainImageSending(file, xhr, formData) {
+      formData.append("_method", "PUT");
+    },
     dropzoneBannerImageAdded(file) {
       if (this.dropzoneBannerImageSelectedFile !== null) {
         this.$refs.dropzoneBannerImage.removeFile(
@@ -349,7 +387,7 @@ export default {
       return this.createGoogleMap(
         this.hotelData.map_coordinate,
         this.hotelData.map_center,
-        this.$refs["map"],
+        this.$refs.map,
         this.map
       );
     },
@@ -364,18 +402,31 @@ export default {
             address: this.hotelData.address,
             headerImage:
               this.imagePath +
-              getImageByType(this.hotelData.images, "banner").image_filename,
+              this.getImageByType(this.hotelData.images, "banner")
+                .image_filename,
             mainImage:
               this.imagePath +
-              getImageByType(this.hotelData.images, "main").image_filename,
+              this.getImageByType(this.hotelData.images, "main").image_filename,
           };
+          this.$refs.dropzoneMainImage.setOption(
+            "url",
+            `${this.$http.defaults.baseURL}/hotel_image/${
+              this.getImageByType(this.hotelData.images, "main").id
+            }`
+          );
+          this.$refs.dropzoneBannerImage.setOption(
+            "url",
+            `${this.$http.defaults.baseURL}/hotel_image/${
+              this.getImageByType(this.hotelData.images, "banner").id
+            }`
+          );
           this.drawMap();
           this.swiperData = [];
-          var commonImage = this.getImageByType(
+          const commonImage = this.getImageByType(
             this.hotelData.images,
             "common"
           );
-          for (var i = 0; i < commonImage.length; i++) {
+          for (let i = 0; i < commonImage.length; i++) {
             this.swiperData.push({
               img: this.imagePath + commonImage[i].image_filename,
               id: commonImage[i].id,
@@ -389,7 +440,10 @@ export default {
             swiperThumbs.controller.control = swiperCommonImage;
           });
           this.$nextTick(() => {
-            var mainImage = this.getImageByType(this.hotelData.images, "main");
+            const mainImage = this.getImageByType(
+              this.hotelData.images,
+              "main"
+            );
             const fileExt = mainImage.image_filename.split(".").pop();
             const file = { size: 1, type: `image/${fileExt}` };
             const url = this.imagePath + mainImage.image_filename;
@@ -397,7 +451,7 @@ export default {
             this.$refs.dropzoneMainImage.manuallyAddFile(file, url);
           });
           this.$nextTick(() => {
-            var bannerImage = this.getImageByType(
+            const bannerImage = this.getImageByType(
               this.hotelData.images,
               "banner"
             );

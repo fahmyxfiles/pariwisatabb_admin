@@ -48,6 +48,7 @@ module.exports = {
        fix: true
     })
     */
+    
   },
   transpileDependencies: ['vue-echarts', 'resize-detector'],
 }

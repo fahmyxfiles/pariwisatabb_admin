@@ -3,13 +3,12 @@ import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
+import VueMoment from 'vue-moment'
+import Skeleton from 'vue-loading-skeleton'
+import jQuery from 'jquery'
 import router from './router'
 import store from './store'
 import App from './App.vue'
-
-import VueMoment from 'vue-moment';
-import Skeleton from 'vue-loading-skeleton'
-import jQuery from 'jquery'
 
 // Global Components
 import './global-components'
@@ -35,7 +34,7 @@ Vue.use(ModalPlugin)
 Vue.use(VueCompositionAPI)
 
 // Vue Moment
-Vue.use(VueMoment);
+Vue.use(VueMoment)
 
 // Vue Skeleton
 Vue.use(Skeleton)

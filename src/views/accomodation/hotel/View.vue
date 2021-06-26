@@ -1,29 +1,51 @@
 <template>
-  <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
+  <b-overlay
+    :show="loading"
+    spinner-variant="primary"
+    rounded="sm"
+  >
     <div id="user-profile">
-      <hotel-header :header-data="headerData" @tab-changed="tabChanged" />
+      <hotel-header
+        :header-data="headerData"
+        @tab-changed="tabChanged"
+      />
       <!-- profile info  -->
       <section id="profile-info">
-        <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
+        <b-overlay
+          :show="tabLoading"
+          spinner-variant="primary"
+          rounded="sm"
+        >
           <b-row v-show="activeTab === 0">
             <!-- about suggested page and twitter feed -->
-            <b-col lg="3" cols="12" order="2" order-lg="1">
+            <b-col
+              lg="3"
+              cols="12"
+              order="2"
+              order-lg="1"
+            >
               <b-card>
                 <!-- about -->
                 <div class="">
-                  <h5 class="text-capitalize mb-75">Name</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Name
+                  </h5>
                   <b-card-text>
                     {{ hotelData.name }}
                   </b-card-text>
                 </div>
                 <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">Address</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Address
+                  </h5>
                   <b-card-text>
                     {{ hotelData.address }}
                   </b-card-text>
                 </div>
                 <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">Description</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Description
+                  </h5>
                   <b-card-text>
                     {{ hotelData.description }}
                   </b-card-text>
@@ -32,37 +54,52 @@
               <b-card>
                 <!-- about -->
                 <div class="">
-                  <h5 class="text-capitalize mb-75">Rooms</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Rooms
+                  </h5>
                   <b-list-group>
                     <b-list-group-item
                       v-for="(room, index) in hotelData.rooms"
                       :key="index"
-                      >{{ room.name }}</b-list-group-item
-                    >
+                    >{{ room.name }}</b-list-group-item>
                   </b-list-group>
                 </div>
               </b-card>
               <!--/ about suggested page and twitter feed -->
             </b-col>
             <!-- post -->
-            <b-col lg="6" cols="12" order="1" order-lg="2">
+            <b-col
+              lg="6"
+              cols="12"
+              order="1"
+              order-lg="2"
+            >
               <b-card title="Maps">
-                <div id="map" ref="map" />
+                <div
+                  id="map"
+                  ref="map"
+                />
               </b-card>
             </b-col>
             <!-- post -->
 
             <!-- latest photos suggestion and polls -->
-            <b-col lg="3" cols="12" order="3">
+            <b-col
+              lg="3"
+              cols="12"
+              order="3"
+            >
               <b-card>
                 <div class="">
-                  <h5 class="text-capitalize mb-75">Facilities</h5>
+                  <h5 class="text-capitalize mb-75">
+                    Facilities
+                  </h5>
                   <b-card-text>
                     <ul class="pl-2">
                       <li
-                        style="margin-top: 0.3rem"
                         v-for="(facility, index) in hotelData.facilities"
                         :key="index"
+                        style="margin-top: 0.3rem"
                       >
                         {{ facility.name }}
                       </li>
@@ -83,9 +120,9 @@
                       id="dropzoneMainImage"
                       ref="dropzoneMainImage"
                       :options="dropzoneImageOptions"
+                      class="mb-2"
                       @vdropzone-file-added="dropzoneMainImageAdded"
                       @vdropzone-sending="dropzoneMainImageSending"
-                      class="mb-2"
                     />
                   </b-col>
                   <b-col md="6">
@@ -94,12 +131,14 @@
                       id="dropzoneBannerImage"
                       ref="dropzoneBannerImage"
                       :options="dropzoneImageOptions"
-                      @vdropzone-file-added="dropzoneBannerImageAdded"
                       class="mb-2"
+                      @vdropzone-file-added="dropzoneBannerImageAdded"
                     />
                   </b-col>
                 </b-row>
-                <h4 class="text-center mt-2">Common Image</h4>
+                <h4 class="text-center mt-2">
+                  Common Image
+                </h4>
                 <b-row class="justify-content-center">
                   <b-col md="6">
                     <!-- swiper1 -->
@@ -113,7 +152,10 @@
                         v-for="(data, index) in swiperData"
                         :key="index"
                       >
-                        <b-img :src="data.img" fluid />
+                        <b-img
+                          :src="data.img"
+                          fluid
+                        />
                       </swiper-slide>
 
                       <div
@@ -136,7 +178,10 @@
                         v-for="(data, index) in swiperData"
                         :key="index"
                       >
-                        <b-img :src="data.img" fluid />
+                        <b-img
+                          :src="data.img"
+                          fluid
+                        />
                       </swiper-slide>
                     </swiper>
                   </b-col>
@@ -193,13 +238,17 @@
                         </b-card-text>
                       </b-col>
                       <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">Room size</h5>
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Room size
+                        </h5>
                         <b-card-text>
                           {{ room.room_size }} &#13217;
                         </b-card-text>
                       </b-col>
                       <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">Bed size</h5>
+                        <h5 class="text-capitalize mb-75 mt-2">
+                          Bed size
+                        </h5>
                         <b-card-text class="text-capitalize">
                           {{ room.bed_size }}
                         </b-card-text>
@@ -229,17 +278,17 @@ import {
   BImg,
   BButtonGroup,
   BButton,
-} from "bootstrap-vue";
+} from 'bootstrap-vue'
 
-import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import "swiper/css/swiper.css";
-import Ripple from "vue-ripple-directive";
-import vueDropzone from "vue2-dropzone";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
-import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
-import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
-import HotelHeader from "./HotelHeader.vue";
+import { toastErrorMsg, getImageByType, createGoogleMap } from '@/libs/helpers'
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
+import Ripple from 'vue-ripple-directive'
+import vueDropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
+import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
+import HotelHeader from './HotelHeader.vue'
 
 export default {
   components: {
@@ -267,29 +316,29 @@ export default {
   data() {
     return {
       dropzoneImageOptions: {
-        url: 'http://localhost',
+        url: 'url',
         maxFilesize: 5.0,
         maxFiles: 1,
         autoProcessQueue: true,
         addRemoveLinks: false,
-        acceptedFiles: "image/*",
+        acceptedFiles: 'image/*',
       },
       dropzoneMainImageSelectedFile: null,
       dropzoneBannerImageSelectedFile: null,
       hotelData: {},
       headerData: {
-        name: "",
-        address: "",
-        headerImage: require("@/assets/images/profile/user-uploads/timeline.jpg"),
-        mainImage: require("@/assets/images/placeholders/16-9.png"),
+        name: '',
+        address: '',
+        headerImage: require('@/assets/images/profile/user-uploads/timeline.jpg'),
+        mainImage: require('@/assets/images/placeholders/16-9.png'),
       },
       hotelId: null,
       defaultParams: {
         regency_id: 0,
-        name: "",
-        address: "",
+        name: '',
+        address: '',
         postal_code: 0,
-        description: "",
+        description: '',
         regency: null,
         images: [],
         rooms: [],
@@ -308,8 +357,8 @@ export default {
         loop: false,
         spaceBetween: 10,
         navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
         },
       },
       swiperOptionThumbs: {
@@ -320,13 +369,13 @@ export default {
         touchRatio: 0.2,
         slideToClickedSlide: true,
       },
-    };
+    }
   },
   created() {
-    this.initDefaultParams();
-    this.hotelId = this.$route.params.id;
+    this.initDefaultParams()
+    this.hotelId = this.$route.params.id
     // this.initDefaultParams();
-    this.getData();
+    this.getData()
   },
   methods: {
     toastErrorMsg,
@@ -334,115 +383,115 @@ export default {
     dropzoneMainImageAdded(file) {
       if (this.dropzoneMainImageSelectedFile !== null) {
         this.$refs.dropzoneMainImage.removeFile(
-          this.dropzoneMainImageSelectedFile
-        );
+          this.dropzoneMainImageSelectedFile,
+        )
       }
-      this.dropzoneMainImageSelectedFile = file;
+      this.dropzoneMainImageSelectedFile = file
     },
-    dropzoneMainImageSending(file, xhr, formData){
-      console.log(xhr);
-      formData.append('imageId', this.getImageByType(this.hotelData.images, "main").id);
-      formData.append('_method', "PUT");
+    dropzoneMainImageSending(file, xhr, formData) {
+      formData.append('_method', 'PUT')
     },
     dropzoneBannerImageAdded(file) {
       if (this.dropzoneBannerImageSelectedFile !== null) {
         this.$refs.dropzoneBannerImage.removeFile(
-          this.dropzoneBannerImageSelectedFile
-        );
+          this.dropzoneBannerImageSelectedFile,
+        )
       }
-      this.dropzoneBannerImageSelectedFile = file;
+      this.dropzoneBannerImageSelectedFile = file
     },
     drawMap() {
       return this.createGoogleMap(
         this.hotelData.map_coordinate,
         this.hotelData.map_center,
-        this.$refs["map"],
-        this.map
-      );
+        this.$refs.map,
+        this.map,
+      )
     },
     getData() {
-      this.loading = true;
+      this.loading = true
       this.$http
         .get(`/hotel/${this.hotelId}`)
-        .then((res) => {
-          this.hotelData = res.data.data;
+        .then(res => {
+          this.hotelData = res.data.data
           this.headerData = {
             name: this.hotelData.name,
             address: this.hotelData.address,
             headerImage:
-              this.imagePath +
-              this.getImageByType(this.hotelData.images, "banner").image_filename,
+              this.imagePath
+              + this.getImageByType(this.hotelData.images, 'banner').image_filename,
             mainImage:
-              this.imagePath +
-              this.getImageByType(this.hotelData.images, "main").image_filename,
-          };
-          this.drawMap();
-          this.swiperData = [];
-          var commonImage = this.getImageByType(
+              this.imagePath
+              + this.getImageByType(this.hotelData.images, 'main').image_filename,
+          }
+          this.$refs.dropzoneMainImage.setOption('url', `${this.$http.defaults.baseURL}/hotel_image/${this.getImageByType(this.hotelData.images, 'main').id}`)
+          this.$refs.dropzoneBannerImage.setOption('url', `${this.$http.defaults.baseURL}/hotel_image/${this.getImageByType(this.hotelData.images, 'banner').id}`)
+          this.drawMap()
+          this.swiperData = []
+          const commonImage = this.getImageByType(
             this.hotelData.images,
-            "common"
-          );
-          for (var i = 0; i < commonImage.length; i++) {
+            'common',
+          )
+          for (let i = 0; i < commonImage.length; i++) {
             this.swiperData.push({
               img: this.imagePath + commonImage[i].image_filename,
               id: commonImage[i].id,
-            });
+            })
           }
           // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
           this.$nextTick(() => {
-            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
-            const swiperThumbs = this.$refs.swiperThumbs.$swiper;
-            swiperCommonImage.controller.control = swiperThumbs;
-            swiperThumbs.controller.control = swiperCommonImage;
-          });
+            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper
+            const swiperThumbs = this.$refs.swiperThumbs.$swiper
+            swiperCommonImage.controller.control = swiperThumbs
+            swiperThumbs.controller.control = swiperCommonImage
+          })
           this.$nextTick(() => {
-            var mainImage = this.getImageByType(this.hotelData.images, "main");
-            const fileExt = mainImage.image_filename.split(".").pop();
-            const file = { size: 1, type: `image/${fileExt}` };
-            const url = this.imagePath + mainImage.image_filename;
-            this.$refs.dropzoneMainImage.removeAllFiles();
-            this.$refs.dropzoneMainImage.manuallyAddFile(file, url);
-          });
+            const mainImage = this.getImageByType(this.hotelData.images, 'main')
+            const fileExt = mainImage.image_filename.split('.').pop()
+            const file = { size: 1, type: `image/${fileExt}` }
+            const url = this.imagePath + mainImage.image_filename
+            this.$refs.dropzoneMainImage.removeAllFiles()
+            this.$refs.dropzoneMainImage.manuallyAddFile(file, url)
+          })
           this.$nextTick(() => {
-            var bannerImage = this.getImageByType(
+            const bannerImage = this.getImageByType(
               this.hotelData.images,
-              "banner"
-            );
-            const fileExt = bannerImage.image_filename.split(".").pop();
-            const file = { size: 1, type: `image/${fileExt}` };
-            const url = this.imagePath + bannerImage.image_filename;
-            this.$refs.dropzoneBannerImage.removeAllFiles();
-            this.$refs.dropzoneBannerImage.manuallyAddFile(file, url);
-          });
-          this.loading = false;
+              'banner',
+            )
+            const fileExt = bannerImage.image_filename.split('.').pop()
+            const file = { size: 1, type: `image/${fileExt}` }
+            const url = this.imagePath + bannerImage.image_filename
+            this.$refs.dropzoneBannerImage.removeAllFiles()
+            this.$refs.dropzoneBannerImage.manuallyAddFile(file, url)
+          })
+          this.loading = false
         })
-        .catch((err) => {
+        .catch(err => {
           if (err.response) {
-            const errMsg = err.response.data.message;
+            const errMsg = err.response.data.message
             if (errMsg) {
               // Data not found
-              this.$router.push({ path: "error-404" });
-              return this.toastErrorMsg(errMsg);
+              this.$router.push({ path: 'error-404' })
+              return this.toastErrorMsg(errMsg)
             }
           }
-          this.$router.go(-1);
-          return this.toastErrorMsg(err.message);
-        });
+          this.$router.go(-1)
+          return this.toastErrorMsg(err.message)
+        })
     },
     initDefaultParams() {
-      this.params = JSON.parse(JSON.stringify(this.defaultParams));
+      this.params = JSON.parse(JSON.stringify(this.defaultParams))
     },
     getImageByType,
     swiperSlideChange() {},
     tabChanged(tab) {
-      this.tabLoading = true;
-      this.activeTab = tab;
+      this.tabLoading = true
+      this.activeTab = tab
       setTimeout(() => {
-        this.tabLoading = false;
-      }, 1000);
+        this.tabLoading = false
+      }, 1000)
     },
   },
-};
+}
 </script>
 
 <style lang="scss">

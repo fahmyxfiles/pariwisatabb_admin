@@ -270,8 +270,8 @@
                 <div class="group-wrapper" v-for="(facilityCategory, index) in availableFacilityCategories" :key="index">
                   <div class="group-title">{{ facilityCategory.name }}</div>
                   <div class="group-content">
-                    <div class="facility-item">
-                      <div class="facility-check-box" v-for="(facility, index) in getAvailableFacilityByCategoryId(facilityCategory.id)" :key="index">
+                    <div class="facility-item" v-for="(facility, index) in getAvailableFacilityByCategoryId(facilityCategory.id)" :key="index">
+                      <div class="facility-check-box">
                         <b-form-checkbox
                           value=""
                           class="custom-control-primary"
@@ -424,8 +424,6 @@ export default {
   },
   methods: {
     getAvailableFacilityByCategoryId(id){
-      console.log(this.availableFacilities)
-      console.log(id)
       return this.availableFacilities.filter((facility) => {
         return facility.category_id == id
       })
@@ -499,7 +497,7 @@ export default {
     },
     getAvailableFacilities() {
       this.$http
-        .get('/facility')
+        .get('/facility/getAllFacility')
         .then(res => {
           this.availableFacilities = res.data.data
         })

@@ -95,7 +95,7 @@
                       :options="dropzoneImageOptions"
                       class="mb-2"
                       @vdropzone-file-added="dropzoneMainImageAdded"
-                      @vdropzone-sending="dropzoneMainImageSending"
+                      @vdropzone-sending="dropzoneSendingMethodPut"
                     />
                   </b-col>
                   <b-col md="6">
@@ -106,6 +106,7 @@
                       :options="dropzoneImageOptions"
                       class="mb-2"
                       @vdropzone-file-added="dropzoneBannerImageAdded"
+                      @vdropzone-sending="dropzoneSendingMethodPut"
                     />
                   </b-col>
                 </b-row>
@@ -225,7 +226,39 @@
                       class="mt-2"
                       hover
                       :items="parseRoomPricing(room.pricings)"
-                    />
+                      :fields="roomPricingFields"
+                    >
+                      <!-- A virtual column -->
+                      <template #cell(No)="data">
+                        {{ data.index + 1 }}
+                      </template>
+
+                      <!-- A virtual composite column -->
+                      <template #cell(action)="data">
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-primary"
+                          class="btn-icon rounded-circle"
+                          @click="editRoomPricingModal(data.item)"
+                        >
+                          <feather-icon icon="EyeIcon" />
+                        </b-button>
+
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-danger"
+                          class="btn-icon rounded-circle ml-1"
+                          @click="deleteRoomPricing(data.item)"
+                        >
+                          <feather-icon icon="TrashIcon" />
+                        </b-button>
+                      </template>
+
+                      <!-- Optional default data cell scoped slot -->
+                      <template #cell()="data">
+                        <i>{{ data.value }}</i>
+                      </template>
+                    </b-table-lite>
                   </app-collapse-item>
                 </app-collapse>
               </b-card>
@@ -345,6 +378,16 @@ export default {
         touchRatio: 0.2,
         slideToClickedSlide: true,
       },
+      roomPricingFields: [
+        // A virtual column that doesn't exist in items
+        'No',
+        // A regular column
+        'type',
+        'date',
+        'price',
+        // A virtual column made up from two fields
+        { key: 'action', label: 'Action' }
+      ],
     };
   },
   created() {
@@ -354,11 +397,18 @@ export default {
     this.getData();
   },
   methods: {
+    editRoomPricingModal(data){
+      console.log(data)
+    },
+    deleteRoomPricing(data){
+      console.log(data)
+    },
     toastErrorMsg,
     createGoogleMap,
     parseRoomPricing(pricings) {
       return pricings.map((pricing) => {
         return {
+          id: pricing.id,
           type: pricing.type,
           date: pricing.date,
           price: pricing.price,
@@ -373,7 +423,7 @@ export default {
       }
       this.dropzoneMainImageSelectedFile = file;
     },
-    dropzoneMainImageSending(file, xhr, formData) {
+    dropzoneSendingMethodPut(file, xhr, formData) {
       formData.append("_method", "PUT");
     },
     dropzoneBannerImageAdded(file) {
@@ -411,13 +461,13 @@ export default {
           };
           this.$refs.dropzoneMainImage.setOption(
             "url",
-            `${this.$http.defaults.baseURL}/hotel_image/${
+            `${this.$http.defaults.baseURL}hotel_image/${
               this.getImageByType(this.hotelData.images, "main").id
             }`
           );
           this.$refs.dropzoneBannerImage.setOption(
             "url",
-            `${this.$http.defaults.baseURL}/hotel_image/${
+            `${this.$http.defaults.baseURL}hotel_image/${
               this.getImageByType(this.hotelData.images, "banner").id
             }`
           );

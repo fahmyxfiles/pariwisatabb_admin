@@ -54,7 +54,9 @@
             </b-col>
             <!-- post -->
             <b-col lg="6" cols="12" order="1" order-lg="2">
-              <b-card title="Maps">
+              <b-card>
+                <b-card-title>
+                </b-card-title>
                 <div id="map" ref="map" />
               </b-card>
             </b-col>
@@ -331,6 +333,7 @@ import {
   BListGroup,
   BListGroupItem,
   BCardText,
+  BCardTitle,
   BCard,
   BOverlay,
   BRow,
@@ -344,7 +347,6 @@ import {
 } from "bootstrap-vue";
 
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
-import BCardCode from "@core/components/b-card-code/BCardCode.vue";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
 import Ripple from "vue-ripple-directive";
@@ -358,7 +360,6 @@ export default {
   components: {
     vueDropzone,
     BFormGroup,
-    BCardCode,
     BTableLite,
     Swiper,
     SwiperSlide,
@@ -369,6 +370,7 @@ export default {
     BListGroup,
     BListGroupItem,
     BCardText,
+    BCardTitle,
     BCard,
     BOverlay,
     BRow,

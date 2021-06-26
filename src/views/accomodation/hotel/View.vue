@@ -182,28 +182,10 @@
                   >
                     {{ room.description }}
 
-                    <b-row>
-                      <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">
-                          Number of Guest
-                        </h5>
-                        <b-card-text>
-                          {{ room.num_of_guest }}
-                        </b-card-text>
-                      </b-col>
-                      <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">Room size</h5>
-                        <b-card-text>
-                          {{ room.room_size }} &#13217;
-                        </b-card-text>
-                      </b-col>
-                      <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">Bed size</h5>
-                        <b-card-text class="text-capitalize">
-                          {{ room.bed_size }}
-                        </b-card-text>
-                      </b-col>
-                    </b-row>
+                    <b-table-lite
+                      hover
+                      :items="parseRoomPricing(room.pricings)"
+                    />
                   </app-collapse-item>
                 </app-collapse>
               </b-card>
@@ -228,9 +210,11 @@ import {
   BImg,
   BButtonGroup,
   BButton,
+  BTableLite,
 } from "bootstrap-vue";
 
 import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
+import BCardCode from "@core/components/b-card-code/BCardCode.vue";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
 import Ripple from "vue-ripple-directive";
@@ -243,6 +227,8 @@ import HotelHeader from "./HotelHeader.vue";
 export default {
   components: {
     vueDropzone,
+    BCardCode,
+    BTableLite,
     Swiper,
     SwiperSlide,
     AppCollapse,
@@ -334,6 +320,15 @@ export default {
   methods: {
     toastErrorMsg,
     createGoogleMap,
+    parseRoomPricing(pricings) {
+      return pricings.map((pricing) => {
+        return {
+          type: pricing.type,
+          date: pricing.date,
+          price: pricing.price,
+        };
+      });
+    },
     dropzoneMainImageAdded(file) {
       if (this.dropzoneMainImageSelectedFile !== null) {
         this.$refs.dropzoneMainImage.removeFile(

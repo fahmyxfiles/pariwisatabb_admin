@@ -564,9 +564,17 @@ export default {
     saveMapEdit() {
       this.mapEditMode = false;
       this.marker.setDraggable(false);
-      const center = this.map.getCenter().toString();
+      const center = this.map
+        .getCenter()
+        .toString()
+        .substr(1)
+        .slice(0, -1);
       const zoom = this.map.getZoom().toString();
-      const coord = this.marker.getPosition().toString();
+      const coord = this.marker
+        .getPosition()
+        .toString()
+        .substr(1)
+        .slice(0, -1);
 
       this.hotelData.map_coordinate = coord;
       this.hotelData.map_center = `${center}, ${zoom}`;

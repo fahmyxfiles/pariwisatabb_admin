@@ -61,7 +61,7 @@ export function createGoogleMap(center, _ref) {
     zoom: center_zoom,
   })
 }
-export function createGoogleMapMarker(coordinate, _map){
+export function createGoogleMapMarker(coordinate, _map) {
   const coord_lat = parseFloat(coordinate.split(',')[0])
   const coord_lng = parseFloat(coordinate.split(',')[1])
   return new window.google.maps.Marker({

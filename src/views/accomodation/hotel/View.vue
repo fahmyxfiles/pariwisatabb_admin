@@ -1,32 +1,31 @@
 <template>
-  <b-overlay
-    :show="loading"
-    spinner-variant="primary"
-    rounded="sm"
-  >
+  <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
     <div id="user-profile">
-      <hotel-header
-        :header-data="headerData"
-        @tab-changed="tabChanged"
-      />
+      <hotel-header :header-data="headerData" @tab-changed="tabChanged" />
       <!-- profile info  -->
       <section id="profile-info">
-        <b-overlay
-          :show="tabLoading"
-          spinner-variant="primary"
-          rounded="sm"
-        >
+        <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
           <b-row v-show="activeTab === 0">
             <!-- about suggested page and twitter feed -->
-            <b-col
-              lg="3"
-              cols="12"
-              order="2"
-              order-lg="1"
-            >
+            <b-col lg="3" cols="12" order="2" order-lg="1">
               <b-card>
                 <!-- about -->
-                <div class="">
+                <div class="d-flex justify-content-between">
+                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                    Profile
+                  </h4>
+                  <b-form-group class="ml-1">
+                    <b-button
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-primary"
+                      size="sm"
+                    >
+                      <feather-icon icon="Edit2Icon" class="mr-50" />
+                      <span class="align-middle">Edit</span>
+                    </b-button>
+                  </b-form-group>
+                </div>
+                <div>
                   <h5 class="text-capitalize mb-75">
                     Name
                   </h5>
@@ -53,33 +52,36 @@
               </b-card>
               <b-card>
                 <!-- about -->
-                <div class="">
-                  <h5 class="text-capitalize mb-75">
+                <div class="d-flex justify-content-between">
+                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
                     Rooms
-                  </h5>
-                  <b-list-group>
-                    <b-list-group-item
-                      v-for="(room, index) in hotelData.rooms"
-                      :key="index"
-                    >{{ room.name }}</b-list-group-item>
-                  </b-list-group>
+                  </h4>
+                  <b-form-group class="ml-1">
+                    <b-button
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-primary"
+                      size="sm"
+                    >
+                      <feather-icon icon="Edit2Icon" class="mr-50" />
+                      <span class="align-middle">Edit</span>
+                    </b-button>
+                  </b-form-group>
                 </div>
+                <b-list-group>
+                  <b-list-group-item
+                    v-for="(room, index) in hotelData.rooms"
+                    :key="index"
+                    >{{ room.name }}</b-list-group-item
+                  >
+                </b-list-group>
               </b-card>
               <!--/ about suggested page and twitter feed -->
             </b-col>
             <!-- post -->
-            <b-col
-              lg="6"
-              cols="12"
-              order="1"
-              order-lg="2"
-            >
+            <b-col lg="6" cols="12" order="1" order-lg="2">
               <b-card>
                 <div class="d-flex justify-content-between">
-                  <h4
-                    class="text-capitalize mb-75"
-                    style="margin-top: 3px;"
-                  >
+                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
                     Maps
                   </h4>
                   <b-form-group class="ml-1">
@@ -90,10 +92,7 @@
                       size="sm"
                       @click="setMapEditMode()"
                     >
-                      <feather-icon
-                        icon="Edit2Icon"
-                        class="mr-50"
-                      />
+                      <feather-icon icon="Edit2Icon" class="mr-50" />
                       <span class="align-middle">Edit</span>
                     </b-button>
                     <b-button
@@ -103,10 +102,7 @@
                       size="sm"
                       @click="saveMapEdit()"
                     >
-                      <feather-icon
-                        icon="SaveIcon"
-                        class="mr-50"
-                      />
+                      <feather-icon icon="SaveIcon" class="mr-50" />
                       <span class="align-middle">Save</span>
                     </b-button>
                     <b-button
@@ -117,45 +113,46 @@
                       size="sm"
                       @click="cancelMapEdit()"
                     >
-                      <feather-icon
-                        icon="XIcon"
-                        class="mr-50"
-                      />
+                      <feather-icon icon="XIcon" class="mr-50" />
                       <span class="align-middle">Cancel</span>
                     </b-button>
                   </b-form-group>
                 </div>
-                <div
-                  id="map"
-                  ref="map"
-                />
+                <div id="map" ref="map" />
               </b-card>
             </b-col>
             <!-- post -->
 
             <!-- latest photos suggestion and polls -->
-            <b-col
-              lg="3"
-              cols="12"
-              order="3"
-            >
+            <b-col lg="3" cols="12" order="3">
               <b-card>
-                <div class="">
-                  <h5 class="text-capitalize mb-75">
+                <div class="d-flex justify-content-between">
+                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
                     Facilities
-                  </h5>
-                  <b-card-text>
-                    <ul class="pl-2">
-                      <li
-                        v-for="(facility, index) in hotelData.facilities"
-                        :key="index"
-                        style="margin-top: 0.3rem"
-                      >
-                        {{ facility.name }}
-                      </li>
-                    </ul>
-                  </b-card-text>
+                  </h4>
+                  <b-form-group class="ml-1">
+                    <b-button
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-primary"
+                      size="sm"
+                      @click="tabChanged(3)"
+                    >
+                      <feather-icon icon="Edit2Icon" class="mr-50" />
+                      <span class="align-middle">Edit</span>
+                    </b-button>
+                  </b-form-group>
                 </div>
+                <b-card-text>
+                  <ul class="pl-2">
+                    <li
+                      v-for="(facility, index) in hotelData.facilities"
+                      :key="index"
+                      style="margin-top: 0.3rem"
+                    >
+                      {{ facility.name }}
+                    </li>
+                  </ul>
+                </b-card-text>
               </b-card>
             </b-col>
             <!--/ latest photos suggestion and polls -->
@@ -203,10 +200,7 @@
                         v-for="(data, index) in swiperData"
                         :key="index"
                       >
-                        <b-img
-                          :src="data.img"
-                          fluid
-                        />
+                        <b-img :src="data.img" fluid />
                       </swiper-slide>
 
                       <div
@@ -229,10 +223,7 @@
                         v-for="(data, index) in swiperData"
                         :key="index"
                       >
-                        <b-img
-                          :src="data.img"
-                          fluid
-                        />
+                        <b-img :src="data.img" fluid />
                       </swiper-slide>
                     </swiper>
                   </b-col>
@@ -277,10 +268,7 @@
                       v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                       variant="outline-primary"
                     >
-                      <feather-icon
-                        icon="PlusIcon"
-                        class="mr-50"
-                      />
+                      <feather-icon icon="PlusIcon" class="mr-50" />
                       <span class="align-middle">Add</span>
                     </b-button>
                   </div>
@@ -330,10 +318,7 @@
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-primary"
                         >
-                          <feather-icon
-                            icon="PlusIcon"
-                            class="mr-50"
-                          />
+                          <feather-icon icon="PlusIcon" class="mr-50" />
                           <span class="align-middle">Add</span>
                         </b-button>
                       </b-form-group>
@@ -388,7 +373,7 @@
               >
                 <div
                   v-for="(facilityCategory,
-                          facilityCategoryIndex) in availableFacilityCategories"
+                  facilityCategoryIndex) in availableFacilityCategories"
                   :key="facilityCategoryIndex"
                   class="group-wrapper"
                 >
@@ -398,9 +383,9 @@
                   <div class="group-content">
                     <div
                       v-for="(facility,
-                              facilityIndex) in getAvailableFacilityByCategoryId(
-                                facilityCategory.id
-                              )"
+                      facilityIndex) in getAvailableFacilityByCategoryId(
+                        facilityCategory.id
+                      )"
                       :key="facilityIndex"
                       class="facility-item"
                     >
@@ -451,19 +436,22 @@ import {
   BTableLite,
   BFormCheckbox,
   BFormGroup,
-} from 'bootstrap-vue'
+} from "bootstrap-vue";
 
 import {
-  toastErrorMsg, getImageByType, createGoogleMap, createGoogleMapMarker,
-} from '@/libs/helpers'
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
-import Ripple from 'vue-ripple-directive'
-import vueDropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
-import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
-import HotelHeader from './HotelHeader.vue'
+  toastErrorMsg,
+  getImageByType,
+  createGoogleMap,
+  createGoogleMapMarker,
+} from "@/libs/helpers";
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import "swiper/css/swiper.css";
+import Ripple from "vue-ripple-directive";
+import vueDropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
+import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
+import HotelHeader from "./HotelHeader.vue";
 
 export default {
   components: {
@@ -495,31 +483,31 @@ export default {
       availableFacilityCategories: [],
       availableFacilities: [],
       dropzoneImageOptions: {
-        url: 'url',
+        url: "url",
         maxFilesize: 5.0,
         maxFiles: 1,
         autoProcessQueue: true,
         addRemoveLinks: false,
-        acceptedFiles: 'image/*',
+        acceptedFiles: "image/*",
       },
       dropzoneMainImageSelectedFile: null,
       dropzoneBannerImageSelectedFile: null,
       hotelData: {},
       headerData: {
-        name: '',
-        address: '',
-        headerImage: require('@/assets/images/profile/user-uploads/timeline.jpg'),
-        mainImage: require('@/assets/images/placeholders/16-9.png'),
+        name: "",
+        address: "",
+        headerImage: require("@/assets/images/profile/user-uploads/timeline.jpg"),
+        mainImage: require("@/assets/images/placeholders/16-9.png"),
       },
       hotelId: null,
       defaultHotelParams: {
         regency_id: 0,
-        name: '',
-        address: '',
+        name: "",
+        address: "",
         postal_code: 0,
-        description: '',
-        map_coordinate: '',
-        map_center: '',
+        description: "",
+        map_coordinate: "",
+        map_center: "",
       },
       hotelParams: null,
       imagePath: this.$imagePath,
@@ -536,8 +524,8 @@ export default {
         loop: false,
         spaceBetween: 10,
         navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
         },
       },
       swiperOptionThumbs: {
@@ -550,284 +538,282 @@ export default {
       },
       roomPricingFields: [
         // A virtual column that doesn't exist in items
-        'No',
+        "No",
         // A regular column
-        'type',
-        'date',
-        'price',
+        "type",
+        "date",
+        "price",
         // A virtual column made up from two fields
-        { key: 'action', label: 'Action' },
+        { key: "action", label: "Action" },
       ],
-    }
+    };
   },
   created() {
-    this.initDefaultParams()
-    this.getAvailableFacilityCategories()
-    this.getAvailableFacilities()
-    this.hotelId = this.$route.params.id
+    this.initDefaultParams();
+    this.getAvailableFacilityCategories();
+    this.getAvailableFacilities();
+    this.hotelId = this.$route.params.id;
     // this.initDefaultParams();
-    this.getData()
+    this.getData();
   },
   methods: {
     setMapEditMode() {
-      this.mapEditMode = true
-      this.marker.setDraggable(true)
+      this.mapEditMode = true;
+      this.marker.setDraggable(true);
     },
     saveMapEdit() {
-      this.mapEditMode = false
-      this.marker.setDraggable(false)
-      const center = this.map.getCenter().toString()
-      const zoom = this.map.getZoom().toString()
-      const coord = this.marker.getPosition().toString()
+      this.mapEditMode = false;
+      this.marker.setDraggable(false);
+      const center = this.map.getCenter().toString();
+      const zoom = this.map.getZoom().toString();
+      const coord = this.marker.getPosition().toString();
 
-      this.hotelData.map_coordinate = coord
-      this.hotelData.map_center = `${center}, ${zoom}`
+      this.hotelData.map_coordinate = coord;
+      this.hotelData.map_center = `${center}, ${zoom}`;
 
-      this.initDefaultParams()
+      this.initDefaultParams();
       for (const key in this.defaultHotelParams) {
-        this.hotelParams[key] = this.hotelData[key]
+        this.hotelParams[key] = this.hotelData[key];
       }
-      this.hotelParams._method = 'PUT'
-      this.tabLoading = true
+      this.hotelParams._method = "PUT";
+      this.tabLoading = true;
       this.$http
         .post(`/hotel/${this.hotelData.id}`, this.hotelParams)
-        .then(res => {
-          this.hotelData = res.data.data
-          this.tabLoading = false
-          this.drawMap()
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.tabLoading = false;
+          this.drawMap();
         })
-        .catch(err => {
-          this.tabLoading = false
+        .catch((err) => {
+          this.tabLoading = false;
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     cancelMapEdit() {
-      this.mapEditMode = false
-      this.marker.setDraggable(false)
-      this.marker.setMap(null)
+      this.mapEditMode = false;
+      this.marker.setDraggable(false);
+      this.marker.setMap(null);
       this.marker = this.createGoogleMapMarker(
         this.hotelData.map_coordinate,
-        this.map,
-      )
+        this.map
+      );
     },
     getAvailableFacilityByCategoryId(id) {
-      return this.availableFacilities.filter(facility => facility.category_id == id)
+      return this.availableFacilities.filter(
+        (facility) => facility.category_id == id
+      );
     },
     editRoomPricingModal(data) {
-      console.log(data)
+      console.log(data);
     },
     deleteRoomPricing(data) {
-      console.log(data)
+      console.log(data);
     },
     toastErrorMsg,
     createGoogleMap,
     createGoogleMapMarker,
     parseRoomPricing(pricings) {
-      return pricings.map(pricing => {
-        if (pricing.type == 'Weekday') {
-          pricing.date = 'Mon to Fri'
+      return pricings.map((pricing) => {
+        if (pricing.type == "Weekday") {
+          pricing.date = "Mon to Fri";
         }
-        if (pricing.type == 'Weekend') {
-          pricing.date = 'Sat and Sun'
+        if (pricing.type == "Weekend") {
+          pricing.date = "Sat and Sun";
         }
         return {
           id: pricing.id,
           type: pricing.type,
           date: pricing.date,
           price: pricing.price,
-        }
-      })
+        };
+      });
     },
     dropzoneMainImageAdded(file) {
       if (this.dropzoneMainImageSelectedFile !== null) {
         this.$refs.dropzoneMainImage.removeFile(
-          this.dropzoneMainImageSelectedFile,
-        )
+          this.dropzoneMainImageSelectedFile
+        );
       }
-      this.dropzoneMainImageSelectedFile = file
+      this.dropzoneMainImageSelectedFile = file;
     },
     dropzoneSendingMethodPut(file, xhr, formData) {
-      formData.append('_method', 'PUT')
+      formData.append("_method", "PUT");
     },
     dropzoneBannerImageAdded(file) {
       if (this.dropzoneBannerImageSelectedFile !== null) {
         this.$refs.dropzoneBannerImage.removeFile(
-          this.dropzoneBannerImageSelectedFile,
-        )
+          this.dropzoneBannerImageSelectedFile
+        );
       }
-      this.dropzoneBannerImageSelectedFile = file
+      this.dropzoneBannerImageSelectedFile = file;
     },
     drawMap() {
       this.map = this.createGoogleMap(
         this.hotelData.map_center,
-        this.$refs.map,
-      )
+        this.$refs.map
+      );
       this.marker = this.createGoogleMapMarker(
         this.hotelData.map_coordinate,
-        this.map,
-      )
+        this.map
+      );
     },
     getAvailableFacilityCategories() {
       this.$http
-        .get('/facility/getAvailableCategoriesByType/hotel')
-        .then(res => {
-          this.availableFacilityCategories = res.data.data
+        .get("/facility/getAvailableCategoriesByType/hotel")
+        .then((res) => {
+          this.availableFacilityCategories = res.data.data;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     getAvailableFacilities() {
       this.$http
-        .get('/facility/getAllFacility')
-        .then(res => {
-          this.availableFacilities = res.data.data
+        .get("/facility/getAllFacility")
+        .then((res) => {
+          this.availableFacilities = res.data.data;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     setHeaderImage() {
       this.headerData = {
         name: this.hotelData.name,
         address: this.hotelData.address,
         headerImage:
-          this.imagePath
-          + this.getImageByType(this.hotelData.images, 'banner')
-            .image_filename,
+          this.imagePath +
+          this.getImageByType(this.hotelData.images, "banner").image_filename,
         mainImage:
-          this.imagePath
-          + this.getImageByType(this.hotelData.images, 'main').image_filename,
-      }
+          this.imagePath +
+          this.getImageByType(this.hotelData.images, "main").image_filename,
+      };
     },
     setDropzoneOptions() {
       this.$refs.dropzoneMainImage.setOption(
-        'url',
+        "url",
         `${this.$http.defaults.baseURL}hotel_image/${
-          this.getImageByType(this.hotelData.images, 'main').id
-        }`,
-      )
+          this.getImageByType(this.hotelData.images, "main").id
+        }`
+      );
       this.$refs.dropzoneBannerImage.setOption(
-        'url',
+        "url",
         `${this.$http.defaults.baseURL}hotel_image/${
-          this.getImageByType(this.hotelData.images, 'banner').id
-        }`,
-      )
+          this.getImageByType(this.hotelData.images, "banner").id
+        }`
+      );
     },
     setSwiperImage() {
-      this.swiperData = []
-      const commonImage = this.getImageByType(
-        this.hotelData.images,
-        'common',
-      )
+      this.swiperData = [];
+      const commonImage = this.getImageByType(this.hotelData.images, "common");
       for (let i = 0; i < commonImage.length; i++) {
         this.swiperData.push({
           img: this.imagePath + commonImage[i].image_filename,
           id: commonImage[i].id,
-        })
+        });
       }
     },
     setFacility() {
       for (let a = 0; a < this.availableFacilities.length; a++) {
-        this.availableFacilities[a].value = ''
+        this.availableFacilities[a].value = "";
       }
       for (let i = 0; i < this.hotelData.facilities.length; i++) {
-        const facilityId = this.hotelData.facilities[i].id
+        const facilityId = this.hotelData.facilities[i].id;
         for (let j = 0; j < this.availableFacilities.length; j++) {
-          const currentFacilityId = this.availableFacilities[j].id
+          const currentFacilityId = this.availableFacilities[j].id;
           if (currentFacilityId == facilityId) {
-            this.availableFacilities[j].value = 'Y'
+            this.availableFacilities[j].value = "Y";
           }
         }
       }
     },
     getData() {
-      this.loading = true
+      this.loading = true;
       this.$http
         .get(`/hotel/${this.hotelId}`)
-        .then(res => {
-          this.hotelData = res.data.data
-          this.setHeaderImage()
-          this.drawMap()
-          this.setDropzoneOptions()
-          this.setSwiperImage()
-          this.setFacility()
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.setHeaderImage();
+          this.drawMap();
+          this.setDropzoneOptions();
+          this.setSwiperImage();
+          this.setFacility();
           // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
           this.$nextTick(() => {
-            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper
-            const swiperThumbs = this.$refs.swiperThumbs.$swiper
-            swiperCommonImage.controller.control = swiperThumbs
-            swiperThumbs.controller.control = swiperCommonImage
-          })
+            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
+            const swiperThumbs = this.$refs.swiperThumbs.$swiper;
+            swiperCommonImage.controller.control = swiperThumbs;
+            swiperThumbs.controller.control = swiperCommonImage;
+          });
           this.$nextTick(() => {
             const mainImage = this.getImageByType(
               this.hotelData.images,
-              'main',
-            )
-            const fileExt = mainImage.image_filename.split('.').pop()
-            const file = { size: 1, type: `image/${fileExt}` }
-            const url = this.imagePath + mainImage.image_filename
-            this.$refs.dropzoneMainImage.removeAllFiles()
-            this.$refs.dropzoneMainImage.manuallyAddFile(file, url)
-          })
+              "main"
+            );
+            const fileExt = mainImage.image_filename.split(".").pop();
+            const file = { size: 1, type: `image/${fileExt}` };
+            const url = this.imagePath + mainImage.image_filename;
+            this.$refs.dropzoneMainImage.removeAllFiles();
+            this.$refs.dropzoneMainImage.manuallyAddFile(file, url);
+          });
           this.$nextTick(() => {
             const bannerImage = this.getImageByType(
               this.hotelData.images,
-              'banner',
-            )
-            const fileExt = bannerImage.image_filename.split('.').pop()
-            const file = { size: 1, type: `image/${fileExt}` }
-            const url = this.imagePath + bannerImage.image_filename
-            this.$refs.dropzoneBannerImage.removeAllFiles()
-            this.$refs.dropzoneBannerImage.manuallyAddFile(file, url)
-          })
-          this.loading = false
+              "banner"
+            );
+            const fileExt = bannerImage.image_filename.split(".").pop();
+            const file = { size: 1, type: `image/${fileExt}` };
+            const url = this.imagePath + bannerImage.image_filename;
+            this.$refs.dropzoneBannerImage.removeAllFiles();
+            this.$refs.dropzoneBannerImage.manuallyAddFile(file, url);
+          });
+          this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.message
+            const errMsg = err.response.data.message;
             if (errMsg) {
               // Data not found
-              this.$router.push({ path: 'error-404' })
-              return this.toastErrorMsg(errMsg)
+              this.$router.push({ path: "error-404" });
+              return this.toastErrorMsg(errMsg);
             }
           }
-          this.$router.go(-1)
-          return this.toastErrorMsg(err.message)
-        })
+          this.$router.go(-1);
+          return this.toastErrorMsg(err.message);
+        });
     },
     initDefaultParams() {
-      this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams))
+      this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams));
     },
     getImageByType,
     swiperSlideChange() {},
     tabChanged(tab) {
-      this.tabLoading = true
-      this.activeTab = tab
+      this.tabLoading = true;
+      this.activeTab = tab;
       setTimeout(() => {
-        this.tabLoading = false
-      }, 1000)
+        this.tabLoading = false;
+      }, 1000);
     },
   },
-}
+};
 </script>
 
 <style lang="scss">

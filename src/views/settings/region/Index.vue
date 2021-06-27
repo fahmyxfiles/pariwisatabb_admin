@@ -105,7 +105,7 @@
     >
       <b-form>
         <b-form-group>
-          <label for="province">Province</label>
+          <label for="province">Province :</label>
           <v-select
             v-model="params.province_id"
             :options="availableProvinces"

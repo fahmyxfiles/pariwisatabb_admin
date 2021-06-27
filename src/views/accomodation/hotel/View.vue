@@ -433,12 +433,13 @@
     >
       <b-form>
         <b-form-group>
-          <label for="Regency">Regency</label>
+          <label for="Regency">Regency :</label>
           <v-select
-            v-model="params.regency_id"
+            v-model="hotelParams.regency_id"
             :options="availableRegencies"
             :reduce="(regency) => regency.id"
             label="name"
+            autocomplete="off"
           />
         </b-form-group>
         <b-form-group>
@@ -448,6 +449,7 @@
             v-model="hotelParams.name"
             type="text"
             placeholder="Hotel Name"
+            autocomplete="off"
           />
         </b-form-group>
         <b-form-group>
@@ -457,6 +459,17 @@
             v-model="hotelParams.address"
             type="text"
             placeholder="Hotel Address"
+            autocomplete="off"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="postalCode">Postal Code :</label>
+          <b-form-input
+            id="postalCode"
+            v-model="hotelParams.postal_code"
+            type="text"
+            placeholder="Hotel Postal Code"
+            autocomplete="off"
           />
         </b-form-group>
         <b-form-group>
@@ -467,6 +480,7 @@
             placeholder="Hotel Description"
             rows="3"
             no-resize
+            autocomplete="off"
           />
         </b-form-group>
       </b-form>
@@ -509,9 +523,11 @@ import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
 import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
 import HotelHeader from "./HotelHeader.vue";
+import VSelect from "vue-select";
 
 export default {
   components: {
+    VSelect,
     BFormInput,
     BFormTextarea,
     BModal,
@@ -541,6 +557,7 @@ export default {
   },
   data() {
     return {
+      availableRegencies: [],
       availableFacilityCategories: [],
       availableFacilities: [],
       dropzoneImageOptions: {
@@ -612,6 +629,7 @@ export default {
   },
   created() {
     this.initDefaultParams();
+    this.getAvailableRegencies();
     this.getAvailableFacilityCategories();
     this.getAvailableFacilities();
     this.hotelId = this.$route.params.id;
@@ -744,6 +762,22 @@ export default {
         this.hotelData.map_coordinate,
         this.map
       );
+    },
+    getAvailableRegencies(){
+      this.$http
+        .get("/hotel/getAvailableRegencies")
+        .then((res) => {
+          this.availableRegencies = res.data.data;
+        })
+        .catch((err) => {
+          if (err.response) {
+            const errMsg = err.response.data.data;
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg);
+            }
+          }
+          return this.toastErrorMsg(err.message);
+        });
     },
     getAvailableFacilityCategories() {
       this.$http

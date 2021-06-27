@@ -283,7 +283,7 @@
                     >
                       {{ room.description }}
                       <b-row>
-                        <b-col md="4">
+                        <b-col md="3">
                           <h5 class="text-capitalize mb-75 mt-2">
                             Number of Guest
                           </h5>
@@ -291,22 +291,22 @@
                             {{ room.num_of_guest }}
                           </b-card-text>
                         </b-col>
-                        <b-col md="4">
+                        <b-col md="3">
                           <h5 class="text-capitalize mb-75 mt-2">Room size</h5>
                           <b-card-text>
                             {{ room.room_size }} &#13217;
                           </b-card-text>
                         </b-col>
-                        <b-col md="4">
+                        <b-col md="3">
                           <h5 class="text-capitalize mb-75 mt-2">Bed size</h5>
                           <b-card-text class="text-capitalize">
                             {{ room.bed_size }}
                           </b-card-text>
                         </b-col>
-                      </b-row>
-                      <b-row class="mt-1">
-                        <b-col md="12">
-                          <b-button
+                        <b-col md="3">
+                          <h5 class="text-capitalize mb-75 mt-2">Action</h5>
+                          <b-card-text class="text-capitalize">
+                            <b-button
                             v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                             variant="outline-primary"
                             class="btn-icon rounded-circle"
@@ -323,8 +323,9 @@
                             size="sm"
                             @click="deleteHotelRoom(data.item)"
                           >
-                            <feather-icon icon="TrashIcon" />
+                          <feather-icon icon="TrashIcon" />
                           </b-button>
+                          </b-card-text>
                         </b-col>
                       </b-row>
                       <hr />
@@ -746,7 +747,26 @@ export default {
       this.$refs["modal-hotel-input"].show();
     },
     editHotel(params) {
-      console.log(params);
+      params["_method"] = "PUT";
+      this.tabLoading = true;
+      this.$http
+        .post(`/hotel/${this.hotelData.id}`, params)
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.tabLoading = false;
+          this.drawMap();
+          this.$refs["modal-hotel-input"].hide();
+        })
+        .catch((err) => {
+          this.tabLoading = false;
+          if (err.response) {
+            const errMsg = err.response.data.data;
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg);
+            }
+          }
+          return this.toastErrorMsg(err.message);
+        });
     },
     addHotelRoomModal() {
       this.initDefaultHotelRoomParams();
@@ -760,12 +780,10 @@ export default {
       console.log(params);
     },
     editHotelRoomModal(params) {
-      console.log(params)
       this.initDefaultHotelRoomParams();
       for (const key in this.defaultHotelRoomParams) {
         this.hotelRoomParams[key] = params[key];
       }
-      console.log(this.hotelRoomParams)
       this.modalTitle = "Edit Hotel Room : " + params.name;
       this.$refs["modal-hotel-room-input"].onOk = () =>
         this.editHotelRoom(this.hotelRoomParams);

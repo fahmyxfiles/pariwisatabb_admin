@@ -1,428 +1,473 @@
 <template>
-  <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
-    <div id="user-profile">
-      <hotel-header :header-data="headerData" @tab-changed="tabChanged" />
-      <!-- profile info  -->
-      <section id="profile-info">
-        <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
-          <b-row v-show="activeTab === 0">
-            <!-- about suggested page and twitter feed -->
-            <b-col lg="3" cols="12" order="2" order-lg="1">
-              <b-card>
-                <!-- about -->
-                <div class="d-flex justify-content-between">
-                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
-                    Profile
-                  </h4>
-                  <b-form-group class="ml-1">
-                    <b-button
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-primary"
-                      size="sm"
-                    >
-                      <feather-icon icon="Edit2Icon" class="mr-50" />
-                      <span class="align-middle">Edit</span>
-                    </b-button>
-                  </b-form-group>
-                </div>
-                <div>
-                  <h5 class="text-capitalize mb-75">
-                    Name
-                  </h5>
-                  <b-card-text>
-                    {{ hotelData.name }}
-                  </b-card-text>
-                </div>
-                <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    Address
-                  </h5>
-                  <b-card-text>
-                    {{ hotelData.address }}
-                  </b-card-text>
-                </div>
-                <div class="mt-2">
-                  <h5 class="text-capitalize mb-75">
-                    Description
-                  </h5>
-                  <b-card-text>
-                    {{ hotelData.description }}
-                  </b-card-text>
-                </div>
-              </b-card>
-              <b-card>
-                <!-- about -->
-                <div class="d-flex justify-content-between">
-                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
-                    Rooms
-                  </h4>
-                  <b-form-group class="ml-1">
-                    <b-button
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-primary"
-                      size="sm"
-                    >
-                      <feather-icon icon="Edit2Icon" class="mr-50" />
-                      <span class="align-middle">Edit</span>
-                    </b-button>
-                  </b-form-group>
-                </div>
-                <b-list-group>
-                  <b-list-group-item
-                    v-for="(room, index) in hotelData.rooms"
-                    :key="index"
-                    >{{ room.name }}</b-list-group-item
-                  >
-                </b-list-group>
-              </b-card>
-              <!--/ about suggested page and twitter feed -->
-            </b-col>
-            <!-- post -->
-            <b-col lg="6" cols="12" order="1" order-lg="2">
-              <b-card>
-                <div class="d-flex justify-content-between">
-                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
-                    Maps
-                  </h4>
-                  <b-form-group class="ml-1">
-                    <b-button
-                      v-show="!mapEditMode"
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-primary"
-                      size="sm"
-                      @click="setMapEditMode()"
-                    >
-                      <feather-icon icon="Edit2Icon" class="mr-50" />
-                      <span class="align-middle">Edit</span>
-                    </b-button>
-                    <b-button
-                      v-show="mapEditMode"
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-success"
-                      size="sm"
-                      @click="saveMapEdit()"
-                    >
-                      <feather-icon icon="SaveIcon" class="mr-50" />
-                      <span class="align-middle">Save</span>
-                    </b-button>
-                    <b-button
-                      v-show="mapEditMode"
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      class="ml-1"
-                      variant="outline-danger"
-                      size="sm"
-                      @click="cancelMapEdit()"
-                    >
-                      <feather-icon icon="XIcon" class="mr-50" />
-                      <span class="align-middle">Cancel</span>
-                    </b-button>
-                  </b-form-group>
-                </div>
-                <div id="map" ref="map" />
-              </b-card>
-            </b-col>
-            <!-- post -->
-
-            <!-- latest photos suggestion and polls -->
-            <b-col lg="3" cols="12" order="3">
-              <b-card>
-                <div class="d-flex justify-content-between">
-                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
-                    Facilities
-                  </h4>
-                  <b-form-group class="ml-1">
-                    <b-button
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-primary"
-                      size="sm"
-                      @click="tabChanged(3)"
-                    >
-                      <feather-icon icon="Edit2Icon" class="mr-50" />
-                      <span class="align-middle">Edit</span>
-                    </b-button>
-                  </b-form-group>
-                </div>
-                <b-card-text>
-                  <ul class="pl-2">
-                    <li
-                      v-for="(facility, index) in hotelData.facilities"
-                      :key="index"
-                      style="margin-top: 0.3rem"
-                    >
-                      {{ facility.name }}
-                    </li>
-                  </ul>
-                </b-card-text>
-              </b-card>
-            </b-col>
-            <!--/ latest photos suggestion and polls -->
-          </b-row>
-          <b-row v-show="activeTab === 1">
-            <b-col lg="12">
-              <b-card title="Hotel Images">
-                <b-row>
-                  <b-col md="6">
-                    <h4>Main Image (Aspect Ratio 16:9)</h4>
-                    <vue-dropzone
-                      id="dropzoneMainImage"
-                      ref="dropzoneMainImage"
-                      :options="dropzoneImageOptions"
-                      class="mb-2"
-                      @vdropzone-file-added="dropzoneMainImageAdded"
-                      @vdropzone-sending="dropzoneSendingMethodPut"
-                    />
-                  </b-col>
-                  <b-col md="6">
-                    <h4>Banner Image (Aspect Ratio 15:4)</h4>
-                    <vue-dropzone
-                      id="dropzoneBannerImage"
-                      ref="dropzoneBannerImage"
-                      :options="dropzoneImageOptions"
-                      class="mb-2"
-                      @vdropzone-file-added="dropzoneBannerImageAdded"
-                      @vdropzone-sending="dropzoneSendingMethodPut"
-                    />
-                  </b-col>
-                </b-row>
-                <h4 class="text-center mt-2 mb-1">
-                  Common Image
-                </h4>
-                <b-row class="justify-content-center">
-                  <b-col md="6">
-                    <!-- swiper1 -->
-                    <swiper
-                      ref="swiperCommonImage"
-                      class="swiper-gallery gallery-top"
-                      :options="swiperOptions"
-                      @slideChange="swiperSlideChange"
-                    >
-                      <swiper-slide
-                        v-for="(data, index) in swiperData"
-                        :key="index"
-                      >
-                        <b-img :src="data.img" fluid />
-                      </swiper-slide>
-
-                      <div
-                        slot="button-next"
-                        class="swiper-button-next swiper-button-white"
-                      />
-                      <div
-                        slot="button-prev"
-                        class="swiper-button-prev swiper-button-white"
-                      />
-                    </swiper>
-
-                    <!-- swiper2 Thumbs -->
-                    <swiper
-                      ref="swiperThumbs"
-                      class="swiper gallery-thumbs"
-                      :options="swiperOptionThumbs"
-                    >
-                      <swiper-slide
-                        v-for="(data, index) in swiperData"
-                        :key="index"
-                      >
-                        <b-img :src="data.img" fluid />
-                      </swiper-slide>
-                    </swiper>
-                  </b-col>
-                </b-row>
-                <b-row class="justify-content-center">
-                  <b-col md="6">
-                    <b-button-group class="mt-2 d-flex justify-content-center">
+  <div>
+    <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
+      <div id="user-profile">
+        <hotel-header :header-data="headerData" @tab-changed="tabChanged" />
+        <!-- profile info  -->
+        <section id="profile-info">
+          <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
+            <b-row v-show="activeTab === 0">
+              <!-- about suggested page and twitter feed -->
+              <b-col lg="3" cols="12" order="2" order-lg="1">
+                <b-card>
+                  <!-- about -->
+                  <div class="d-flex justify-content-between">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                      Profile
+                    </h4>
+                    <b-form-group class="ml-1">
                       <b-button
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                        variant="outline-success"
+                        variant="outline-primary"
+                        size="sm"
+                        @click="editHotelModal()"
                       >
-                        <feather-icon icon="PlusIcon" />
-                        Add
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
+                        <span class="align-middle">Edit</span>
                       </b-button>
+                    </b-form-group>
+                  </div>
+                  <div>
+                    <h5 class="text-capitalize mb-75">
+                      Name
+                    </h5>
+                    <b-card-text>
+                      {{ hotelData.name }}
+                    </b-card-text>
+                  </div>
+                  <div class="mt-2">
+                    <h5 class="text-capitalize mb-75">
+                      Address
+                    </h5>
+                    <b-card-text>
+                      {{ hotelData.address }}
+                    </b-card-text>
+                  </div>
+                  <div class="mt-2">
+                    <h5 class="text-capitalize mb-75">
+                      Description
+                    </h5>
+                    <b-card-text>
+                      {{ hotelData.description }}
+                    </b-card-text>
+                  </div>
+                </b-card>
+                <b-card>
+                  <!-- about -->
+                  <div class="d-flex justify-content-between">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                      Rooms
+                    </h4>
+                    <b-form-group class="ml-1">
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-primary"
+                        size="sm"
+                      >
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
+                        <span class="align-middle">Edit</span>
+                      </b-button>
+                    </b-form-group>
+                  </div>
+                  <b-list-group>
+                    <b-list-group-item
+                      v-for="(room, index) in hotelData.rooms"
+                      :key="index"
+                      >{{ room.name }}</b-list-group-item
+                    >
+                  </b-list-group>
+                </b-card>
+                <!--/ about suggested page and twitter feed -->
+              </b-col>
+              <!-- post -->
+              <b-col lg="6" cols="12" order="1" order-lg="2">
+                <b-card>
+                  <div class="d-flex justify-content-between">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                      Maps
+                    </h4>
+                    <b-form-group class="ml-1">
+                      <b-button
+                        v-show="!mapEditMode"
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-primary"
+                        size="sm"
+                        @click="setMapEditMode()"
+                      >
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
+                        <span class="align-middle">Edit</span>
+                      </b-button>
+                      <b-button
+                        v-show="mapEditMode"
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-success"
+                        size="sm"
+                        @click="saveMapEdit()"
+                      >
+                        <feather-icon icon="SaveIcon" class="mr-50" />
+                        <span class="align-middle">Save</span>
+                      </b-button>
+                      <b-button
+                        v-show="mapEditMode"
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        class="ml-1"
+                        variant="outline-danger"
+                        size="sm"
+                        @click="cancelMapEdit()"
+                      >
+                        <feather-icon icon="XIcon" class="mr-50" />
+                        <span class="align-middle">Cancel</span>
+                      </b-button>
+                    </b-form-group>
+                  </div>
+                  <div id="map" ref="map" />
+                </b-card>
+              </b-col>
+              <!-- post -->
+
+              <!-- latest photos suggestion and polls -->
+              <b-col lg="3" cols="12" order="3">
+                <b-card>
+                  <div class="d-flex justify-content-between">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                      Facilities
+                    </h4>
+                    <b-form-group class="ml-1">
+                      <b-button
+                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                        variant="outline-primary"
+                        size="sm"
+                        @click="tabChanged(3)"
+                      >
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
+                        <span class="align-middle">Edit</span>
+                      </b-button>
+                    </b-form-group>
+                  </div>
+                  <b-card-text>
+                    <ul class="pl-2">
+                      <li
+                        v-for="(facility, index) in hotelData.facilities"
+                        :key="index"
+                        style="margin-top: 0.3rem"
+                      >
+                        {{ facility.name }}
+                      </li>
+                    </ul>
+                  </b-card-text>
+                </b-card>
+              </b-col>
+              <!--/ latest photos suggestion and polls -->
+            </b-row>
+            <b-row v-show="activeTab === 1">
+              <b-col lg="12">
+                <b-card title="Hotel Images">
+                  <b-row>
+                    <b-col md="6">
+                      <h4>Main Image (Aspect Ratio 16:9)</h4>
+                      <vue-dropzone
+                        id="dropzoneMainImage"
+                        ref="dropzoneMainImage"
+                        :options="dropzoneImageOptions"
+                        class="mb-2"
+                        @vdropzone-file-added="dropzoneMainImageAdded"
+                        @vdropzone-sending="dropzoneSendingMethodPut"
+                      />
+                    </b-col>
+                    <b-col md="6">
+                      <h4>Banner Image (Aspect Ratio 15:4)</h4>
+                      <vue-dropzone
+                        id="dropzoneBannerImage"
+                        ref="dropzoneBannerImage"
+                        :options="dropzoneImageOptions"
+                        class="mb-2"
+                        @vdropzone-file-added="dropzoneBannerImageAdded"
+                        @vdropzone-sending="dropzoneSendingMethodPut"
+                      />
+                    </b-col>
+                  </b-row>
+                  <h4 class="text-center mt-2 mb-1">
+                    Common Image
+                  </h4>
+                  <b-row class="justify-content-center">
+                    <b-col md="6">
+                      <!-- swiper1 -->
+                      <swiper
+                        ref="swiperCommonImage"
+                        class="swiper-gallery gallery-top"
+                        :options="swiperOptions"
+                        @slideChange="swiperSlideChange"
+                      >
+                        <swiper-slide
+                          v-for="(data, index) in swiperData"
+                          :key="index"
+                        >
+                          <b-img :src="data.img" fluid />
+                        </swiper-slide>
+
+                        <div
+                          slot="button-next"
+                          class="swiper-button-next swiper-button-white"
+                        />
+                        <div
+                          slot="button-prev"
+                          class="swiper-button-prev swiper-button-white"
+                        />
+                      </swiper>
+
+                      <!-- swiper2 Thumbs -->
+                      <swiper
+                        ref="swiperThumbs"
+                        class="swiper gallery-thumbs"
+                        :options="swiperOptionThumbs"
+                      >
+                        <swiper-slide
+                          v-for="(data, index) in swiperData"
+                          :key="index"
+                        >
+                          <b-img :src="data.img" fluid />
+                        </swiper-slide>
+                      </swiper>
+                    </b-col>
+                  </b-row>
+                  <b-row class="justify-content-center">
+                    <b-col md="6">
+                      <b-button-group
+                        class="mt-2 d-flex justify-content-center"
+                      >
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-success"
+                        >
+                          <feather-icon icon="PlusIcon" />
+                          Add
+                        </b-button>
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-primary"
+                        >
+                          <feather-icon icon="ImageIcon" />
+                          Replace
+                        </b-button>
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-danger"
+                        >
+                          <feather-icon icon="TrashIcon" />
+                          Delete
+                        </b-button>
+                      </b-button-group>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
+            </b-row>
+            <!-- Tab Room -->
+            <b-row v-show="activeTab === 2">
+              <b-col lg="12">
+                <b-card title="Hotel Room">
+                  <b-form-group class="ml-1">
+                    <div class="d-flex align-items-center">
                       <b-button
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                         variant="outline-primary"
                       >
-                        <feather-icon icon="ImageIcon" />
-                        Replace
+                        <feather-icon icon="PlusIcon" class="mr-50" />
+                        <span class="align-middle">Add</span>
                       </b-button>
-                      <b-button
-                        v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                        variant="outline-danger"
-                      >
-                        <feather-icon icon="TrashIcon" />
-                        Delete
-                      </b-button>
-                    </b-button-group>
-                  </b-col>
-                </b-row>
-              </b-card>
-            </b-col>
-          </b-row>
-          <!-- Tab Room -->
-          <b-row v-show="activeTab === 2">
-            <b-col lg="12">
-              <b-card title="Hotel Room">
-                <b-form-group class="ml-1">
-                  <div class="d-flex align-items-center">
-                    <b-button
-                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                      variant="outline-primary"
-                    >
-                      <feather-icon icon="PlusIcon" class="mr-50" />
-                      <span class="align-middle">Add</span>
-                    </b-button>
-                  </div>
-                </b-form-group>
-                <app-collapse accordion>
-                  <app-collapse-item
-                    v-for="(room, index) in hotelData.rooms"
-                    :key="index"
-                    :title="room.name"
-                  >
-                    {{ room.description }}
-                    <b-row>
-                      <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">
-                          Number of Guest
-                        </h5>
-                        <b-card-text>
-                          {{ room.num_of_guest }}
-                        </b-card-text>
-                      </b-col>
-                      <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">
-                          Room size
-                        </h5>
-                        <b-card-text>
-                          {{ room.room_size }} &#13217;
-                        </b-card-text>
-                      </b-col>
-                      <b-col md="4">
-                        <h5 class="text-capitalize mb-75 mt-2">
-                          Bed size
-                        </h5>
-                        <b-card-text class="text-capitalize">
-                          {{ room.bed_size }}
-                        </b-card-text>
-                      </b-col>
-                    </b-row>
-                    <div class="d-flex justify-content-between mt-2">
-                      <h5
-                        class="text-capitalize mb-75"
-                        style="margin-top: 10px;"
-                      >
-                        Pricing
-                      </h5>
-                      <b-form-group class="ml-1">
-                        <b-button
-                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                          variant="outline-primary"
-                        >
-                          <feather-icon icon="PlusIcon" class="mr-50" />
-                          <span class="align-middle">Add</span>
-                        </b-button>
-                      </b-form-group>
                     </div>
-                    <b-table-lite
-                      class="mt-2"
-                      hover
-                      :items="parseRoomPricing(room.pricings)"
-                      :fields="roomPricingFields"
+                  </b-form-group>
+                  <app-collapse accordion>
+                    <app-collapse-item
+                      v-for="(room, index) in hotelData.rooms"
+                      :key="index"
+                      :title="room.name"
                     >
-                      <!-- A virtual column -->
-                      <template #cell(No)="data">
-                        {{ data.index + 1 }}
-                      </template>
-
-                      <!-- A virtual composite column -->
-                      <template #cell(action)="data">
-                        <b-button
-                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                          variant="outline-primary"
-                          class="btn-icon rounded-circle"
-                          @click="editRoomPricingModal(data.item)"
+                      {{ room.description }}
+                      <b-row>
+                        <b-col md="4">
+                          <h5 class="text-capitalize mb-75 mt-2">
+                            Number of Guest
+                          </h5>
+                          <b-card-text>
+                            {{ room.num_of_guest }}
+                          </b-card-text>
+                        </b-col>
+                        <b-col md="4">
+                          <h5 class="text-capitalize mb-75 mt-2">
+                            Room size
+                          </h5>
+                          <b-card-text>
+                            {{ room.room_size }} &#13217;
+                          </b-card-text>
+                        </b-col>
+                        <b-col md="4">
+                          <h5 class="text-capitalize mb-75 mt-2">
+                            Bed size
+                          </h5>
+                          <b-card-text class="text-capitalize">
+                            {{ room.bed_size }}
+                          </b-card-text>
+                        </b-col>
+                      </b-row>
+                      <div class="d-flex justify-content-between mt-2">
+                        <h5
+                          class="text-capitalize mb-75"
+                          style="margin-top: 10px;"
                         >
-                          <feather-icon icon="Edit2Icon" />
-                        </b-button>
+                          Pricing
+                        </h5>
+                        <b-form-group class="ml-1">
+                          <b-button
+                            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                            variant="outline-primary"
+                          >
+                            <feather-icon icon="PlusIcon" class="mr-50" />
+                            <span class="align-middle">Add</span>
+                          </b-button>
+                        </b-form-group>
+                      </div>
+                      <b-table-lite
+                        class="mt-2"
+                        hover
+                        :items="parseRoomPricing(room.pricings)"
+                        :fields="roomPricingFields"
+                      >
+                        <!-- A virtual column -->
+                        <template #cell(No)="data">
+                          {{ data.index + 1 }}
+                        </template>
 
-                        <b-button
-                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                          variant="outline-danger"
-                          class="btn-icon rounded-circle ml-1"
-                          @click="deleteRoomPricing(data.item)"
-                        >
-                          <feather-icon icon="TrashIcon" />
-                        </b-button>
-                      </template>
+                        <!-- A virtual composite column -->
+                        <template #cell(action)="data">
+                          <b-button
+                            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                            variant="outline-primary"
+                            class="btn-icon rounded-circle"
+                            @click="editRoomPricingModal(data.item)"
+                          >
+                            <feather-icon icon="Edit2Icon" />
+                          </b-button>
 
-                      <!-- Optional default data cell scoped slot -->
-                      <template #cell()="data">
-                        <i>{{ data.value }}</i>
-                      </template>
-                    </b-table-lite>
-                  </app-collapse-item>
-                </app-collapse>
-              </b-card>
-            </b-col>
-          </b-row>
-          <b-row v-show="activeTab === 3">
-            <b-col md="12">
-              <b-card
-                v-if="availableFacilityCategories.length > 0"
-                title="Hotel Facilities"
-              >
-                <div
-                  v-for="(facilityCategory,
-                  facilityCategoryIndex) in availableFacilityCategories"
-                  :key="facilityCategoryIndex"
-                  class="group-wrapper"
+                          <b-button
+                            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                            variant="outline-danger"
+                            class="btn-icon rounded-circle ml-1"
+                            @click="deleteRoomPricing(data.item)"
+                          >
+                            <feather-icon icon="TrashIcon" />
+                          </b-button>
+                        </template>
+
+                        <!-- Optional default data cell scoped slot -->
+                        <template #cell()="data">
+                          <i>{{ data.value }}</i>
+                        </template>
+                      </b-table-lite>
+                    </app-collapse-item>
+                  </app-collapse>
+                </b-card>
+              </b-col>
+            </b-row>
+            <b-row v-show="activeTab === 3">
+              <b-col md="12">
+                <b-card
+                  v-if="availableFacilityCategories.length > 0"
+                  title="Hotel Facilities"
                 >
-                  <div class="group-title">
-                    {{ facilityCategory.name }}
-                  </div>
-                  <div class="group-content">
-                    <div
-                      v-for="(facility,
-                      facilityIndex) in getAvailableFacilityByCategoryId(
-                        facilityCategory.id
-                      )"
-                      :key="facilityIndex"
-                      class="facility-item"
-                    >
-                      <div class="facility-check-box">
-                        <b-form-checkbox
-                          v-model="facility.value"
-                          value="Y"
-                          class="custom-control-primary"
-                        >
-                          <div class="facility-label">
-                            {{ facility.name }}
-                          </div>
-                        </b-form-checkbox>
+                  <div
+                    v-for="(facilityCategory,
+                    facilityCategoryIndex) in availableFacilityCategories"
+                    :key="facilityCategoryIndex"
+                    class="group-wrapper"
+                  >
+                    <div class="group-title">
+                      {{ facilityCategory.name }}
+                    </div>
+                    <div class="group-content">
+                      <div
+                        v-for="(facility,
+                        facilityIndex) in getAvailableFacilityByCategoryId(
+                          facilityCategory.id
+                        )"
+                        :key="facilityIndex"
+                        class="facility-item"
+                      >
+                        <div class="facility-check-box">
+                          <b-form-checkbox
+                            v-model="facility.value"
+                            value="Y"
+                            class="custom-control-primary"
+                          >
+                            <div class="facility-label">
+                              {{ facility.name }}
+                            </div>
+                          </b-form-checkbox>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <b-row class="justify-content-center">
-                  <b-button
-                    v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                    variant="info"
-                  >
-                    Save
-                  </b-button>
-                </b-row>
-              </b-card>
-            </b-col>
-          </b-row>
-        </b-overlay>
-      </section>
-      <!--/ profile info  -->
-    </div>
-  </b-overlay>
+                  <b-row class="justify-content-center">
+                    <b-button
+                      v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                      variant="info"
+                    >
+                      Save
+                    </b-button>
+                  </b-row>
+                </b-card>
+              </b-col>
+            </b-row>
+          </b-overlay>
+        </section>
+        <!--/ profile info  -->
+      </div>
+    </b-overlay>
+    <b-modal
+      ref="modal-hotel-input"
+      centered
+      :title="modalTitle"
+      :no-close-on-backdrop="true"
+    >
+      <b-form>
+        <b-form-group>
+          <label for="name">Name :</label>
+          <b-form-input
+            id="name"
+            v-model="hotelParams.name"
+            type="text"
+            placeholder="Hotel Name"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="address">Address :</label>
+          <b-form-input
+            id="address"
+            v-model="hotelParams.address"
+            type="text"
+            placeholder="Hotel Address"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="description">Description :</label>
+          <b-form-textarea
+            id="description"
+            v-model="hotelParams.description"
+            placeholder="Hotel Description"
+            rows="3"
+            no-resize
+          />
+        </b-form-group>
+      </b-form>
+    </b-modal>
+  </div>
 </template>
 
 <script>
 import {
+  BForm,
+  BFormInput,
+  BModal,
   BListGroup,
   BListGroupItem,
   BCardText,
@@ -435,6 +480,7 @@ import {
   BButton,
   BTableLite,
   BFormCheckbox,
+  BFormTextarea,
   BFormGroup,
 } from "bootstrap-vue";
 
@@ -455,6 +501,10 @@ import HotelHeader from "./HotelHeader.vue";
 
 export default {
   components: {
+    BFormInput,
+    BFormTextarea,
+    BModal,
+    BForm,
     vueDropzone,
     BFormGroup,
     BTableLite,
@@ -490,6 +540,7 @@ export default {
         addRemoveLinks: false,
         acceptedFiles: "image/*",
       },
+      modalTitle: "",
       dropzoneMainImageSelectedFile: null,
       dropzoneBannerImageSelectedFile: null,
       hotelData: {},
@@ -560,6 +611,15 @@ export default {
     setMapEditMode() {
       this.mapEditMode = true;
       this.marker.setDraggable(true);
+    },
+    editHotelModal() {
+      this.initDefaultParams();
+      for (const key in this.defaultHotelParams) {
+        this.hotelParams[key] = this.hotelData[key];
+      }
+      this.modalTitle = "Edit Hotel";
+      // this.$refs["modal-hotel-input"].onOk = () => this.addData(this.params);
+      this.$refs["modal-hotel-input"].show();
     },
     saveMapEdit() {
       this.mapEditMode = false;

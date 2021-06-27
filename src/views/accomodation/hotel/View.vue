@@ -272,6 +272,7 @@
                       <b-button
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                         variant="outline-primary"
+                        @click="addHotelRoomModal()"
                       >
                         <feather-icon icon="PlusIcon" class="mr-50" />
                         <span class="align-middle">Add</span>
@@ -485,6 +486,40 @@
         </b-form-group>
       </b-form>
     </b-modal>
+    <b-modal
+      ref="modal-hotel-room-input"
+      centered
+      :title="modalTitle"
+      :no-close-on-backdrop="true"
+    >
+      <b-form>
+        <b-form-group>
+          <label for="name">Name :</label>
+          <b-form-input id="name" type="text" placeholder="Hotel Room" />
+        </b-form-group>
+        <b-form-group>
+          <label for="description">Description :</label>
+          <b-form-textarea
+            id="description"
+            placeholder="Room Description"
+            rows="3"
+            no-resize
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="numofguest">Number Of Guest :</label>
+          <b-form-input
+            id="numofguest"
+            type="number"
+            placeholder="Number Of Guest"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="bedsize">Bed Size :</label>
+          <b-form-input id="bedsize" type="text" placeholder="Bed Size" />
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
@@ -650,8 +685,19 @@ export default {
       this.$refs["modal-hotel-input"].onOk = () => this.editHotel(this.hotelParams);
       this.$refs["modal-hotel-input"].show();
     },
+<<<<<<< Updated upstream
     editHotel(params){
       console.log(params)
+=======
+    addHotelRoomModal() {
+      this.initDefaultParams();
+      for (const key in this.defaultHotelParams) {
+        this.hotelParams[key] = this.hotelData[key];
+      }
+      this.modalTitle = "Add Hotel Room";
+      // this.$refs["modal-hotel-input"].onOk = () => this.addData(this.params);
+      this.$refs["modal-hotel-room-input"].show();
+>>>>>>> Stashed changes
     },
     saveMapEdit() {
       this.mapEditMode = false;
@@ -929,7 +975,7 @@ export default {
       }, 1000);
     },
     setCurrentTab(tab) {
-      this.$refs.header.setCurrentTab(tab)
+      this.$refs.header.setCurrentTab(tab);
     },
   },
 };

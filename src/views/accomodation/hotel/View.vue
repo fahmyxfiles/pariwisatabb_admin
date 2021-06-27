@@ -2,7 +2,11 @@
   <div>
     <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
       <div id="user-profile">
-        <hotel-header ref="header" :header-data="headerData" @tab-changed="tabChanged" />
+        <hotel-header
+          ref="header"
+          :header-data="headerData"
+          @tab-changed="tabChanged"
+        />
         <!-- profile info  -->
         <section id="profile-info">
           <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
@@ -12,7 +16,7 @@
                 <b-card>
                   <!-- about -->
                   <div class="d-flex justify-content-between">
-                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Profile
                     </h4>
                     <b-form-group class="ml-1">
@@ -28,25 +32,19 @@
                     </b-form-group>
                   </div>
                   <div>
-                    <h5 class="text-capitalize mb-75">
-                      Name
-                    </h5>
+                    <h5 class="text-capitalize mb-75">Name</h5>
                     <b-card-text>
                       {{ hotelData.name }}
                     </b-card-text>
                   </div>
                   <div class="mt-2">
-                    <h5 class="text-capitalize mb-75">
-                      Address
-                    </h5>
+                    <h5 class="text-capitalize mb-75">Address</h5>
                     <b-card-text>
                       {{ hotelData.address }}
                     </b-card-text>
                   </div>
                   <div class="mt-2">
-                    <h5 class="text-capitalize mb-75">
-                      Description
-                    </h5>
+                    <h5 class="text-capitalize mb-75">Description</h5>
                     <b-card-text>
                       {{ hotelData.description }}
                     </b-card-text>
@@ -55,7 +53,7 @@
                 <b-card>
                   <!-- about -->
                   <div class="d-flex justify-content-between">
-                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Rooms
                     </h4>
                     <b-form-group class="ml-1">
@@ -84,7 +82,7 @@
               <b-col lg="6" cols="12" order="1" order-lg="2">
                 <b-card>
                   <div class="d-flex justify-content-between">
-                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Maps
                     </h4>
                     <b-form-group class="ml-1">
@@ -130,7 +128,7 @@
               <b-col lg="3" cols="12" order="3">
                 <b-card>
                   <div class="d-flex justify-content-between">
-                    <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Facilities
                     </h4>
                     <b-form-group class="ml-1">
@@ -187,9 +185,7 @@
                       />
                     </b-col>
                   </b-row>
-                  <h4 class="text-center mt-2 mb-1">
-                    Common Image
-                  </h4>
+                  <h4 class="text-center mt-2 mb-1">Common Image</h4>
                   <b-row class="justify-content-center">
                     <b-col md="6">
                       <!-- swiper1 -->
@@ -296,26 +292,46 @@
                           </b-card-text>
                         </b-col>
                         <b-col md="4">
-                          <h5 class="text-capitalize mb-75 mt-2">
-                            Room size
-                          </h5>
+                          <h5 class="text-capitalize mb-75 mt-2">Room size</h5>
                           <b-card-text>
                             {{ room.room_size }} &#13217;
                           </b-card-text>
                         </b-col>
                         <b-col md="4">
-                          <h5 class="text-capitalize mb-75 mt-2">
-                            Bed size
-                          </h5>
+                          <h5 class="text-capitalize mb-75 mt-2">Bed size</h5>
                           <b-card-text class="text-capitalize">
                             {{ room.bed_size }}
                           </b-card-text>
                         </b-col>
                       </b-row>
-                      <div class="d-flex justify-content-between mt-2">
+                      <b-row class="mt-1">
+                        <b-col md="12">
+                          <b-button
+                            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                            variant="outline-primary"
+                            class="btn-icon rounded-circle"
+                            size="sm"
+                            @click="editHotelRoomModal(room)"
+                          >
+                            <feather-icon icon="Edit2Icon" />
+                          </b-button>
+
+                          <b-button
+                            v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                            variant="outline-danger"
+                            class="btn-icon rounded-circle ml-1"
+                            size="sm"
+                            @click="deleteHotelRoom(data.item)"
+                          >
+                            <feather-icon icon="TrashIcon" />
+                          </b-button>
+                        </b-col>
+                      </b-row>
+                      <hr />
+                      <div class="d-flex justify-content-between">
                         <h5
                           class="text-capitalize mb-75"
-                          style="margin-top: 10px;"
+                          style="margin-top: 5px"
                         >
                           Pricing
                         </h5>
@@ -323,6 +339,7 @@
                           <b-button
                             v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                             variant="outline-primary"
+                            size="sm"
                           >
                             <feather-icon icon="PlusIcon" class="mr-50" />
                             <span class="align-middle">Add</span>
@@ -330,7 +347,7 @@
                         </b-form-group>
                       </div>
                       <b-table-lite
-                        class="mt-2"
+                        class=""
                         hover
                         :items="parseRoomPricing(room.pricings)"
                         :fields="roomPricingFields"
@@ -346,6 +363,7 @@
                             v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                             variant="outline-primary"
                             class="btn-icon rounded-circle"
+                            size="sm"
                             @click="editRoomPricingModal(data.item)"
                           >
                             <feather-icon icon="Edit2Icon" />
@@ -355,6 +373,7 @@
                             v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                             variant="outline-danger"
                             class="btn-icon rounded-circle ml-1"
+                            size="sm"
                             @click="deleteRoomPricing(data.item)"
                           >
                             <feather-icon icon="TrashIcon" />
@@ -378,8 +397,9 @@
                   title="Hotel Facilities"
                 >
                   <div
-                    v-for="(facilityCategory,
-                    facilityCategoryIndex) in availableFacilityCategories"
+                    v-for="(
+                      facilityCategory, facilityCategoryIndex
+                    ) in availableFacilityCategories"
                     :key="facilityCategoryIndex"
                     class="group-wrapper"
                   >
@@ -388,8 +408,9 @@
                     </div>
                     <div class="group-content">
                       <div
-                        v-for="(facility,
-                        facilityIndex) in getAvailableFacilityByCategoryId(
+                        v-for="(
+                          facility, facilityIndex
+                        ) in getAvailableFacilityByCategoryId(
                           facilityCategory.id
                         )"
                         :key="facilityIndex"
@@ -414,7 +435,7 @@
                       v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                       variant="outline-primary"
                     >
-                    <feather-icon icon="SaveIcon" class="mr-50" />
+                      <feather-icon icon="SaveIcon" class="mr-50" />
                       Save
                     </b-button>
                   </b-row>
@@ -495,7 +516,12 @@
       <b-form>
         <b-form-group>
           <label for="name">Name :</label>
-          <b-form-input id="name" type="text" placeholder="Hotel Room" />
+          <b-form-input
+            id="name"
+            type="text"
+            placeholder="Room Name"
+            v-model="hotelRoomParams.name"
+          />
         </b-form-group>
         <b-form-group>
           <label for="description">Description :</label>
@@ -504,19 +530,34 @@
             placeholder="Room Description"
             rows="3"
             no-resize
+            v-model="hotelRoomParams.description"
           />
         </b-form-group>
         <b-form-group>
-          <label for="numofguest">Number Of Guest :</label>
+          <label for="num_of_guest">Number Of Guest :</label>
           <b-form-input
-            id="numofguest"
+            id="num_of_guest"
             type="number"
             placeholder="Number Of Guest"
+            v-model="hotelRoomParams.num_of_guest"
           />
         </b-form-group>
         <b-form-group>
-          <label for="bedsize">Bed Size :</label>
-          <b-form-input id="bedsize" type="text" placeholder="Bed Size" />
+          <label for="room_size">Room Size :</label>
+          <b-form-input
+            id="room_size"
+            type="number"
+            placeholder="Room Size"
+            v-model="hotelRoomParams.room_size"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="bed_size">Bed Size :</label>
+          <b-form-radio-group
+            v-model="hotelRoomParams.bed_size"
+            :options="bedSizeOptions"
+            class="spacer"
+          />
         </b-form-group>
       </b-form>
     </b-modal>
@@ -542,6 +583,7 @@ import {
   BFormCheckbox,
   BFormTextarea,
   BFormGroup,
+  BFormRadioGroup,
 } from "bootstrap-vue";
 
 import {
@@ -562,6 +604,7 @@ import VSelect from "vue-select";
 
 export default {
   components: {
+    BFormRadioGroup,
     VSelect,
     BFormInput,
     BFormTextarea,
@@ -624,6 +667,22 @@ export default {
         map_center: "",
       },
       hotelParams: null,
+      defaultHotelRoomParams: {
+        hotel_id: 0,
+        name: "",
+        description: "",
+        num_of_guest: 0,
+        room_size: 0,
+        bed_size: "",
+      },
+      hotelRoomParams: null,
+      bedSizeOptions: [
+        { text: "Single", value: "single" },
+        { text: "Double", value: "double" },
+        { text: "Queen", value: "queen" },
+        { text: "King", value: "king" },
+        { text: "Twin", value: "twin" },
+      ],
       imagePath: this.$imagePath,
       loading: true,
       tabLoading: false,
@@ -663,12 +722,12 @@ export default {
     };
   },
   created() {
-    this.initDefaultParams();
+    this.initDefaultHotelParams();
+    this.initDefaultHotelRoomParams();
     this.getAvailableRegencies();
     this.getAvailableFacilityCategories();
     this.getAvailableFacilities();
     this.hotelId = this.$route.params.id;
-    // this.initDefaultParams();
     this.getData();
   },
   methods: {
@@ -677,47 +736,55 @@ export default {
       this.marker.setDraggable(true);
     },
     editHotelModal() {
-      this.initDefaultParams();
+      this.initDefaultHotelParams();
       for (const key in this.defaultHotelParams) {
         this.hotelParams[key] = this.hotelData[key];
       }
       this.modalTitle = "Edit Hotel";
-      this.$refs["modal-hotel-input"].onOk = () => this.editHotel(this.hotelParams);
+      this.$refs["modal-hotel-input"].onOk = () =>
+        this.editHotel(this.hotelParams);
       this.$refs["modal-hotel-input"].show();
     },
-<<<<<<< Updated upstream
-    editHotel(params){
-      console.log(params)
-=======
+    editHotel(params) {
+      console.log(params);
+    },
     addHotelRoomModal() {
-      this.initDefaultParams();
-      for (const key in this.defaultHotelParams) {
-        this.hotelParams[key] = this.hotelData[key];
-      }
+      this.initDefaultHotelRoomParams();
       this.modalTitle = "Add Hotel Room";
-      // this.$refs["modal-hotel-input"].onOk = () => this.addData(this.params);
+      this.$refs["modal-hotel-room-input"].onOk = () =>
+        this.addHotelRoom(this.hotelRoomParams);
       this.$refs["modal-hotel-room-input"].show();
->>>>>>> Stashed changes
+    },
+    addHotelRoom(params) {
+      params.hotel_id = this.hotelData.id;
+      console.log(params);
+    },
+    editHotelRoomModal(params) {
+      console.log(params)
+      this.initDefaultHotelRoomParams();
+      for (const key in this.defaultHotelRoomParams) {
+        this.hotelRoomParams[key] = params[key];
+      }
+      console.log(this.hotelRoomParams)
+      this.modalTitle = "Edit Hotel Room : " + params.name;
+      this.$refs["modal-hotel-room-input"].onOk = () =>
+        this.editHotelRoom(this.hotelRoomParams);
+      this.$refs["modal-hotel-room-input"].show();
+    },
+    editHotelRoom(params) {
+      console.log(params);
     },
     saveMapEdit() {
       this.mapEditMode = false;
       this.marker.setDraggable(false);
-      const center = this.map
-        .getCenter()
-        .toString()
-        .substr(1)
-        .slice(0, -1);
+      const center = this.map.getCenter().toString().substr(1).slice(0, -1);
       const zoom = this.map.getZoom().toString();
-      const coord = this.marker
-        .getPosition()
-        .toString()
-        .substr(1)
-        .slice(0, -1);
+      const coord = this.marker.getPosition().toString().substr(1).slice(0, -1);
 
       this.hotelData.map_coordinate = coord;
       this.hotelData.map_center = `${center}, ${zoom}`;
 
-      this.initDefaultParams();
+      this.initDefaultHotelParams();
       for (const key in this.defaultHotelParams) {
         this.hotelParams[key] = this.hotelData[key];
       }
@@ -809,7 +876,7 @@ export default {
         this.map
       );
     },
-    getAvailableRegencies(){
+    getAvailableRegencies() {
       this.$http
         .get("/hotel/getAvailableRegencies")
         .then((res) => {
@@ -962,8 +1029,13 @@ export default {
           return this.toastErrorMsg(err.message);
         });
     },
-    initDefaultParams() {
+    initDefaultHotelParams() {
       this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams));
+    },
+    initDefaultHotelRoomParams() {
+      this.hotelRoomParams = JSON.parse(
+        JSON.stringify(this.defaultHotelRoomParams)
+      );
     },
     getImageByType,
     swiperSlideChange() {},
@@ -988,7 +1060,17 @@ export default {
   height: 600px;
   background: gray;
 }
-
+.spacer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  & > * {
+    margin-left: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+}
 .dropzone .dz-preview .dz-image img {
   width: inherit !important;
   height: fit-content !important;

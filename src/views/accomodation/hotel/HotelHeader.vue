@@ -113,6 +113,10 @@ export default {
     }
   },
   methods: {
+    setCurrentTab(newTab){
+      this.currentTab = newTab
+      this.$emit('tab-changed', this.currentTab)
+    },
     change() {
       this.$emit('tab-changed', this.currentTab)
     },

@@ -105,11 +105,11 @@
     >
       <b-form>
         <b-form-group>
-          <label for="provinces">Provinces</label>
+          <label for="province">Province</label>
           <v-select
             v-model="params.province_id"
             :options="availableProvinces"
-            :reduce="(provinces) => provinces.id"
+            :reduce="(province) => province.id"
             label="name"
           />
         </b-form-group>

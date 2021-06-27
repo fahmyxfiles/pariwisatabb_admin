@@ -433,6 +433,15 @@
     >
       <b-form>
         <b-form-group>
+          <label for="Regency">Regency</label>
+          <v-select
+            v-model="params.regency_id"
+            :options="availableRegencies"
+            :reduce="(regency) => regency.id"
+            label="name"
+          />
+        </b-form-group>
+        <b-form-group>
           <label for="name">Name :</label>
           <b-form-input
             id="name"

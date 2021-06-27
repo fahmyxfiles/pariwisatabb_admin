@@ -55,8 +55,44 @@
             <!-- post -->
             <b-col lg="6" cols="12" order="1" order-lg="2">
               <b-card>
-                <b-card-title>
-                </b-card-title>
+                <div class="d-flex justify-content-between">
+                  <h4 class="text-capitalize mb-75" style="margin-top: 3px;">
+                    Maps
+                  </h4>
+                  <b-form-group class="ml-1">
+                    <b-button
+                      v-show="!mapEditMode"
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-primary"
+                      size="sm"
+                      @click="setMapEditMode()"
+                    >
+                      <feather-icon icon="Edit2Icon" class="mr-50" />
+                      <span class="align-middle">Edit</span>
+                    </b-button>
+                    <b-button
+                      v-show="mapEditMode"
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-success"
+                      size="sm"
+                      @click="saveMapEdit()"
+                    >
+                      <feather-icon icon="SaveIcon" class="mr-50" />
+                      <span class="align-middle">Save</span>
+                    </b-button>
+                    <b-button
+                      v-show="mapEditMode"
+                      class="ml-1"
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                      variant="outline-danger"
+                      size="sm"
+                      @click="cancelMapEdit()"
+                    >
+                      <feather-icon icon="XIcon" class="mr-50" />
+                      <span class="align-middle">Cancel</span>
+                    </b-button>
+                  </b-form-group>
+                </div>
                 <div id="map" ref="map" />
               </b-card>
             </b-col>
@@ -112,7 +148,7 @@
                     />
                   </b-col>
                 </b-row>
-                <h4 class="text-center mt-2">
+                <h4 class="text-center mt-2 mb-1">
                   Common Image
                 </h4>
                 <b-row class="justify-content-center">
@@ -161,7 +197,7 @@
                     <b-button-group class="mt-2 d-flex justify-content-center">
                       <b-button
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                        variant="outline-primary"
+                        variant="outline-success"
                       >
                         <feather-icon icon="PlusIcon" />
                         Add
@@ -234,11 +270,11 @@
                         </b-card-text>
                       </b-col>
                     </b-row>
-                    <div class="d-flex justify-content-between">
-                      <h5 class="text-capitalize mb-75 mt-2">
+                    <div class="d-flex justify-content-between mt-2">
+                      <h5 class="text-capitalize mb-75" style="margin-top: 10px;">
                         Pricing
                       </h5>
-                      <b-form-group class="ml-1" style="margin-top:5px;">
+                      <b-form-group class="ml-1">
                         <b-button
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-primary"
@@ -356,7 +392,7 @@ import {
   BFormGroup,
 } from "bootstrap-vue";
 
-import { toastErrorMsg, getImageByType, createGoogleMap } from "@/libs/helpers";
+import { toastErrorMsg, getImageByType, createGoogleMap, createGoogleMapMarker } from "@/libs/helpers";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
 import Ripple from "vue-ripple-directive";
@@ -414,24 +450,23 @@ export default {
         mainImage: require("@/assets/images/placeholders/16-9.png"),
       },
       hotelId: null,
-      defaultParams: {
+      defaultHotelParams: {
         regency_id: 0,
         name: "",
         address: "",
         postal_code: 0,
         description: "",
-        regency: null,
-        images: [],
-        rooms: [],
-        facilities: [],
+        map_coordinate: "",
+        map_center: "",
       },
-      params: null,
+      hotelParams: null,
       imagePath: this.$imagePath,
       loading: true,
       tabLoading: false,
       activeTab: 0,
       map: null,
       marker: null,
+      mapEditMode: false,
       swiperData: [],
       /* eslint-disable global-require */
 
@@ -472,6 +507,58 @@ export default {
     this.getData();
   },
   methods: {
+    setMapEditMode(){
+      this.mapEditMode = true
+      this.marker.setDraggable(true)
+    },
+    saveMapEdit(){
+      this.mapEditMode = false
+      this.marker.setDraggable(false)
+      var center = this.map.getCenter().toString()
+      var zoom = this.map.getZoom().toString()
+      var coord = this.marker.getPosition().toString()
+
+      console.log("center", center)
+      console.log("zoom", zoom)
+      console.log("coord", coord)
+
+      this.hotelData.map_coordinate = coord
+      this.hotelData.map_center = `${center}, ${zoom}`
+
+      this.initDefaultParams()
+      for (const key in this.defaultHotelParams) {
+          this.hotelParams[key] = this.hotelData[key]
+      }
+      console.log(this.hotelParams);
+      this.hotelParams["_method"] = "PUT"
+      this.tabLoading = true
+      this.$http
+        .post("/hotel/" + this.hotelData.id, this.hotelParams)
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.tabLoading = false
+          this.drawMap()
+      })
+      .catch((err) => {
+        this.tabLoading = false
+        if (err.response) {
+          const errMsg = err.response.data.data;
+          if (errMsg) {
+            return this.toastErrorMsg(errMsg);
+          }
+        }
+        return this.toastErrorMsg(err.message);
+      });
+    },
+    cancelMapEdit(){
+      this.mapEditMode = false
+      this.marker.setDraggable(false)
+      this.marker.setMap(null)
+      this.marker = this.createGoogleMapMarker(
+        this.hotelData.map_coordinate, 
+        this.map
+      )
+    },
     getAvailableFacilityByCategoryId(id) {
       return this.availableFacilities.filter((facility) => {
         return facility.category_id == id;
@@ -485,6 +572,7 @@ export default {
     },
     toastErrorMsg,
     createGoogleMap,
+    createGoogleMapMarker,
     parseRoomPricing(pricings) {
       return pricings.map((pricing) => {
         if (pricing.type == "Weekday") {
@@ -521,13 +609,14 @@ export default {
       this.dropzoneBannerImageSelectedFile = file;
     },
     drawMap() {
-      return this.createGoogleMap(
-        this.hotelData.map_coordinate,
+      this.map = this.createGoogleMap(
         this.hotelData.map_center,
         this.$refs.map,
-        this.map,
-        this.marker
-      );
+      )
+      this.marker = this.createGoogleMapMarker(
+        this.hotelData.map_coordinate, 
+        this.map
+      )
     },
     getAvailableFacilityCategories() {
       this.$http
@@ -561,48 +650,56 @@ export default {
           return this.toastErrorMsg(err.message);
         });
     },
+    setHeaderImage(){
+      this.headerData = {
+        name: this.hotelData.name,
+        address: this.hotelData.address,
+        headerImage:
+          this.imagePath +
+          this.getImageByType(this.hotelData.images, "banner")
+            .image_filename,
+        mainImage:
+          this.imagePath +
+          this.getImageByType(this.hotelData.images, "main").image_filename,
+      };
+    },
+    setDropzoneOptions(){
+      this.$refs.dropzoneMainImage.setOption(
+        "url",
+        `${this.$http.defaults.baseURL}hotel_image/${
+          this.getImageByType(this.hotelData.images, "main").id
+        }`
+      );
+      this.$refs.dropzoneBannerImage.setOption(
+        "url",
+        `${this.$http.defaults.baseURL}hotel_image/${
+          this.getImageByType(this.hotelData.images, "banner").id
+        }`
+      );
+    },
+    setSwiperImage(){
+      this.swiperData = [];
+      const commonImage = this.getImageByType(
+        this.hotelData.images,
+        "common"
+      );
+      for (let i = 0; i < commonImage.length; i++) {
+        this.swiperData.push({
+          img: this.imagePath + commonImage[i].image_filename,
+          id: commonImage[i].id,
+        });
+      }
+    },
     getData() {
       this.loading = true;
       this.$http
         .get(`/hotel/${this.hotelId}`)
         .then((res) => {
           this.hotelData = res.data.data;
-          this.headerData = {
-            name: this.hotelData.name,
-            address: this.hotelData.address,
-            headerImage:
-              this.imagePath +
-              this.getImageByType(this.hotelData.images, "banner")
-                .image_filename,
-            mainImage:
-              this.imagePath +
-              this.getImageByType(this.hotelData.images, "main").image_filename,
-          };
-          this.$refs.dropzoneMainImage.setOption(
-            "url",
-            `${this.$http.defaults.baseURL}hotel_image/${
-              this.getImageByType(this.hotelData.images, "main").id
-            }`
-          );
-          this.$refs.dropzoneBannerImage.setOption(
-            "url",
-            `${this.$http.defaults.baseURL}hotel_image/${
-              this.getImageByType(this.hotelData.images, "banner").id
-            }`
-          );
+          this.setHeaderImage()
           this.drawMap()
-          console.log(this.marker)
-          this.swiperData = [];
-          const commonImage = this.getImageByType(
-            this.hotelData.images,
-            "common"
-          );
-          for (let i = 0; i < commonImage.length; i++) {
-            this.swiperData.push({
-              img: this.imagePath + commonImage[i].image_filename,
-              id: commonImage[i].id,
-            });
-          }
+          this.setDropzoneOptions()
+          this.setSwiperImage()
           // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
           this.$nextTick(() => {
             const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
@@ -648,7 +745,7 @@ export default {
         });
     },
     initDefaultParams() {
-      this.params = JSON.parse(JSON.stringify(this.defaultParams));
+      this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams));
     },
     getImageByType,
     swiperSlideChange() {},

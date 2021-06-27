@@ -52,20 +52,20 @@ export function toastErrorMsg(errMsg) {
     )
   }
 }
-export function createGoogleMap(coordinate, center, _map, thisMap, thisMarker) {
-  const map_coordinate = coordinate
-  const map_center = center
-  const coord_lat = parseFloat(map_coordinate.split(',')[0])
-  const coord_lng = parseFloat(map_coordinate.split(',')[1])
-  const center_lat = parseFloat(map_center.split(',')[0])
-  const center_lng = parseFloat(map_center.split(',')[1])
-  const center_zoom = parseFloat(map_center.split(',')[2])
-  thisMap = new window.google.maps.Map(map, {
+export function createGoogleMap(center, _ref) {
+  const center_lat = parseFloat(center.split(',')[0])
+  const center_lng = parseFloat(center.split(',')[1])
+  const center_zoom = parseFloat(center.split(',')[2])
+  return new window.google.maps.Map(_ref, {
     center: { lat: center_lat, lng: center_lng },
     zoom: center_zoom,
   })
-  thisMarker = new window.google.maps.Marker({
+}
+export function createGoogleMapMarker(coordinate, _map){
+  const coord_lat = parseFloat(coordinate.split(',')[0])
+  const coord_lng = parseFloat(coordinate.split(',')[1])
+  return new window.google.maps.Marker({
     position: { lat: coord_lat, lng: coord_lng },
-    map: thisMap,
+    map: _map,
   })
 }

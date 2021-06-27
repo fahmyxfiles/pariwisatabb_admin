@@ -2,7 +2,7 @@
   <div>
     <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
       <div id="user-profile">
-        <hotel-header :header-data="headerData" @tab-changed="tabChanged" />
+        <hotel-header ref="header" :header-data="headerData" @tab-changed="tabChanged" />
         <!-- profile info  -->
         <section id="profile-info">
           <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
@@ -63,6 +63,7 @@
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                         variant="outline-primary"
                         size="sm"
+                        @click="setCurrentTab(2)"
                       >
                         <feather-icon icon="Edit2Icon" class="mr-50" />
                         <span class="align-middle">Edit</span>
@@ -137,7 +138,7 @@
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                         variant="outline-primary"
                         size="sm"
-                        @click="tabChanged(3)"
+                        @click="setCurrentTab(3)"
                       >
                         <feather-icon icon="Edit2Icon" class="mr-50" />
                         <span class="align-middle">Edit</span>
@@ -409,9 +410,10 @@
                   </div>
                   <b-row class="justify-content-center">
                     <b-button
-                      v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                      v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                       variant="outline-primary"
                     >
+                    <feather-icon icon="SaveIcon" class="mr-50" />
                       Save
                     </b-button>
                   </b-row>
@@ -618,8 +620,11 @@ export default {
         this.hotelParams[key] = this.hotelData[key];
       }
       this.modalTitle = "Edit Hotel";
-      // this.$refs["modal-hotel-input"].onOk = () => this.addData(this.params);
+      this.$refs["modal-hotel-input"].onOk = () => this.editHotel(this.hotelParams);
       this.$refs["modal-hotel-input"].show();
+    },
+    editHotel(params){
+      console.log(params)
     },
     saveMapEdit() {
       this.mapEditMode = false;

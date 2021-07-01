@@ -171,7 +171,7 @@
                         class="mb-2"
                         @vdropzone-file-added="dropzoneMainImageAdded"
                         @vdropzone-sending="dropzoneMainImageSending"
-                        @vdropzone-success="dropzoneSuccess"
+                        @vdropzone-success="dropzoneMainImageSuccess"
                         @vdropzone-error="dropzoneError"
                       />
                     </b-col>
@@ -184,7 +184,7 @@
                         class="mb-2"
                         @vdropzone-file-added="dropzoneBannerImageAdded"
                         @vdropzone-sending="dropzoneBannerImageSending"
-                        @vdropzone-success="dropzoneSuccess"
+                        @vdropzone-success="dropzoneBannerImageSuccess"
                         @vdropzone-error="dropzoneError"
                       />
                     </b-col>
@@ -242,6 +242,7 @@
                         <b-button
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-success"
+                          @click="addHotelImageModal()"
                         >
                           <feather-icon icon="PlusIcon" />
                           Add
@@ -250,8 +251,8 @@
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-primary"
                         >
-                          <feather-icon icon="ImageIcon" />
-                          Replace
+                          <feather-icon icon="Edit2Icon" />
+                          Edit
                         </b-button>
                         <b-button
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -688,6 +689,45 @@
         </b-form>
       </b-overlay>
     </b-modal>
+    <b-modal
+      ref="modal-hotel-image-input"
+      centered
+      :title="modalTitle"
+      :no-close-on-backdrop="true"
+    >
+      <b-overlay :show="modalLoading" spinner-variant="primary" rounded="sm">
+        <b-form>
+          <b-form-group>
+            <label for="room">Room :</label>
+            <v-select
+              v-model="hotelImageParams.hotel_room_id"
+              :options="hotelData.rooms"
+              :reduce="(room) => room.id"
+              label="name"
+              autocomplete="off"
+            />
+          </b-form-group>
+          <b-form-group>
+            <label for="name">Name :</label>
+            <b-form-input
+              id="name"
+              v-model="hotelImageParams.name"
+              type="text"
+              placeholder="Name"
+            />
+          </b-form-group>
+          <b-form-group>
+            <label for="image">Image (Aspect Ratio 4:3):</label>
+            <vue-dropzone
+              id="dropzoneCommonImage"
+              ref="dropzoneCommonImage"
+              :options="dropzoneImageOptions"
+              @vdropzone-file-added="dropzoneCommonImageAdded"
+            />
+          </b-form-group>
+        </b-form>
+      </b-overlay>
+    </b-modal>
   </div>
 </template>
 
@@ -786,6 +826,7 @@ export default {
       modalTitle: "",
       dropzoneMainImageSelectedFile: null,
       dropzoneBannerImageSelectedFile: null,
+      dropzoneCommonImageSelectedFile: null,
       hotelData: {},
       hotelRoomFacilities: [],
       headerData: {
@@ -805,6 +846,14 @@ export default {
         map_center: "",
       },
       hotelParams: null,
+      defaultHotelImageParams: {
+        hotel_id: 0,
+        hotel_room_id: null,
+        name: "",
+        type: "",
+        file: null,
+      },
+      hotelImageParams: null,
       defaultHotelRoomParams: {
         hotel_id: 0,
         name: "",
@@ -877,6 +926,7 @@ export default {
     this.initDefaultHotelParams();
     this.initDefaultHotelRoomParams();
     this.initDefaultHotelRoomPricingParams();
+    this.initDefaultHotelImageParams();
     this.getAvailableRegencies();
     this.getAvailableFacilityCategories();
     this.getAvailableFacilities();
@@ -1111,6 +1161,34 @@ export default {
         }
       });
     },
+    addHotelImageModal(){
+      this.initDefaultHotelImageParams();
+      this.hotelImageParams.hotel_id = this.hotelData.id;
+      this.hotelImageParams.type = "common";
+      this.modalTitle = "Add Hotel Image";
+      this.$refs["modal-hotel-image-input"].onOk = () =>
+        this.addHotelImage(this.hotelImageParams);
+      this.$refs["modal-hotel-image-input"].show();
+      this.$nextTick(() => {
+        this.$refs.dropzoneCommonImage.setOption("autoProcessQueue", false);
+      });
+    },
+    addHotelImage(params){
+      if (this.dropzoneCommonImageSelectedFile) {
+        params.file = this.dropzoneCommonImageSelectedFile.dataURL
+      }
+      this.$http
+        .post('/hotel_image', params)
+        .then(res => {
+          this.$refs['modal-hotel-image-input'].hide()
+          this.getData()
+          this.setSwiperImage()
+        })
+        .catch(err => {
+          const errMsg = err.response.data.data
+          this.toastErrorMsg(errMsg)
+        })
+    },
     saveHotelFacilitiesEdit() {
       const selectedFacilities = this.availableFacilities.filter(
         (facility) => facility.value == "Y"
@@ -1215,6 +1293,22 @@ export default {
       }
       this.dropzoneMainImageSelectedFile = file;
     },
+    dropzoneCommonImageAdded(file){
+      if (this.dropzoneCommonImageSelectedFile !== null) {
+        this.$refs.dropzoneCommonImage.removeFile(
+          this.dropzoneCommonImageSelectedFile
+        );
+      }
+      this.dropzoneCommonImageSelectedFile = file;
+    },
+    dropzoneBannerImageAdded(file) {
+      if (this.dropzoneBannerImageSelectedFile !== null) {
+        this.$refs.dropzoneBannerImage.removeFile(
+          this.dropzoneBannerImageSelectedFile
+        );
+      }
+      this.dropzoneBannerImageSelectedFile = file;
+    },
     dropzoneMainImageSending(file, xhr, formData) {
       formData.append("_method", "PUT");
       formData.append("type", "main");
@@ -1227,24 +1321,22 @@ export default {
       formData.append("name", "Banner Image");
       formData.append("hotel_id", this.hotelData.id);
     },
-    dropzoneSuccess(file, response){
-      console.log("dropzoneSuccess > response", response)
-      console.log("dropzoneSuccess > file ", file)
-      this.getData()
-      setTimeout(() => { this.setCurrentTab(1) }, 5000)
+    dropzoneMainImageSuccess(file, response){
+      var img = this.getImageByType(this.hotelData.images, "main")
+      img.image_filename = response.data.image_filename
+      this.setHeaderImage()
+      this.setDropzoneImages()
+    },
+    dropzoneBannerImageSuccess(file, response){
+      var img = this.getImageByType(this.hotelData.images, "banner")
+      img.image_filename = response.data.image_filename
+      this.setHeaderImage()
+      this.setDropzoneImages()
     },
     dropzoneError(file){
       console.log("dropzoneError > file ", file)
       var error = JSON.parse(file.xhr.responseText)
       console.log(error)
-    },
-    dropzoneBannerImageAdded(file) {
-      if (this.dropzoneBannerImageSelectedFile !== null) {
-        this.$refs.dropzoneBannerImage.removeFile(
-          this.dropzoneBannerImageSelectedFile
-        );
-      }
-      this.dropzoneBannerImageSelectedFile = file;
     },
     drawMap() {
       this.$refs.map.innerHTML = ''
@@ -1443,7 +1535,7 @@ export default {
         .then((res) => {
           this.hotelData = res.data.data;
           this.setHeaderImage();
-          this.setCurrentTab(0)
+          this.drawMap();
           // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
           this.$nextTick(() => {
             const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
@@ -1478,6 +1570,11 @@ export default {
     initDefaultHotelRoomPricingParams() {
       this.hotelRoomPricingParams = JSON.parse(
         JSON.stringify(this.defaultHotelRoomPricingParams)
+      );
+    },
+    initDefaultHotelImageParams() {
+      this.hotelImageParams = JSON.parse(
+        JSON.stringify(this.defaultHotelImageParams)
       );
     },
     getImageByType,

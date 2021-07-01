@@ -698,6 +698,15 @@
       <b-overlay :show="modalLoading" spinner-variant="primary" rounded="sm">
         <b-form>
           <b-form-group>
+            <label for="name">Name :</label>
+            <b-form-input
+              id="name"
+              v-model="hotelImageParams.name"
+              type="text"
+              placeholder="Name"
+            />
+          </b-form-group>
+          <b-form-group>
             <label for="room">Room :</label>
             <v-select
               v-model="hotelImageParams.hotel_room_id"
@@ -705,15 +714,6 @@
               :reduce="(room) => room.id"
               label="name"
               autocomplete="off"
-            />
-          </b-form-group>
-          <b-form-group>
-            <label for="name">Name :</label>
-            <b-form-input
-              id="name"
-              v-model="hotelImageParams.name"
-              type="text"
-              placeholder="Name"
             />
           </b-form-group>
           <b-form-group>
@@ -1176,6 +1176,9 @@ export default {
     addHotelImage(params){
       if (this.dropzoneCommonImageSelectedFile) {
         params.file = this.dropzoneCommonImageSelectedFile.dataURL
+      }
+      if(params.hotel_room_id == null){
+        delete params.hotel_room_id;
       }
       this.$http
         .post('/hotel_image', params)

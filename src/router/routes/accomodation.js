@@ -1,52 +1,57 @@
 export default [{
-  path: '/hotel/list',
-  name: 'hotel-list',
-  component: () => import('@/views/accomodation/hotel/Index.vue'),
-  meta: {
-    pageTitle: 'Hotel List',
-    breadcrumb: [{
-      text: 'Hotel',
+        path: '/hotel/list',
+        name: 'hotel-list',
+        component: () =>
+            import ('@/views/accomodation/hotel/Index.vue'),
+        meta: {
+            pageTitle: 'Hotel List',
+            breadcrumb: [{
+                    text: 'Hotel',
+                },
+                {
+                    text: 'List',
+                    active: true,
+                },
+            ],
+        },
     },
     {
-      text: 'List',
-      active: true,
-    },
-    ],
-  },
-},
-{
-  path: '/hotel/view/:id',
-  name: 'hotel-view',
-  component: () => import('@/views/accomodation/hotel/View.vue'),
-  meta: {
-    pageTitle: 'Hotel View',
-    breadcrumb: [{
-      text: 'Hotel',
+        path: '/hotel/view/:id',
+        name: 'hotel-view',
+        component: () =>
+            import ('@/views/accomodation/hotel/View.vue'),
+        meta: {
+            pageTitle: 'Hotel View',
+            breadcrumb: [{
+                    text: 'Hotel',
+                },
+                {
+                    text: 'List',
+                    to: '/hotel/list',
+                },
+                {
+                    text: 'View',
+                    active: true,
+                },
+            ],
+        },
     },
     {
-      text: 'List',
-      to: '/hotel/list',
+        path: '/hotel/facitilies',
+        name: 'hotel-facilities',
+        component: () =>
+            import ('@/views/accomodation/hotel/Facilities.vue'),
     },
     {
-      text: 'View',
-      active: true,
+        path: '/guest-house/list',
+        name: 'guest-house-list',
+        component: () =>
+            import ('@/views/apps/calendar/Calendar.vue'),
     },
-    ],
-  },
-},
-{
-  path: '/hotel/facitilies',
-  name: 'hotel-facilities',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
-},
-{
-  path: '/guest-house/list',
-  name: 'guest-house-list',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
-},
-{
-  path: '/guest-house/facilities',
-  name: 'guest-house-facilities',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
-},
+    {
+        path: '/guest-house/facilities',
+        name: 'guest-house-facilities',
+        component: () =>
+            import ('@/views/apps/calendar/Calendar.vue'),
+    },
 ]

@@ -847,7 +847,7 @@ export default {
         regency_id: 0,
         name: "",
         address: "",
-        postal_code: 0,
+        postal_code: "",
         description: "",
         map_coordinate: "",
         map_center: "",

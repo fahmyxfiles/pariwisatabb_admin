@@ -122,6 +122,7 @@
               <label for="Regency">Regency :</label>
               <v-select
                 v-model="hotelParams.regency_id"
+                :options="availableRegencies"
                 :reduce="(regency) => regency.id"
                 label="name"
                 autocomplete="off"
@@ -242,6 +243,7 @@ export default {
   },
   data() {
     return {
+      availableRegencies: [],
       query: {
         keyword: "",
         limit: 6,
@@ -254,7 +256,7 @@ export default {
         regency_id: 0,
         name: "",
         address: "",
-        postal_code: 0,
+        postal_code: "",
         description: "",
         map_coordinate: "",
         map_center: "",
@@ -278,9 +280,26 @@ export default {
   },
   created() {
     this.initDefaultHotelParams();
+    this.getAvailableRegencies();
     this.getData();
   },
   methods: {
+    getAvailableRegencies() {
+      this.$http
+        .get("/hotel/getAvailableRegencies")
+        .then((res) => {
+          this.availableRegencies = res.data.data;
+        })
+        .catch((err) => {
+          if (err.response) {
+            const errMsg = err.response.data.data;
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg);
+            }
+          }
+          return this.toastErrorMsg(err.message);
+        });
+    },
     toastErrorMsg,
     getData() {
       this.loading = true;
@@ -290,6 +309,19 @@ export default {
           const _data = res.data.data;
           if (_data.length > 0) {
             this.data = _data;
+            for(var i = 0; i < this.data.length; i++){
+              var mainImage = this.getImageByType(this.data[i].images, 'main');
+              if(mainImage.length == 0){
+                this.data[i].images.push({
+                  hotel_id: this.data[i].id,
+                  hotel_room_id: null,
+                  id: null,
+                  image_filename: require("@/assets/images/placeholders/16-9.png"),
+                  name: "Main Image",
+                  type: "main",
+                })
+              }
+            }
           } else {
             // jika datanya kosong dan ada keyword yang di masukkan/mengetik maka jalankan toast
             if (this.query.keyword) {
@@ -328,13 +360,13 @@ export default {
       this.initDefaultHotelParams();
       this.modalTitle = "Add Hotel";
       this.$refs["modal-hotel-input"].onOk = () =>
-        this.addHotelRoom(this.hotelRoomParams);
+        this.addHotel(this.hotelParams);
       this.$refs["modal-hotel-input"].show();
     },
-    addHotelRoom(params) {
+    addHotel(params) {
       this.modalLoading = true;
       this.$http
-        .post("/hotel_room", params)
+        .post("/hotel", params)
         .then((res) => {
           this.getData();
           this.$refs["modal-hotel-input"].hide();

@@ -1,10 +1,6 @@
 <template>
   <div>
-    <b-overlay
-      :show="loading"
-      spinner-variant="primary"
-      rounded="sm"
-    >
+    <b-overlay :show="loading" spinner-variant="primary" rounded="sm">
       <div id="user-profile">
         <hotel-header
           ref="header"
@@ -13,26 +9,14 @@
         />
         <!-- profile info  -->
         <section id="profile-info">
-          <b-overlay
-            :show="tabLoading"
-            spinner-variant="primary"
-            rounded="sm"
-          >
+          <b-overlay :show="tabLoading" spinner-variant="primary" rounded="sm">
             <b-row v-show="activeTab === 0">
               <!-- about suggested page and twitter feed -->
-              <b-col
-                lg="3"
-                cols="12"
-                order="2"
-                order-lg="1"
-              >
+              <b-col lg="3" cols="12" order="2" order-lg="1">
                 <b-card>
                   <!-- about -->
                   <div class="d-flex justify-content-between">
-                    <h4
-                      class="text-capitalize mb-75"
-                      style="margin-top: 3px"
-                    >
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Profile
                     </h4>
                     <b-form-group class="ml-1">
@@ -42,34 +26,25 @@
                         size="sm"
                         @click="editHotelModal()"
                       >
-                        <feather-icon
-                          icon="Edit2Icon"
-                          class="mr-50"
-                        />
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
                         <span class="align-middle">Edit</span>
                       </b-button>
                     </b-form-group>
                   </div>
                   <div>
-                    <h5 class="text-capitalize mb-75">
-                      Name
-                    </h5>
+                    <h5 class="text-capitalize mb-75">Name</h5>
                     <b-card-text>
                       {{ hotelData.name }}
                     </b-card-text>
                   </div>
                   <div class="mt-2">
-                    <h5 class="text-capitalize mb-75">
-                      Address
-                    </h5>
+                    <h5 class="text-capitalize mb-75">Address</h5>
                     <b-card-text>
                       {{ hotelData.address }}
                     </b-card-text>
                   </div>
                   <div class="mt-2">
-                    <h5 class="text-capitalize mb-75">
-                      Description
-                    </h5>
+                    <h5 class="text-capitalize mb-75">Description</h5>
                     <b-card-text>
                       {{ hotelData.description }}
                     </b-card-text>
@@ -78,10 +53,7 @@
                 <b-card>
                   <!-- about -->
                   <div class="d-flex justify-content-between">
-                    <h4
-                      class="text-capitalize mb-75"
-                      style="margin-top: 3px"
-                    >
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Rooms
                     </h4>
                     <b-form-group class="ml-1">
@@ -91,10 +63,7 @@
                         size="sm"
                         @click="setCurrentTab(2)"
                       >
-                        <feather-icon
-                          icon="Edit2Icon"
-                          class="mr-50"
-                        />
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
                         <span class="align-middle">Edit</span>
                       </b-button>
                     </b-form-group>
@@ -103,24 +72,17 @@
                     <b-list-group-item
                       v-for="(room, index) in hotelData.rooms"
                       :key="index"
-                    >{{ room.name }}</b-list-group-item>
+                      >{{ room.name }}</b-list-group-item
+                    >
                   </b-list-group>
                 </b-card>
                 <!--/ about suggested page and twitter feed -->
               </b-col>
               <!-- post -->
-              <b-col
-                lg="6"
-                cols="12"
-                order="1"
-                order-lg="2"
-              >
+              <b-col lg="6" cols="12" order="1" order-lg="2">
                 <b-card>
                   <div class="d-flex justify-content-between">
-                    <h4
-                      class="text-capitalize mb-75"
-                      style="margin-top: 3px"
-                    >
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Maps
                     </h4>
                     <b-form-group class="ml-1">
@@ -131,10 +93,7 @@
                         size="sm"
                         @click="setMapEditMode()"
                       >
-                        <feather-icon
-                          icon="Edit2Icon"
-                          class="mr-50"
-                        />
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
                         <span class="align-middle">Edit</span>
                       </b-button>
                       <b-button
@@ -144,10 +103,7 @@
                         size="sm"
                         @click="saveMapEdit()"
                       >
-                        <feather-icon
-                          icon="SaveIcon"
-                          class="mr-50"
-                        />
+                        <feather-icon icon="SaveIcon" class="mr-50" />
                         <span class="align-middle">Save</span>
                       </b-button>
                       <b-button
@@ -158,34 +114,21 @@
                         size="sm"
                         @click="cancelMapEdit()"
                       >
-                        <feather-icon
-                          icon="XIcon"
-                          class="mr-50"
-                        />
+                        <feather-icon icon="XIcon" class="mr-50" />
                         <span class="align-middle">Cancel</span>
                       </b-button>
                     </b-form-group>
                   </div>
-                  <div
-                    id="map"
-                    ref="map"
-                  />
+                  <div id="map" ref="map" />
                 </b-card>
               </b-col>
               <!-- post -->
 
               <!-- latest photos suggestion and polls -->
-              <b-col
-                lg="3"
-                cols="12"
-                order="3"
-              >
+              <b-col lg="3" cols="12" order="3">
                 <b-card>
                   <div class="d-flex justify-content-between">
-                    <h4
-                      class="text-capitalize mb-75"
-                      style="margin-top: 3px"
-                    >
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Facilities
                     </h4>
                     <b-form-group class="ml-1">
@@ -195,10 +138,7 @@
                         size="sm"
                         @click="setCurrentTab(3)"
                       >
-                        <feather-icon
-                          icon="Edit2Icon"
-                          class="mr-50"
-                        />
+                        <feather-icon icon="Edit2Icon" class="mr-50" />
                         <span class="align-middle">Edit</span>
                       </b-button>
                     </b-form-group>
@@ -230,7 +170,9 @@
                         :options="dropzoneImageOptions"
                         class="mb-2"
                         @vdropzone-file-added="dropzoneMainImageAdded"
-                        @vdropzone-sending="dropzoneSendingMethodPut"
+                        @vdropzone-sending="dropzoneMainImageSending"
+                        @vdropzone-success="dropzoneSuccess"
+                        @vdropzone-error="dropzoneError"
                       />
                     </b-col>
                     <b-col md="6">
@@ -241,13 +183,13 @@
                         :options="dropzoneImageOptions"
                         class="mb-2"
                         @vdropzone-file-added="dropzoneBannerImageAdded"
-                        @vdropzone-sending="dropzoneSendingMethodPut"
+                        @vdropzone-sending="dropzoneBannerImageSending"
+                        @vdropzone-success="dropzoneSuccess"
+                        @vdropzone-error="dropzoneError"
                       />
                     </b-col>
                   </b-row>
-                  <h4 class="text-center mt-2 mb-1">
-                    Common Image
-                  </h4>
+                  <h4 class="text-center mt-2 mb-1">Common Image</h4>
                   <b-row class="justify-content-center">
                     <b-col md="6">
                       <!-- swiper1 -->
@@ -261,10 +203,10 @@
                           v-for="(data, index) in swiperData"
                           :key="index"
                         >
-                          <b-img
-                            :src="data.img"
-                            fluid
-                          />
+                          <div class="text-center mb-2">
+                            <h5>{{ data | printHotelImage(hotelData) }}</h5>
+                          </div>
+                          <b-img :src="data.img" fluid />
                         </swiper-slide>
 
                         <div
@@ -287,10 +229,7 @@
                           v-for="(data, index) in swiperData"
                           :key="index"
                         >
-                          <b-img
-                            :src="data.img"
-                            fluid
-                          />
+                          <b-img :src="data.img" fluid />
                         </swiper-slide>
                       </swiper>
                     </b-col>
@@ -332,10 +271,7 @@
               <b-col lg="12">
                 <b-card>
                   <div class="d-flex justify-content-between">
-                    <h4
-                      class="text-capitalize mb-75"
-                      style="margin-top: 3px"
-                    >
+                    <h4 class="text-capitalize mb-75" style="margin-top: 3px">
                       Hotel Rooms
                     </h4>
                     <b-form-group class="ml-1">
@@ -345,18 +281,15 @@
                         size="sm"
                         @click="addHotelRoomModal()"
                       >
-                        <feather-icon
-                          icon="PlusIcon"
-                          class="mr-50"
-                        />
+                        <feather-icon icon="PlusIcon" class="mr-50" />
                         <span class="align-middle">Add</span>
                       </b-button>
                     </b-form-group>
                   </div>
                   <app-collapse accordion>
                     <app-collapse-item
-                      v-for="(room, index) in hotelData.rooms"
-                      :key="index"
+                      v-for="(room, hotelRoomIndex) in hotelData.rooms"
+                      :key="hotelRoomIndex"
                       :title="room.name"
                     >
                       {{ room.description }}
@@ -370,25 +303,19 @@
                           </b-card-text>
                         </b-col>
                         <b-col md="3">
-                          <h5 class="text-capitalize mb-75 mt-2">
-                            Room size
-                          </h5>
+                          <h5 class="text-capitalize mb-75 mt-2">Room size</h5>
                           <b-card-text>
                             {{ room.room_size }} &#13217;
                           </b-card-text>
                         </b-col>
                         <b-col md="3">
-                          <h5 class="text-capitalize mb-75 mt-2">
-                            Bed size
-                          </h5>
+                          <h5 class="text-capitalize mb-75 mt-2">Bed size</h5>
                           <b-card-text class="text-capitalize">
                             {{ room.bed_size }}
                           </b-card-text>
                         </b-col>
                         <b-col md="3">
-                          <h5 class="text-capitalize mb-75 mt-2">
-                            Action
-                          </h5>
+                          <h5 class="text-capitalize mb-75 mt-2">Action</h5>
                           <b-card-text class="text-capitalize">
                             <b-button
                               v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -412,7 +339,7 @@
                           </b-card-text>
                         </b-col>
                       </b-row>
-                      <hr>
+                      <hr />
                       <div class="d-flex justify-content-between">
                         <h5
                           class="text-capitalize mb-75"
@@ -427,10 +354,7 @@
                             size="sm"
                             @click="addHotelRoomPricingModal(room.id)"
                           >
-                            <feather-icon
-                              icon="PlusIcon"
-                              class="mr-50"
-                            />
+                            <feather-icon icon="PlusIcon" class="mr-50" />
                             <span class="align-middle">Add</span>
                           </b-button>
                         </b-form-group>
@@ -454,7 +378,9 @@
                               variant="outline-primary"
                               class="btn-icon rounded-circle"
                               size="sm"
-                              @click="editHotelRoomPricingModal(room.id, data.item)"
+                              @click="
+                                editHotelRoomPricingModal(room.id, data.item)
+                              "
                             >
                               <feather-icon icon="Edit2Icon" />
                             </b-button>
@@ -476,6 +402,58 @@
                           </template>
                         </b-table-lite>
                       </div>
+                      <hr />
+                      <h5 class="text-capitalize mb-75" style="margin-top: 5px">
+                        Room Facilities
+                      </h5>
+                      <b-form-checkbox-group
+                        id="room-facilities-checkbox"
+                        v-model="room.facilityList"
+                      >
+                        <div
+                          v-for="(
+                            facilityCategory, facilityCategoryIndex
+                          ) in availableHotelRoomFacilityCategories"
+                          :key="facilityCategoryIndex"
+                          class="group-wrapper"
+                        >
+                          <div class="group-title">
+                            {{ facilityCategory.name }}
+                          </div>
+                          <div class="group-content">
+                            <div
+                              v-for="(
+                                facility, facilityIndex
+                              ) in getAvailableHotelFacilityByCategoryId(
+                                facilityCategory.id
+                              )"
+                              :key="facilityIndex"
+                              class="facility-item"
+                            >
+                              <div class="facility-check-box">
+                                <b-form-checkbox
+                                  :value="facility.id"
+                                  class="custom-control-primary"
+                                >
+                                  <div class="facility-label">
+                                    {{ facility.name }}
+                                  </div>
+                                </b-form-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </b-form-checkbox-group>
+                      <b-row class="justify-content-center">
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-primary"
+                          @click="saveHotelRoomFacilitiesEdit(room.id)"
+                        >
+                          <feather-icon icon="SaveIcon" class="mr-50" />
+                          Save
+                        </b-button>
+                      </b-row>
                     </app-collapse-item>
                   </app-collapse>
                 </b-card>
@@ -527,10 +505,7 @@
                       variant="outline-primary"
                       @click="saveHotelFacilitiesEdit()"
                     >
-                      <feather-icon
-                        icon="SaveIcon"
-                        class="mr-50"
-                      />
+                      <feather-icon icon="SaveIcon" class="mr-50" />
                       Save
                     </b-button>
                   </b-row>
@@ -548,11 +523,7 @@
       :title="modalTitle"
       :no-close-on-backdrop="true"
     >
-      <b-overlay
-        :show="modalLoading"
-        spinner-variant="primary"
-        rounded="sm"
-      >
+      <b-overlay :show="modalLoading" spinner-variant="primary" rounded="sm">
         <b-form>
           <b-form-group>
             <label for="Regency">Regency :</label>
@@ -614,11 +585,7 @@
       :title="modalTitle"
       :no-close-on-backdrop="true"
     >
-      <b-overlay
-        :show="modalLoading"
-        spinner-variant="primary"
-        rounded="sm"
-      >
+      <b-overlay :show="modalLoading" spinner-variant="primary" rounded="sm">
         <b-form>
           <b-form-group>
             <label for="name">Name :</label>
@@ -674,11 +641,7 @@
       :title="modalTitle"
       :no-close-on-backdrop="true"
     >
-      <b-overlay
-        :show="modalLoading"
-        spinner-variant="primary"
-        rounded="sm"
-      >
+      <b-overlay :show="modalLoading" spinner-variant="primary" rounded="sm">
         <b-form>
           <b-form-group>
             <label for="type">Type :</label>
@@ -746,27 +709,28 @@ import {
   BButton,
   BTableLite,
   BFormCheckbox,
+  BFormCheckboxGroup,
   BFormTextarea,
   BFormGroup,
   BFormRadioGroup,
-} from 'bootstrap-vue'
+} from "bootstrap-vue";
 
 import {
   toastErrorMsg,
   getImageByType,
   createGoogleMap,
   createGoogleMapMarker,
-} from '@/libs/helpers'
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
-import Ripple from 'vue-ripple-directive'
-import vueDropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
-import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
-import VSelect from 'vue-select'
-import flatPickr from 'vue-flatpickr-component'
-import HotelHeader from './HotelHeader.vue'
+} from "@/libs/helpers";
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import "swiper/css/swiper.css";
+import Ripple from "vue-ripple-directive";
+import vueDropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import AppCollapse from "@core/components/app-collapse/AppCollapse.vue";
+import AppCollapseItem from "@core/components/app-collapse/AppCollapseItem.vue";
+import VSelect from "vue-select";
+import flatPickr from "vue-flatpickr-component";
+import HotelHeader from "./HotelHeader.vue";
 
 export default {
   components: {
@@ -796,6 +760,7 @@ export default {
     BCol,
     BImg,
     BFormCheckbox,
+    BFormCheckboxGroup,
     HotelHeader,
   },
   directives: {
@@ -808,61 +773,65 @@ export default {
       availableHotelRoomFacilityCategories: [],
       availableFacilities: [],
       dropzoneImageOptions: {
-        url: 'url',
+        url: "url",
         maxFilesize: 5.0,
         maxFiles: 1,
         autoProcessQueue: true,
         addRemoveLinks: false,
-        acceptedFiles: 'image/*',
+        acceptedFiles: "image/*",
+        headers:{ 
+          "Authorization":'Bearer ' + localStorage.getItem('accessToken'),
+        }
       },
-      modalTitle: '',
+      modalTitle: "",
       dropzoneMainImageSelectedFile: null,
       dropzoneBannerImageSelectedFile: null,
       hotelData: {},
+      hotelRoomFacilities: [],
       headerData: {
-        name: '',
-        address: '',
-        headerImage: require('@/assets/images/profile/user-uploads/timeline.jpg'),
-        mainImage: require('@/assets/images/placeholders/16-9.png'),
+        name: "",
+        address: "",
+        headerImage: require("@/assets/images/profile/user-uploads/timeline.jpg"),
+        mainImage: require("@/assets/images/placeholders/16-9.png"),
       },
       hotelId: null,
       defaultHotelParams: {
         regency_id: 0,
-        name: '',
-        address: '',
+        name: "",
+        address: "",
         postal_code: 0,
-        description: '',
-        map_coordinate: '',
-        map_center: '',
+        description: "",
+        map_coordinate: "",
+        map_center: "",
       },
       hotelParams: null,
       defaultHotelRoomParams: {
         hotel_id: 0,
-        name: '',
-        description: '',
+        name: "",
+        description: "",
         num_of_guest: 0,
         room_size: 0,
-        bed_size: '',
+        bed_size: "",
       },
       hotelRoomParams: null,
       defaultHotelRoomPricingParams: {
         hotel_room_id: 0,
-        type: 'Weekday',
+        type: "Weekday",
         date: null,
         price: 0,
       },
       hotelRoomPricingParams: null,
       bedSizeOptions: [
-        { text: 'Single', value: 'single' },
-        { text: 'Double', value: 'double' },
-        { text: 'Queen', value: 'queen' },
-        { text: 'King', value: 'king' },
-        { text: 'Twin', value: 'twin' },
+        { text: "Single", value: "single" },
+        { text: "Double", value: "double" },
+        { text: "Queen", value: "queen" },
+        { text: "King", value: "king" },
+        { text: "Twin", value: "twin" },
       ],
       pricingTypeOptions: [
-        { text: 'Weekday', value: 'Weekday' },
-        { text: 'Weekend', value: 'Weekend' },
-        { text: 'Custom Date', value: 'Date' },
+        { text: "Weekday", value: "Weekday" },
+        { text: "Weekend", value: "Weekend" },
+        { text: "Custom Date", value: "Date" },
       ],
       imagePath: this.$imagePath,
       loading: true,
@@ -879,8 +848,8 @@ export default {
         loop: false,
         spaceBetween: 10,
         navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
         },
       },
       swiperOptionThumbs: {
@@ -893,568 +862,656 @@ export default {
       },
       roomPricingFields: [
         // A virtual column that doesn't exist in items
-        'No',
+        "No",
         // A regular column
-        'type',
-        'date',
-        'price',
+        "type",
+        "date",
+        "price",
         // A virtual column made up from two fields
-        { key: 'action', label: 'Action' },
+        { key: "action", label: "Action" },
       ],
-    }
+    };
   },
   created() {
-    this.hotelId = this.$route.params.id
-    this.initDefaultHotelParams()
-    this.initDefaultHotelRoomParams()
-    this.initDefaultHotelRoomPricingParams()
-    this.getAvailableRegencies()
-    this.getAvailableFacilityCategories()
-    this.getAvailableFacilities()
-    this.getData()
+    this.hotelId = this.$route.params.id;
+    this.initDefaultHotelParams();
+    this.initDefaultHotelRoomParams();
+    this.initDefaultHotelRoomPricingParams();
+    this.getAvailableRegencies();
+    this.getAvailableFacilityCategories();
+    this.getAvailableFacilities();
+    this.getData();
   },
   methods: {
     setMapEditMode() {
-      this.mapEditMode = true
-      this.marker.setDraggable(true)
+      this.mapEditMode = true;
+      this.marker.setDraggable(true);
     },
     editHotelModal() {
-      this.initDefaultHotelParams()
+      this.initDefaultHotelParams();
       for (const key in this.defaultHotelParams) {
-        this.hotelParams[key] = this.hotelData[key]
+        this.hotelParams[key] = this.hotelData[key];
       }
-      this.modalTitle = 'Edit Hotel'
-      this.$refs['modal-hotel-input'].onOk = () => this.editHotel(this.hotelParams)
-      this.$refs['modal-hotel-input'].show()
+      this.modalTitle = "Edit Hotel";
+      this.$refs["modal-hotel-input"].onOk = () =>
+        this.editHotel(this.hotelParams);
+      this.$refs["modal-hotel-input"].show();
     },
     editHotel(params) {
-      this.modalLoading = true
-      params._method = 'PUT'
+      this.modalLoading = true;
+      params._method = "PUT";
       this.$http
         .post(`/hotel/${this.hotelData.id}`, params)
-        .then(res => {
-          this.hotelData = res.data.data
-          this.drawMap()
-          this.$refs['modal-hotel-input'].hide()
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.drawMap();
+          this.$refs["modal-hotel-input"].hide();
         })
-        .catch(err => {
-          this.tabLoading = false
+        .catch((err) => {
+          this.tabLoading = false;
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
+          return this.toastErrorMsg(err.message);
         })
         .finally(() => {
-          this.modalLoading = false
-        })
+          this.modalLoading = false;
+        });
     },
     addHotelRoomModal() {
-      this.initDefaultHotelRoomParams()
-      this.modalTitle = 'Add Hotel Room'
-      this.$refs['modal-hotel-room-input'].onOk = () => this.addHotelRoom(this.hotelRoomParams)
-      this.$refs['modal-hotel-room-input'].show()
+      this.initDefaultHotelRoomParams();
+      this.modalTitle = "Add Hotel Room";
+      this.$refs["modal-hotel-room-input"].onOk = () =>
+        this.addHotelRoom(this.hotelRoomParams);
+      this.$refs["modal-hotel-room-input"].show();
     },
     addHotelRoom(params) {
-      this.modalLoading = true
+      this.modalLoading = true;
       this.$http
-        .post('/hotel_room', params)
-        .then(res => {
-          this.getData()
-          this.$refs['modal-hotel-room-input'].hide()
+        .post("/hotel_room", params)
+        .then((res) => {
+          this.getData();
+          this.$refs["modal-hotel-room-input"].hide();
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
+          return this.toastErrorMsg(err.message);
         })
         .finally(() => {
-          this.modalLoading = false
-        })
+          this.modalLoading = false;
+        });
     },
     editHotelRoomModal(params) {
-      this.initDefaultHotelRoomParams()
+      this.initDefaultHotelRoomParams();
       for (const key in this.defaultHotelRoomParams) {
-        this.hotelRoomParams[key] = params[key]
+        this.hotelRoomParams[key] = params[key];
       }
-      this.modalTitle = `Edit Hotel Room : ${params.name}`
-      this.$refs['modal-hotel-room-input'].onOk = () => this.editHotelRoom(params.id, this.hotelRoomParams)
-      this.$refs['modal-hotel-room-input'].show()
+      this.modalTitle = `Edit Hotel Room : ${params.name}`;
+      this.$refs["modal-hotel-room-input"].onOk = () =>
+        this.editHotelRoom(params.id, this.hotelRoomParams);
+      this.$refs["modal-hotel-room-input"].show();
     },
     editHotelRoom(id, params) {
-      this.modalLoading = true
-      params._method = 'PUT'
+      this.modalLoading = true;
+      params._method = "PUT";
       this.$http
         .post(`/hotel_room/${id}`, params)
-        .then(res => {
-          this.getData()
-          this.$refs['modal-hotel-room-input'].hide()
+        .then((res) => {
+          this.getData();
+          this.$refs["modal-hotel-room-input"].hide();
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
+          return this.toastErrorMsg(err.message);
         })
         .finally(() => {
-          this.modalLoading = false
-        })
+          this.modalLoading = false;
+        });
     },
     deleteHotelRoom(item) {
       this.$swal({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: `Room ${item.name} will be removed. All related data with this Hotel Room will also be removed.`,
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes',
+        confirmButtonText: "Yes",
         customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1',
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-outline-danger ml-1",
         },
         buttonsStyling: false,
-      }).then(result => {
+      }).then((result) => {
         if (result.value) {
           this.$http
             .delete(`/hotel_room/${item.id}`)
-            .then(res => {
+            .then((res) => {
               this.$swal({
-                icon: 'success',
-                title: 'Deleted!',
-                text: 'Hotel Room has been deleted.',
+                icon: "success",
+                title: "Deleted!",
+                text: "Hotel Room has been deleted.",
                 customClass: {
-                  confirmButton: 'btn btn-success',
+                  confirmButton: "btn btn-success",
                 },
-              })
-              this.getData()
+              });
+              this.getData();
             })
-            .catch(err => {
-              const errMsg = err.response.data.data
-              this.toastErrorMsg(errMsg)
-            })
+            .catch((err) => {
+              const errMsg = err.response.data.data;
+              this.toastErrorMsg(errMsg);
+            });
         }
-      })
+      });
     },
     addHotelRoomPricingModal(room_id) {
-      this.initDefaultHotelRoomPricingParams()
-      this.hotelRoomPricingParams.hotel_room_id = room_id
-      this.modalTitle = 'Add Hotel Room Pricing'
-      this.$refs['modal-hotel-room-pricing-input'].onOk = () => this.addHotelRoomPricing(this.hotelRoomPricingParams)
-      this.$refs['modal-hotel-room-pricing-input'].show()
+      this.initDefaultHotelRoomPricingParams();
+      this.hotelRoomPricingParams.hotel_room_id = room_id;
+      this.modalTitle = "Add Hotel Room Pricing";
+      this.$refs["modal-hotel-room-pricing-input"].onOk = () =>
+        this.addHotelRoomPricing(this.hotelRoomPricingParams);
+      this.$refs["modal-hotel-room-pricing-input"].show();
     },
     addHotelRoomPricing(params) {
-      this.modalLoading = true
+      this.modalLoading = true;
       this.$http
-        .post('/hotel_room_pricing', params)
-        .then(res => {
-          this.getData()
-          this.$refs['modal-hotel-room-pricing-input'].hide()
+        .post("/hotel_room_pricing", params)
+        .then((res) => {
+          this.getData();
+          this.$refs["modal-hotel-room-pricing-input"].hide();
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
+          return this.toastErrorMsg(err.message);
         })
         .finally(() => {
-          this.modalLoading = false
-        })
+          this.modalLoading = false;
+        });
     },
     editHotelRoomPricingModal(room_id, params) {
-      this.initDefaultHotelRoomPricingParams()
+      this.initDefaultHotelRoomPricingParams();
       for (const key in this.defaultHotelRoomPricingParams) {
-        this.hotelRoomPricingParams[key] = params[key]
+        this.hotelRoomPricingParams[key] = params[key];
       }
-      this.hotelRoomPricingParams.hotel_room_id = room_id
-      this.modalTitle = 'Edit Hotel Room Pricing'
-      this.$refs['modal-hotel-room-pricing-input'].onOk = () => this.editHotelRoomPricing(params.id, this.hotelRoomPricingParams)
-      this.$refs['modal-hotel-room-pricing-input'].show()
+      this.hotelRoomPricingParams.hotel_room_id = room_id;
+      this.modalTitle = "Edit Hotel Room Pricing";
+      this.$refs["modal-hotel-room-pricing-input"].onOk = () =>
+        this.editHotelRoomPricing(params.id, this.hotelRoomPricingParams);
+      this.$refs["modal-hotel-room-pricing-input"].show();
     },
     editHotelRoomPricing(id, params) {
-      this.modalLoading = true
-      params._method = 'PUT'
+      this.modalLoading = true;
+      params._method = "PUT";
       this.$http
         .post(`/hotel_room_pricing/${id}`, params)
-        .then(res => {
-          this.getData()
-          this.$refs['modal-hotel-room-pricing-input'].hide()
+        .then((res) => {
+          this.getData();
+          this.$refs["modal-hotel-room-pricing-input"].hide();
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
+          return this.toastErrorMsg(err.message);
         })
         .finally(() => {
-          this.modalLoading = false
-        })
+          this.modalLoading = false;
+        });
     },
     deleteHotelRoomPricing(item) {
       this.$swal({
-        title: 'Are you sure?',
-        text: 'Room Pricing will be removed. All related data with this Hotel Room Pricing will also be removed.',
-        icon: 'warning',
+        title: "Are you sure?",
+        text: "Room Pricing will be removed. All related data with this Hotel Room Pricing will also be removed.",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes',
+        confirmButtonText: "Yes",
         customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-outline-danger ml-1',
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-outline-danger ml-1",
         },
         buttonsStyling: false,
-      }).then(result => {
+      }).then((result) => {
         if (result.value) {
           this.$http
             .delete(`/hotel_room_pricing/${item.id}`)
-            .then(res => {
+            .then((res) => {
               this.$swal({
-                icon: 'success',
-                title: 'Deleted!',
-                text: 'Hotel Room Pricing has been deleted.',
+                icon: "success",
+                title: "Deleted!",
+                text: "Hotel Room Pricing has been deleted.",
                 customClass: {
-                  confirmButton: 'btn btn-success',
+                  confirmButton: "btn btn-success",
                 },
-              })
-              this.getData()
+              });
+              this.getData();
             })
-            .catch(err => {
-              const errMsg = err.response.data.data
-              this.toastErrorMsg(errMsg)
-            })
+            .catch((err) => {
+              const errMsg = err.response.data.data;
+              this.toastErrorMsg(errMsg);
+            });
         }
-      })
+      });
     },
     saveHotelFacilitiesEdit() {
-      const selectedFacilities = this.availableFacilities.filter(facility => facility.value == 'Y')
-      const _facilities = []
+      const selectedFacilities = this.availableFacilities.filter(
+        (facility) => facility.value == "Y"
+      );
+      const _facilities = [];
       for (let i = 0; i < selectedFacilities.length; i++) {
-        _facilities.push(selectedFacilities[i].id)
+        _facilities.push(selectedFacilities[i].id);
       }
-      this.tabLoading = true
+      this.tabLoading = true;
       this.$http
-        .post(`/hotel/${this.hotelData.id}/syncFacilities`, { facilities: _facilities })
-        .then(res => {
-          this.hotelData = res.data.data
-          this.tabLoading = false
-          this.drawMap()
+        .post(`/hotel/${this.hotelData.id}/syncFacilities`, {
+          facilities: _facilities,
         })
-        .catch(err => {
-          this.tabLoading = false
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.tabLoading = false;
+          this.drawMap();
+        })
+        .catch((err) => {
+          this.tabLoading = false;
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     saveMapEdit() {
-      this.mapEditMode = false
-      this.marker.setDraggable(false)
-      const center = this.map.getCenter().toString().substr(1).slice(0, -1)
-      const zoom = this.map.getZoom().toString()
-      const coord = this.marker.getPosition().toString().substr(1).slice(0, -1)
+      this.mapEditMode = false;
+      this.marker.setDraggable(false);
+      const center = this.map.getCenter().toString().substr(1).slice(0, -1);
+      const zoom = this.map.getZoom().toString();
+      const coord = this.marker.getPosition().toString().substr(1).slice(0, -1);
 
-      this.hotelData.map_coordinate = coord
-      this.hotelData.map_center = `${center}, ${zoom}`
+      this.hotelData.map_coordinate = coord;
+      this.hotelData.map_center = `${center}, ${zoom}`;
 
-      this.initDefaultHotelParams()
+      this.initDefaultHotelParams();
       for (const key in this.defaultHotelParams) {
-        this.hotelParams[key] = this.hotelData[key]
+        this.hotelParams[key] = this.hotelData[key];
       }
-      this.hotelParams._method = 'PUT'
-      this.tabLoading = true
+      this.hotelParams._method = "PUT";
+      this.tabLoading = true;
       this.$http
         .post(`/hotel/${this.hotelData.id}`, this.hotelParams)
-        .then(res => {
-          this.hotelData = res.data.data
-          this.tabLoading = false
-          this.drawMap()
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.tabLoading = false;
+          this.drawMap();
         })
-        .catch(err => {
-          this.tabLoading = false
+        .catch((err) => {
+          this.tabLoading = false;
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     cancelMapEdit() {
-      this.mapEditMode = false
-      this.marker.setDraggable(false)
-      this.marker.setMap(null)
+      this.mapEditMode = false;
+      this.marker.setDraggable(false);
+      this.marker.setMap(null);
       this.marker = this.createGoogleMapMarker(
         this.hotelData.map_coordinate,
-        this.map,
-      )
+        this.map
+      );
     },
     getAvailableHotelFacilityByCategoryId(id) {
       return this.availableFacilities.filter(
-        facility => facility.category_id == id,
-      )
+        (facility) => facility.category_id == id
+      );
     },
     toastErrorMsg,
     createGoogleMap,
     createGoogleMapMarker,
     parseRoomPricing(pricings) {
-      return pricings.map(pricing => {
-        if (pricing.type == 'Weekday') {
-          pricing.date = 'Mon to Fri'
+      return pricings.map((pricing) => {
+        if (pricing.type == "Weekday") {
+          pricing.date = "Mon to Fri";
         }
-        if (pricing.type == 'Weekend') {
-          pricing.date = 'Sat and Sun'
+        if (pricing.type == "Weekend") {
+          pricing.date = "Sat and Sun";
         }
         return {
           id: pricing.id,
           type: pricing.type,
           date: pricing.date,
           price: pricing.price,
-        }
-      })
+        };
+      });
     },
     dropzoneMainImageAdded(file) {
       if (this.dropzoneMainImageSelectedFile !== null) {
         this.$refs.dropzoneMainImage.removeFile(
-          this.dropzoneMainImageSelectedFile,
-        )
+          this.dropzoneMainImageSelectedFile
+        );
       }
-      this.dropzoneMainImageSelectedFile = file
+      this.dropzoneMainImageSelectedFile = file;
     },
-    dropzoneSendingMethodPut(file, xhr, formData) {
-      formData.append('_method', 'PUT')
+    dropzoneMainImageSending(file, xhr, formData) {
+      formData.append("_method", "PUT");
+      formData.append("type", "main");
+      formData.append("name", "Main Image");
+      formData.append("hotel_id", this.hotelData.id);
+    },
+    dropzoneBannerImageSending(file, xhr, formData) {
+      formData.append("_method", "PUT");
+      formData.append("type", "banner");
+      formData.append("name", "Banner Image");
+      formData.append("hotel_id", this.hotelData.id);
+    },
+    dropzoneSuccess(file, response){
+      console.log("dropzoneSuccess > response", response)
+      console.log("dropzoneSuccess > file ", file)
+      this.getData()
+      setTimeout(() => { this.setCurrentTab(1) }, 5000)
+    },
+    dropzoneError(file){
+      console.log("dropzoneError > file ", file)
+      var error = JSON.parse(file.xhr.responseText)
+      console.log(error)
     },
     dropzoneBannerImageAdded(file) {
       if (this.dropzoneBannerImageSelectedFile !== null) {
         this.$refs.dropzoneBannerImage.removeFile(
-          this.dropzoneBannerImageSelectedFile,
-        )
+          this.dropzoneBannerImageSelectedFile
+        );
       }
-      this.dropzoneBannerImageSelectedFile = file
+      this.dropzoneBannerImageSelectedFile = file;
     },
     drawMap() {
+      this.$refs.map.innerHTML = ''
       this.map = this.createGoogleMap(
         this.hotelData.map_center,
-        this.$refs.map,
-      )
+        this.$refs.map
+      );
       this.marker = this.createGoogleMapMarker(
         this.hotelData.map_coordinate,
-        this.map,
-      )
+        this.map
+      );
     },
     getAvailableRegencies() {
       this.$http
-        .get('/hotel/getAvailableRegencies')
-        .then(res => {
-          this.availableRegencies = res.data.data
+        .get("/hotel/getAvailableRegencies")
+        .then((res) => {
+          this.availableRegencies = res.data.data;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     getAvailableFacilityCategories() {
       this.$http
-        .get('/facility/getAvailableCategoriesByType/hotel')
-        .then(res => {
-          this.availableHotelFacilityCategories = res.data.data
+        .get("/facility/getAvailableCategoriesByType/hotel")
+        .then((res) => {
+          this.availableHotelFacilityCategories = res.data.data;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
       this.$http
-        .get('/facility/getAvailableCategoriesByType/hotel_room')
-        .then(res => {
-          this.availableHotelRoomFacilityCategories = res.data.data
+        .get("/facility/getAvailableCategoriesByType/hotel_room")
+        .then((res) => {
+          this.availableHotelRoomFacilityCategories = res.data.data;
+          for (
+            var i = 0;
+            i < this.availableHotelRoomFacilityCategories.length;
+            i++
+          ) {
+            this.availableHotelRoomFacilityCategories[i]["selected"] = [];
+          }
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     getAvailableFacilities() {
       this.$http
-        .get('/facility/getAllFacility')
-        .then(res => {
-          this.availableFacilities = res.data.data
+        .get("/facility/getAllFacility")
+        .then((res) => {
+          this.availableFacilities = res.data.data;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
-            const errMsg = err.response.data.data
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          return this.toastErrorMsg(err.message)
-        })
+          return this.toastErrorMsg(err.message);
+        });
     },
     setHeaderImage() {
       this.headerData = {
         name: this.hotelData.name,
         address: this.hotelData.address,
         headerImage:
-          this.imagePath
-          + this.getImageByType(this.hotelData.images, 'banner').image_filename,
+          this.imagePath +
+          this.getImageByType(this.hotelData.images, "banner").image_filename,
         mainImage:
-          this.imagePath
-          + this.getImageByType(this.hotelData.images, 'main').image_filename,
-      }
+          this.imagePath +
+          this.getImageByType(this.hotelData.images, "main").image_filename,
+      };
     },
-    setDropzoneOptions() {
+    setDropzoneImages() {
       this.$refs.dropzoneMainImage.setOption(
-        'url',
+        "url",
         `${this.$http.defaults.baseURL}hotel_image/${
-          this.getImageByType(this.hotelData.images, 'main').id
-        }`,
-      )
+          this.getImageByType(this.hotelData.images, "main").id
+        }`
+      );
       this.$refs.dropzoneBannerImage.setOption(
-        'url',
+        "url",
         `${this.$http.defaults.baseURL}hotel_image/${
-          this.getImageByType(this.hotelData.images, 'banner').id
-        }`,
-      )
+          this.getImageByType(this.hotelData.images, "banner").id
+        }`
+      );
+      this.$nextTick(() => {
+        const mainImage = this.getImageByType(
+          this.hotelData.images,
+          "main"
+        );
+        const fileExt = mainImage.image_filename.split(".").pop();
+        const file = { size: 1, type: `image/${fileExt}` };
+        const url = this.imagePath + mainImage.image_filename;
+        this.$refs.dropzoneMainImage.removeAllFiles();
+        this.$refs.dropzoneMainImage.manuallyAddFile(file, url);
+      });
+      this.$nextTick(() => {
+        const bannerImage = this.getImageByType(
+          this.hotelData.images,
+          "banner"
+        );
+        const fileExt = bannerImage.image_filename.split(".").pop();
+        const file = { size: 1, type: `image/${fileExt}` };
+        const url = this.imagePath + bannerImage.image_filename;
+        this.$refs.dropzoneBannerImage.removeAllFiles();
+        this.$refs.dropzoneBannerImage.manuallyAddFile(file, url);
+      });
     },
     setSwiperImage() {
-      this.swiperData = []
-      const commonImage = this.getImageByType(this.hotelData.images, 'common')
+      this.swiperData = [];
+      const commonImage = this.getImageByType(this.hotelData.images, "common");
       for (let i = 0; i < commonImage.length; i++) {
         this.swiperData.push({
           img: this.imagePath + commonImage[i].image_filename,
           id: commonImage[i].id,
-        })
+          name: commonImage[i].name,
+          type: commonImage[i].type,
+          hotelRoomId: commonImage[i].hotel_room_id,
+        });
       }
     },
     setFacilities() {
       for (let a = 0; a < this.availableFacilities.length; a++) {
-        this.availableFacilities[a].value = ''
+        this.availableFacilities[a].value = "";
       }
       for (let i = 0; i < this.hotelData.facilities.length; i++) {
-        const facilityId = this.hotelData.facilities[i].id
+        const facilityId = this.hotelData.facilities[i].id;
         for (let j = 0; j < this.availableFacilities.length; j++) {
-          const currentFacilityId = this.availableFacilities[j].id
+          const currentFacilityId = this.availableFacilities[j].id;
           if (currentFacilityId == facilityId) {
-            this.availableFacilities[j].value = 'Y'
+            this.availableFacilities[j].value = "Y";
           }
         }
       }
     },
-    getData() {
-      this.loading = true
+    setHotelRoomFacilities() {
+      for (var i = 0; i < this.hotelData.rooms.length; i++) {
+        this.hotelData.rooms[i]["facilityList"] = [];
+        var currentRoom = this.hotelData.rooms[i];
+        var facilityList = [];
+        for (var j = 0; j < currentRoom.facilities.length; j++) {
+          facilityList.push(currentRoom.facilities[j].id);
+        }
+        this.hotelData.rooms[i]["facilityList"] = facilityList;
+      }
+    },
+    saveHotelRoomFacilitiesEdit(room_id) {
+      var room = this.hotelData.rooms.find((room) => {
+        return room.id === room_id;
+      });
+      var _facilities = room.facilityList
+      this.tabLoading = true;
       this.$http
-        .get(`/hotel/${this.hotelId}`)
-        .then(res => {
-          this.hotelData = res.data.data
-          this.setHeaderImage()
-          this.drawMap()
-          this.setDropzoneOptions()
-          this.setSwiperImage()
-          // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
-          this.$nextTick(() => {
-            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper
-            const swiperThumbs = this.$refs.swiperThumbs.$swiper
-            swiperCommonImage.controller.control = swiperThumbs
-            swiperThumbs.controller.control = swiperCommonImage
-          })
-          this.$nextTick(() => {
-            const mainImage = this.getImageByType(
-              this.hotelData.images,
-              'main',
-            )
-            const fileExt = mainImage.image_filename.split('.').pop()
-            const file = { size: 1, type: `image/${fileExt}` }
-            const url = this.imagePath + mainImage.image_filename
-            this.$refs.dropzoneMainImage.removeAllFiles()
-            this.$refs.dropzoneMainImage.manuallyAddFile(file, url)
-          })
-          this.$nextTick(() => {
-            const bannerImage = this.getImageByType(
-              this.hotelData.images,
-              'banner',
-            )
-            const fileExt = bannerImage.image_filename.split('.').pop()
-            const file = { size: 1, type: `image/${fileExt}` }
-            const url = this.imagePath + bannerImage.image_filename
-            this.$refs.dropzoneBannerImage.removeAllFiles()
-            this.$refs.dropzoneBannerImage.manuallyAddFile(file, url)
-          })
-          this.loading = false
+        .post(`/hotel_room/${room_id}/syncFacilities`, {
+          facilities: _facilities,
         })
-        .catch(err => {
+        .then((res) => {
+          this.tabLoading = false;
+        })
+        .catch((err) => {
+          this.tabLoading = false;
           if (err.response) {
-            const errMsg = err.response.data.message
+            const errMsg = err.response.data.data;
             if (errMsg) {
-              // Data not found
-              this.$router.push({ path: 'error-404' })
-              return this.toastErrorMsg(errMsg)
+              return this.toastErrorMsg(errMsg);
             }
           }
-          this.$router.go(-1)
-          return this.toastErrorMsg(err.message)
+          return this.toastErrorMsg(err.message);
+        });
+    },
+    getData() {
+      this.loading = true;
+      this.$http
+        .get(`/hotel/${this.hotelId}`)
+        .then((res) => {
+          this.hotelData = res.data.data;
+          this.setHeaderImage();
+          this.tabChanged(0)
+          // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
+          this.$nextTick(() => {
+            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
+            const swiperThumbs = this.$refs.swiperThumbs.$swiper;
+            swiperCommonImage.controller.control = swiperThumbs;
+            swiperThumbs.controller.control = swiperCommonImage;
+          });
+          this.loading = false;
         })
+        .catch((err) => {
+          if (err.response) {
+            const errMsg = err.response.data.message;
+            if (errMsg) {
+              // Data not found
+              this.$router.push({ path: "error-404" });
+              return this.toastErrorMsg(errMsg);
+            }
+          }
+          this.$router.go(-1);
+          return this.toastErrorMsg(err.message);
+        });
     },
     initDefaultHotelParams() {
-      this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams))
+      this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams));
     },
     initDefaultHotelRoomParams() {
       this.hotelRoomParams = JSON.parse(
-        JSON.stringify(this.defaultHotelRoomParams),
-      )
-      this.hotelRoomParams.hotel_id = this.hotelId
+        JSON.stringify(this.defaultHotelRoomParams)
+      );
+      this.hotelRoomParams.hotel_id = this.hotelId;
     },
     initDefaultHotelRoomPricingParams() {
       this.hotelRoomPricingParams = JSON.parse(
-        JSON.stringify(this.defaultHotelRoomPricingParams),
-      )
+        JSON.stringify(this.defaultHotelRoomPricingParams)
+      );
     },
     getImageByType,
     swiperSlideChange() {},
     tabChanged(tab) {
-      this.activeTab = tab
+      this.activeTab = tab;
 
       if (tab == 0) {
+        this.drawMap();
       } else if (tab == 1) {
+        this.setSwiperImage();
+        this.setDropzoneImages();
       } else if (tab == 2) {
+        this.setHotelRoomFacilities();
       } else if (tab == 3) {
-        this.setFacilities()
+        this.setFacilities();
       }
     },
     setCurrentTab(tab) {
-      this.$refs.header.setCurrentTab(tab)
+      this.$refs.header.setCurrentTab(tab);
     },
   },
-}
+  filters: {
+    printHotelImage(data, hotelData){
+      if(data.hotelRoomId !== null){
+        var room = hotelData.rooms.find( x => { return x.id === data.hotelRoomId });
+        return `${room.name} - ${data.name}`;
+      }
+      else {
+        return data.name;
+      }
+    }
+  }
+};
 </script>
 
 <style lang="scss">

@@ -193,7 +193,7 @@
                   <b-row class="justify-content-center">
                     <b-col md="6">
                       <!-- swiper1 -->
-                      <swiper
+                      <swiper v-if="swiperData.length > 0"
                         ref="swiperCommonImage"
                         class="swiper-gallery gallery-top"
                         :options="swiperOptions"
@@ -220,7 +220,7 @@
                       </swiper>
 
                       <!-- swiper2 Thumbs -->
-                      <swiper
+                      <swiper v-if="swiperData.length > 0"
                         ref="swiperThumbs"
                         class="swiper gallery-thumbs"
                         :options="swiperOptionThumbs"
@@ -232,6 +232,11 @@
                           <b-img :src="data.img" fluid />
                         </swiper-slide>
                       </swiper>
+                    </b-col>
+                  </b-row>
+                  <b-row v-if="swiperData.length == 0">
+                    <b-col md="12">
+                      <h5 class="text-center">No common image added</h5>
                     </b-col>
                   </b-row>
                   <b-row class="justify-content-center">
@@ -248,6 +253,7 @@
                           Add
                         </b-button>
                         <b-button
+                          v-if="swiperData.length > 0"
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-primary"
                         >
@@ -257,6 +263,7 @@
                         <b-button
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-danger"
+                          v-if="swiperData.length > 0"
                         >
                           <feather-icon icon="TrashIcon" />
                           Delete
@@ -1174,6 +1181,7 @@ export default {
       });
     },
     addHotelImage(params){
+      this.modalLoading = true;
       if (this.dropzoneCommonImageSelectedFile) {
         params.file = this.dropzoneCommonImageSelectedFile.dataURL
       }
@@ -1185,12 +1193,13 @@ export default {
         .then(res => {
           this.$refs['modal-hotel-image-input'].hide()
           this.getData()
-          this.setSwiperImage()
         })
         .catch(err => {
           const errMsg = err.response.data.data
           this.toastErrorMsg(errMsg)
-        })
+        }).finally(() => {
+          this.modalLoading = false;
+        });
     },
     saveHotelFacilitiesEdit() {
       const selectedFacilities = this.availableFacilities.filter(
@@ -1472,13 +1481,32 @@ export default {
     setSwiperImage() {
       this.swiperData = [];
       const commonImage = this.getImageByType(this.hotelData.images, "common");
-      for (let i = 0; i < commonImage.length; i++) {
-        this.swiperData.push({
-          img: this.imagePath + commonImage[i].image_filename,
-          id: commonImage[i].id,
-          name: commonImage[i].name,
-          type: commonImage[i].type,
-          hotelRoomId: commonImage[i].hotel_room_id,
+      if(Array.isArray(commonImage)){
+        for (let i = 0; i < commonImage.length; i++) {
+          this.swiperData.push({
+            img: this.imagePath + commonImage[i].image_filename,
+            id: commonImage[i].id,
+            name: commonImage[i].name,
+            type: commonImage[i].type,
+            hotelRoomId: commonImage[i].hotel_room_id,
+          });
+        }
+      }
+      else {
+         this.swiperData.push({
+            img: this.imagePath + commonImage.image_filename,
+            id: commonImage.id,
+            name: commonImage.name,
+            type: commonImage.type,
+            hotelRoomId: commonImage.hotel_room_id,
+          });
+      }
+      if(this.swiperData.length > 0){
+        this.$nextTick(() => {
+          const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
+          const swiperThumbs = this.$refs.swiperThumbs.$swiper;
+          swiperCommonImage.controller.control = swiperThumbs;
+          swiperThumbs.controller.control = swiperCommonImage;
         });
       }
     },
@@ -1539,13 +1567,11 @@ export default {
           this.hotelData = res.data.data;
           this.setHeaderImage();
           this.drawMap();
+          this.setSwiperImage();
+          this.setDropzoneImages();
+          this.setHotelRoomFacilities();
+          this.setFacilities();
           // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
-          this.$nextTick(() => {
-            const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
-            const swiperThumbs = this.$refs.swiperThumbs.$swiper;
-            swiperCommonImage.controller.control = swiperThumbs;
-            swiperThumbs.controller.control = swiperCommonImage;
-          });
           this.loading = false;
         })
         .catch((err) => {

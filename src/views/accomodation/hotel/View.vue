@@ -1443,7 +1443,7 @@ export default {
         .then((res) => {
           this.hotelData = res.data.data;
           this.setHeaderImage();
-          this.tabChanged(0)
+          this.setCurrentTab(0)
           // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
           this.$nextTick(() => {
             const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;

@@ -10,7 +10,16 @@ export default [{
   },
   {
     title: 'Facilities',
-    route: 'hotel-facilities',
+    children: [
+      {
+        title: 'Hotel',
+        route: 'facilities-hotel',
+      },
+      {
+        title: 'Room',
+        route: 'facilities-room',
+      },
+    ],
   },
   ],
 },

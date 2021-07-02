@@ -37,10 +37,43 @@ export default [{
         },
     },
     {
-        path: '/hotel/facitilies',
-        name: 'hotel-facilities',
+        path: '/hotel/facilities-hotel',
+        name: 'facilities-hotel',
         component: () =>
-            import ('@/views/accomodation/hotel/Facilities.vue'),
+            import ('@/views/accomodation/hotel/FacilityHotel.vue'),
+            meta: {
+                pageTitle: 'Hotel Facilities',
+                breadcrumb: [{
+                        text: 'Hotel',
+                    },
+                    {
+                        text: 'Facilities',
+                        active: true,
+                    },
+                    
+                ],
+            },
+    },
+    {
+        path: '/hotel/facilities-room',
+        name: 'facilities-room',
+        component: () =>
+            import ('@/views/accomodation/hotel/FacilityRoom.vue'),
+            meta: {
+                pageTitle: 'Room Facilities',
+                breadcrumb: [{
+                        text: 'Hotel',
+                    },
+                    {
+                        text: 'Facilities',
+                        to: '/hotel/facilities-hotel',
+                    },
+                    {
+                        text: 'Room',
+                        active: true,
+                    },
+                ],
+            },
     },
     {
         path: '/guest-house/list',

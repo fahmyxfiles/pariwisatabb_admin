@@ -267,6 +267,7 @@
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-danger"
                           v-if="swiperData.length > 0"
+                          @click="deleteHotelImage(swiperData[swiperCommonImageActiveIndex])"
                         >
                           <feather-icon icon="TrashIcon" />
                           Delete
@@ -1232,7 +1233,7 @@ export default {
         .then((res) => {
           this.modalLoading = false;
           this.$refs["modal-hotel-image-input"].hide();
-          this.setSwiperImage();
+          this.getData();
         })
         .catch((err) => {
           this.modalLoading = false;
@@ -1245,8 +1246,40 @@ export default {
           return this.toastErrorMsg(err.message);
         });
     },
-    deleteHotelImage(params) {
-
+    deleteHotelImage(item) {
+      console.log(item)
+      this.$swal({
+        title: "Are you sure?",
+        text: `Room Image : ${item.name} will be removed. All related data with this Hotel Image will also be removed.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-outline-danger ml-1",
+        },
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.$http
+            .delete(`/hotel_image/${item.id}`)
+            .then((res) => {
+              this.$swal({
+                icon: "success",
+                title: "Deleted!",
+                text: "Hotel Image has been deleted.",
+                customClass: {
+                  confirmButton: "btn btn-success",
+                },
+              });
+              this.getData();
+            })
+            .catch((err) => {
+              const errMsg = err.response.data.data;
+              this.toastErrorMsg(errMsg);
+            });
+        }
+      });
     },
     addHotelImageModal() {
       this.initDefaultHotelImageParams();

@@ -1225,7 +1225,6 @@ export default {
       if (this.dropzoneCommonImageSelectedFile) {
         params.file = this.dropzoneCommonImageSelectedFile.dataURL;
       }
-      
       params._method = "PUT";
       this.modalLoading = true;
       this.$http
@@ -1246,7 +1245,9 @@ export default {
           return this.toastErrorMsg(err.message);
         });
     },
-    deleteHotelImage(params) {},
+    deleteHotelImage(params) {
+
+    },
     addHotelImageModal() {
       this.initDefaultHotelImageParams();
       this.hotelImageParams.hotel_id = this.hotelData.id;

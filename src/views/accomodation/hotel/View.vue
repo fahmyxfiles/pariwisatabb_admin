@@ -172,7 +172,7 @@
                         @vdropzone-file-added="dropzoneMainImageAdded"
                         @vdropzone-sending="dropzoneMainImageSending"
                         @vdropzone-success="dropzoneMainImageSuccess"
-                        @vdropzone-error="dropzoneError"
+                        @vdropzone-error="dropzoneMainImageError"
                       />
                     </b-col>
                     <b-col md="6">
@@ -185,7 +185,7 @@
                         @vdropzone-file-added="dropzoneBannerImageAdded"
                         @vdropzone-sending="dropzoneBannerImageSending"
                         @vdropzone-success="dropzoneBannerImageSuccess"
-                        @vdropzone-error="dropzoneError"
+                        @vdropzone-error="dropzoneBannerImageError"
                       />
                     </b-col>
                   </b-row>
@@ -193,7 +193,8 @@
                   <b-row class="justify-content-center">
                     <b-col md="6">
                       <!-- swiper1 -->
-                      <swiper v-if="swiperData.length > 0"
+                      <swiper
+                        v-if="swiperData.length > 0"
                         ref="swiperCommonImage"
                         class="swiper-gallery gallery-top"
                         :options="swiperOptions"
@@ -220,7 +221,8 @@
                       </swiper>
 
                       <!-- swiper2 Thumbs -->
-                      <swiper v-if="swiperData.length > 0"
+                      <swiper
+                        v-if="swiperData.length > 0"
                         ref="swiperThumbs"
                         class="swiper gallery-thumbs"
                         :options="swiperOptionThumbs"
@@ -256,6 +258,7 @@
                           v-if="swiperData.length > 0"
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-primary"
+                          @click="editHotelImageModal()"
                         >
                           <feather-icon icon="Edit2Icon" />
                           Edit
@@ -293,6 +296,15 @@
                         <span class="align-middle">Add</span>
                       </b-button>
                     </b-form-group>
+                  </div>
+                  <div v-if="Object.keys(hotelData).length !== 0">
+                    <b-row v-if="hotelData.rooms.length == 0">
+                      <b-col md="12">
+                        <h4 class="text-center">
+                          No hotel room has been added
+                        </h4>
+                      </b-col>
+                    </b-row>
                   </div>
                   <app-collapse accordion>
                     <app-collapse-item
@@ -346,6 +358,58 @@
                             </b-button>
                           </b-card-text>
                         </b-col>
+                      </b-row>
+                      <hr />
+                      <h5 class="text-capitalize mb-75" style="margin-top: 5px">
+                        Room Facilities
+                      </h5>
+                      <b-form-checkbox-group
+                        id="room-facilities-checkbox"
+                        v-model="room.facilityList"
+                      >
+                        <div
+                          v-for="(
+                            facilityCategory, facilityCategoryIndex
+                          ) in availableHotelRoomFacilityCategories"
+                          :key="facilityCategoryIndex"
+                          class="group-wrapper"
+                        >
+                          <div class="group-title">
+                            {{ facilityCategory.name }}
+                          </div>
+                          <div class="group-content">
+                            <div
+                              v-for="(
+                                facility, facilityIndex
+                              ) in getAvailableHotelFacilityByCategoryId(
+                                facilityCategory.id
+                              )"
+                              :key="facilityIndex"
+                              class="facility-item"
+                            >
+                              <div class="facility-check-box">
+                                <b-form-checkbox
+                                  :value="facility.id"
+                                  class="custom-control-primary"
+                                >
+                                  <div class="facility-label">
+                                    {{ facility.name }}
+                                  </div>
+                                </b-form-checkbox>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </b-form-checkbox-group>
+                      <b-row class="justify-content-center">
+                        <b-button
+                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+                          variant="outline-primary"
+                          @click="saveHotelRoomFacilitiesEdit(room.id)"
+                        >
+                          <feather-icon icon="SaveIcon" class="mr-50" />
+                          Save
+                        </b-button>
                       </b-row>
                       <hr />
                       <div class="d-flex justify-content-between">
@@ -410,58 +474,6 @@
                           </template>
                         </b-table-lite>
                       </div>
-                      <hr />
-                      <h5 class="text-capitalize mb-75" style="margin-top: 5px">
-                        Room Facilities
-                      </h5>
-                      <b-form-checkbox-group
-                        id="room-facilities-checkbox"
-                        v-model="room.facilityList"
-                      >
-                        <div
-                          v-for="(
-                            facilityCategory, facilityCategoryIndex
-                          ) in availableHotelRoomFacilityCategories"
-                          :key="facilityCategoryIndex"
-                          class="group-wrapper"
-                        >
-                          <div class="group-title">
-                            {{ facilityCategory.name }}
-                          </div>
-                          <div class="group-content">
-                            <div
-                              v-for="(
-                                facility, facilityIndex
-                              ) in getAvailableHotelFacilityByCategoryId(
-                                facilityCategory.id
-                              )"
-                              :key="facilityIndex"
-                              class="facility-item"
-                            >
-                              <div class="facility-check-box">
-                                <b-form-checkbox
-                                  :value="facility.id"
-                                  class="custom-control-primary"
-                                >
-                                  <div class="facility-label">
-                                    {{ facility.name }}
-                                  </div>
-                                </b-form-checkbox>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </b-form-checkbox-group>
-                      <b-row class="justify-content-center">
-                        <b-button
-                          v-ripple.400="'rgba(113, 102, 240, 0.15)'"
-                          variant="outline-primary"
-                          @click="saveHotelRoomFacilitiesEdit(room.id)"
-                        >
-                          <feather-icon icon="SaveIcon" class="mr-50" />
-                          Save
-                        </b-button>
-                      </b-row>
                     </app-collapse-item>
                   </app-collapse>
                 </b-card>
@@ -826,9 +838,10 @@ export default {
         autoProcessQueue: true,
         addRemoveLinks: false,
         acceptedFiles: "image/*",
-        headers:{ 
-          "Authorization":'Bearer ' + localStorage.getItem('accessToken'),
-        }
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          Accept: "application/json",
+        },
       },
       modalTitle: "",
       dropzoneMainImageSelectedFile: null,
@@ -916,6 +929,7 @@ export default {
         touchRatio: 0.2,
         slideToClickedSlide: true,
       },
+      swiperCommonImageActiveIndex: 0,
       roomPricingFields: [
         // A virtual column that doesn't exist in items
         "No",
@@ -941,8 +955,14 @@ export default {
   },
   methods: {
     setMapEditMode() {
-      this.mapEditMode = true;
+      if (this.hotelData.map_coordinate == null) {
+        this.marker = this.createGoogleMapMarker(
+          "-5.466450019745824, 122.60788425767214",
+          this.map
+        );
+      }
       this.marker.setDraggable(true);
+      this.mapEditMode = true;
     },
     editHotelModal() {
       this.initDefaultHotelParams();
@@ -1082,6 +1102,9 @@ export default {
     },
     addHotelRoomPricing(params) {
       this.modalLoading = true;
+      if (params.type == "Weekday" || params.type == "Weekend") {
+        delete params.date;
+      }
       this.$http
         .post("/hotel_room_pricing", params)
         .then((res) => {
@@ -1115,6 +1138,9 @@ export default {
     editHotelRoomPricing(id, params) {
       this.modalLoading = true;
       params._method = "PUT";
+      if (params.type == "Weekday" || params.type == "Weekend") {
+        delete params.date;
+      }
       this.$http
         .post(`/hotel_room_pricing/${id}`, params)
         .then((res) => {
@@ -1168,7 +1194,60 @@ export default {
         }
       });
     },
-    addHotelImageModal(){
+    editHotelImageModal() {
+      this.initDefaultHotelImageParams();
+      var currentImageId =
+        this.swiperData[this.swiperCommonImageActiveIndex].id;
+      var params = this.hotelData.images.find((image) => {
+        return image.id === currentImageId;
+      });
+      for (const key in this.defaultHotelImageParams) {
+        this.hotelImageParams[key] = params[key];
+      }
+      this.modalTitle = "Edit Hotel Image : " + params.name;
+      this.$refs["modal-hotel-image-input"].onOk = () =>
+        this.editHotelImage(params.id, this.hotelImageParams);
+      this.$refs["modal-hotel-image-input"].show();
+      this.$nextTick(() => {
+        var currentImageId =
+          this.swiperData[this.swiperCommonImageActiveIndex].id;
+        var params = this.hotelData.images.find((image) => {
+          return image.id === currentImageId;
+        });
+        this.$refs.dropzoneCommonImage.setOption("autoProcessQueue", false);
+        const fileExt = params.image_filename.split(".").pop();
+        const file = { size: 1, type: `image/${fileExt}` };
+        const url = this.imagePath + params.image_filename;
+        this.$refs.dropzoneCommonImage.manuallyAddFile(file, url);
+      });
+    },
+    editHotelImage(id, params) {
+      if (this.dropzoneCommonImageSelectedFile) {
+        params.file = this.dropzoneCommonImageSelectedFile.dataURL;
+      }
+      
+      params._method = "PUT";
+      this.modalLoading = true;
+      this.$http
+        .post(`/hotel_image/${id}`, params)
+        .then((res) => {
+          this.modalLoading = false;
+          this.$refs["modal-hotel-image-input"].hide();
+          this.setSwiperImage();
+        })
+        .catch((err) => {
+          this.modalLoading = false;
+          if (err.response) {
+            const errMsg = err.response.data.data;
+            if (errMsg) {
+              return this.toastErrorMsg(errMsg);
+            }
+          }
+          return this.toastErrorMsg(err.message);
+        });
+    },
+    deleteHotelImage(params) {},
+    addHotelImageModal() {
       this.initDefaultHotelImageParams();
       this.hotelImageParams.hotel_id = this.hotelData.id;
       this.hotelImageParams.type = "common";
@@ -1180,24 +1259,36 @@ export default {
         this.$refs.dropzoneCommonImage.setOption("autoProcessQueue", false);
       });
     },
-    addHotelImage(params){
+    addHotelImage(params) {
       this.modalLoading = true;
       if (this.dropzoneCommonImageSelectedFile) {
-        params.file = this.dropzoneCommonImageSelectedFile.dataURL
+        params.file = this.dropzoneCommonImageSelectedFile.dataURL;
       }
-      if(params.hotel_room_id == null){
+      if (params.hotel_room_id == null) {
         delete params.hotel_room_id;
       }
+      let formData = new FormData();
+      formData.append(
+        "file",
+        this.dropzoneCommonImageSelectedFile,
+        this.dropzoneCommonImageSelectedFile.upload.filename
+      );
+      Object.keys(params).map((e) => {
+        formData.append(e, params[e]);
+      });
       this.$http
-        .post('/hotel_image', params)
-        .then(res => {
-          this.$refs['modal-hotel-image-input'].hide()
-          this.getData()
+        .post("/hotel_image", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
         })
-        .catch(err => {
-          const errMsg = err.response.data.data
-          this.toastErrorMsg(errMsg)
-        }).finally(() => {
+        .then((res) => {
+          this.$refs["modal-hotel-image-input"].hide();
+          this.getData();
+        })
+        .catch((err) => {
+          const errMsg = err.response.data.data;
+          this.toastErrorMsg(errMsg);
+        })
+        .finally(() => {
           this.modalLoading = false;
         });
     },
@@ -1268,10 +1359,12 @@ export default {
       this.mapEditMode = false;
       this.marker.setDraggable(false);
       this.marker.setMap(null);
-      this.marker = this.createGoogleMapMarker(
-        this.hotelData.map_coordinate,
-        this.map
-      );
+      if (this.hotelData.map_coordinate !== null) {
+        this.marker = this.createGoogleMapMarker(
+          this.hotelData.map_coordinate,
+          this.map
+        );
+      }
     },
     getAvailableHotelFacilityByCategoryId(id) {
       return this.availableFacilities.filter(
@@ -1305,7 +1398,7 @@ export default {
       }
       this.dropzoneMainImageSelectedFile = file;
     },
-    dropzoneCommonImageAdded(file){
+    dropzoneCommonImageAdded(file) {
       if (this.dropzoneCommonImageSelectedFile !== null) {
         this.$refs.dropzoneCommonImage.removeFile(
           this.dropzoneCommonImageSelectedFile
@@ -1322,44 +1415,81 @@ export default {
       this.dropzoneBannerImageSelectedFile = file;
     },
     dropzoneMainImageSending(file, xhr, formData) {
-      formData.append("_method", "PUT");
+      var mainImage = this.getImageByType(this.hotelData.images, "main");
+      if (mainImage.length !== 0) {
+        formData.append("_method", "PUT");
+      }
       formData.append("type", "main");
       formData.append("name", "Main Image");
       formData.append("hotel_id", this.hotelData.id);
     },
     dropzoneBannerImageSending(file, xhr, formData) {
-      formData.append("_method", "PUT");
+      var bannerImage = this.getImageByType(this.hotelData.images, "banner");
+      if (bannerImage.length !== 0) {
+        formData.append("_method", "PUT");
+      }
       formData.append("type", "banner");
       formData.append("name", "Banner Image");
       formData.append("hotel_id", this.hotelData.id);
     },
-    dropzoneMainImageSuccess(file, response){
-      var img = this.getImageByType(this.hotelData.images, "main")
-      img.image_filename = response.data.image_filename
-      this.setHeaderImage()
-      this.setDropzoneImages()
+    dropzoneMainImageSuccess(file, response) {
+      var mainImage = this.getImageByType(this.hotelData.images, "main");
+      if (mainImage.length == 0) {
+        this.hotelData.images.push(response.data);
+      } else {
+        mainImage.image_filename = response.data.image_filename;
+      }
+      this.setHeaderData();
+      this.setDropzoneImages();
     },
-    dropzoneBannerImageSuccess(file, response){
-      var img = this.getImageByType(this.hotelData.images, "banner")
-      img.image_filename = response.data.image_filename
-      this.setHeaderImage()
-      this.setDropzoneImages()
+    dropzoneBannerImageSuccess(file, response) {
+      var bannerImage = this.getImageByType(this.hotelData.images, "banner");
+      if (bannerImage.length == 0) {
+        this.hotelData.images.push(response.data);
+      } else {
+        bannerImage.image_filename = response.data.image_filename;
+      }
+      this.setHeaderData();
+      this.setDropzoneImages();
     },
-    dropzoneError(file){
-      console.log("dropzoneError > file ", file)
-      var error = JSON.parse(file.xhr.responseText)
-      console.log(error)
+    dropzoneMainImageError(file) {
+      var error = JSON.parse(file.xhr.responseText);
+      if (error !== null) {
+        const errMsg = error.data;
+        this.toastErrorMsg(errMsg);
+      } else {
+        this.toastErrorMsg(file.xhr.responseText);
+      }
+      this.setDropzoneImages();
+    },
+    dropzoneBannerImageError(file) {
+      var error = JSON.parse(file.xhr.responseText);
+      if (error !== null) {
+        const errMsg = error.data;
+        this.toastErrorMsg(errMsg);
+      } else {
+        this.toastErrorMsg(file.xhr.responseText);
+      }
+      this.setDropzoneImages();
     },
     drawMap() {
-      this.$refs.map.innerHTML = ''
+      this.$refs.map.innerHTML = "";
+      console.log(this.hotelData);
+      if (this.hotelData.map_center == null) {
+        this.hotelData.map_center =
+          "-5.466090678870657, 122.60769753809814, 14";
+      }
+
       this.map = this.createGoogleMap(
         this.hotelData.map_center,
         this.$refs.map
       );
-      this.marker = this.createGoogleMapMarker(
-        this.hotelData.map_coordinate,
-        this.map
-      );
+      if (this.hotelData.map_coordinate !== null) {
+        this.marker = this.createGoogleMapMarker(
+          this.hotelData.map_coordinate,
+          this.map
+        );
+      }
     },
     getAvailableRegencies() {
       this.$http
@@ -1430,58 +1560,72 @@ export default {
           return this.toastErrorMsg(err.message);
         });
     },
-    setHeaderImage() {
-      this.headerData = {
-        name: this.hotelData.name,
-        address: this.hotelData.address,
-        headerImage:
-          this.imagePath +
-          this.getImageByType(this.hotelData.images, "banner").image_filename,
-        mainImage:
-          this.imagePath +
-          this.getImageByType(this.hotelData.images, "main").image_filename,
-      };
+    setHeaderData() {
+      var mainImage = this.getImageByType(this.hotelData.images, "main");
+      var bannerImage = this.getImageByType(this.hotelData.images, "banner");
+      this.headerData.name = this.hotelData.name;
+      this.headerData.address = this.hotelData.address;
+      if (mainImage.length !== 0) {
+        this.headerData.mainImage = this.imagePath + mainImage.image_filename;
+      }
+      if (bannerImage.length !== 0) {
+        this.headerData.headerImage =
+          this.imagePath + bannerImage.image_filename;
+      }
     },
     setDropzoneImages() {
-      this.$refs.dropzoneMainImage.setOption(
-        "url",
-        `${this.$http.defaults.baseURL}hotel_image/${
-          this.getImageByType(this.hotelData.images, "main").id
-        }`
-      );
-      this.$refs.dropzoneBannerImage.setOption(
-        "url",
-        `${this.$http.defaults.baseURL}hotel_image/${
-          this.getImageByType(this.hotelData.images, "banner").id
-        }`
-      );
-      this.$nextTick(() => {
-        const mainImage = this.getImageByType(
-          this.hotelData.images,
-          "main"
+      this.$refs.dropzoneMainImage.removeAllFiles();
+      this.$refs.dropzoneBannerImage.removeAllFiles();
+      var mainImage = this.getImageByType(this.hotelData.images, "main");
+      if (mainImage.length !== 0) {
+        this.$refs.dropzoneMainImage.setOption(
+          "url",
+          `${this.$http.defaults.baseURL}hotel_image/${mainImage.id}`
         );
-        const fileExt = mainImage.image_filename.split(".").pop();
-        const file = { size: 1, type: `image/${fileExt}` };
-        const url = this.imagePath + mainImage.image_filename;
-        this.$refs.dropzoneMainImage.removeAllFiles();
-        this.$refs.dropzoneMainImage.manuallyAddFile(file, url);
-      });
-      this.$nextTick(() => {
-        const bannerImage = this.getImageByType(
-          this.hotelData.images,
-          "banner"
+        this.$nextTick(() => {
+          const mainImage = this.getImageByType(this.hotelData.images, "main");
+          const fileExt = mainImage.image_filename.split(".").pop();
+          const file = { size: 1, type: `image/${fileExt}` };
+          const url = this.imagePath + mainImage.image_filename;
+          this.$refs.dropzoneMainImage.manuallyAddFile(file, url);
+        });
+      } else {
+        this.$nextTick(() => {
+          this.$refs.dropzoneMainImage.setOption(
+            "url",
+            `${this.$http.defaults.baseURL}hotel_image`
+          );
+        });
+      }
+      var bannerImage = this.getImageByType(this.hotelData.images, "banner");
+      if (bannerImage.length !== 0) {
+        this.$refs.dropzoneBannerImage.setOption(
+          "url",
+          `${this.$http.defaults.baseURL}hotel_image/${bannerImage.id}`
         );
-        const fileExt = bannerImage.image_filename.split(".").pop();
-        const file = { size: 1, type: `image/${fileExt}` };
-        const url = this.imagePath + bannerImage.image_filename;
-        this.$refs.dropzoneBannerImage.removeAllFiles();
-        this.$refs.dropzoneBannerImage.manuallyAddFile(file, url);
-      });
+        this.$nextTick(() => {
+          const bannerImage = this.getImageByType(
+            this.hotelData.images,
+            "banner"
+          );
+          const fileExt = bannerImage.image_filename.split(".").pop();
+          const file = { size: 1, type: `image/${fileExt}` };
+          const url = this.imagePath + bannerImage.image_filename;
+          this.$refs.dropzoneBannerImage.manuallyAddFile(file, url);
+        });
+      } else {
+        this.$nextTick(() => {
+          this.$refs.dropzoneBannerImage.setOption(
+            "url",
+            `${this.$http.defaults.baseURL}hotel_image`
+          );
+        });
+      }
     },
     setSwiperImage() {
       this.swiperData = [];
       const commonImage = this.getImageByType(this.hotelData.images, "common");
-      if(Array.isArray(commonImage)){
+      if (Array.isArray(commonImage)) {
         for (let i = 0; i < commonImage.length; i++) {
           this.swiperData.push({
             img: this.imagePath + commonImage[i].image_filename,
@@ -1491,17 +1635,16 @@ export default {
             hotelRoomId: commonImage[i].hotel_room_id,
           });
         }
+      } else {
+        this.swiperData.push({
+          img: this.imagePath + commonImage.image_filename,
+          id: commonImage.id,
+          name: commonImage.name,
+          type: commonImage.type,
+          hotelRoomId: commonImage.hotel_room_id,
+        });
       }
-      else {
-         this.swiperData.push({
-            img: this.imagePath + commonImage.image_filename,
-            id: commonImage.id,
-            name: commonImage.name,
-            type: commonImage.type,
-            hotelRoomId: commonImage.hotel_room_id,
-          });
-      }
-      if(this.swiperData.length > 0){
+      if (this.swiperData.length > 0) {
         this.$nextTick(() => {
           const swiperCommonImage = this.$refs.swiperCommonImage.$swiper;
           const swiperThumbs = this.$refs.swiperThumbs.$swiper;
@@ -1539,7 +1682,7 @@ export default {
       var room = this.hotelData.rooms.find((room) => {
         return room.id === room_id;
       });
-      var _facilities = room.facilityList
+      var _facilities = room.facilityList;
       this.tabLoading = true;
       this.$http
         .post(`/hotel_room/${room_id}/syncFacilities`, {
@@ -1565,7 +1708,7 @@ export default {
         .get(`/hotel/${this.hotelId}`)
         .then((res) => {
           this.hotelData = res.data.data;
-          this.setHeaderImage();
+          this.setHeaderData();
           this.drawMap();
           this.setSwiperImage();
           this.setDropzoneImages();
@@ -1607,7 +1750,10 @@ export default {
       );
     },
     getImageByType,
-    swiperSlideChange() {},
+    swiperSlideChange() {
+      var currentSlide = this.$refs.swiperCommonImage.$swiper.activeIndex;
+      this.swiperCommonImageActiveIndex = currentSlide;
+    },
     tabChanged(tab) {
       this.activeTab = tab;
 
@@ -1627,16 +1773,17 @@ export default {
     },
   },
   filters: {
-    printHotelImage(data, hotelData){
-      if(data.hotelRoomId !== null){
-        var room = hotelData.rooms.find( x => { return x.id === data.hotelRoomId });
+    printHotelImage(data, hotelData) {
+      if (data.hotelRoomId !== null) {
+        var room = hotelData.rooms.find((x) => {
+          return x.id === data.hotelRoomId;
+        });
         return `${room.name} - ${data.name}`;
-      }
-      else {
+      } else {
         return data.name;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

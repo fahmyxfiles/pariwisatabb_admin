@@ -55,10 +55,7 @@
                       :to="{ name: 'hotel-view', params: { id: hotel.id } }"
                     >
                       <b-card-img
-                        :src="
-                          imagePath +
-                            getImageByType(hotel.images, 'main').image_filename
-                        "
+                        :src="getImageByType(hotel.images, 'main').image_filename"
                         :alt="hotel.name"
                       />
                     </router-link>
@@ -103,7 +100,8 @@
                     </b-card-footer>
                   </b-card>
                   <!-- mengisi sisa slot jika tidak ada, karena di set default 3 card -->
-                  <b-card v-for="_idx in 3 - row.length" :key="_idx" no-body />
+                  <!-- eslint-disable-next-line -->
+                  <b-card v-for="_idx in (3 - row.length)" no-body />
                 </b-card-group>
               </b-col>
             </b-row>
@@ -320,6 +318,9 @@ export default {
                   name: "Main Image",
                   type: "main",
                 })
+              }
+              else {
+                mainImage.image_filename = this.imagePath + mainImage.image_filename
               }
             }
           } else {

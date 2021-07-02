@@ -48,7 +48,7 @@ export default [{
                     },
                     {
                         text: 'Facilities',
-                        active: true,
+                        active: true
                     },
                     
                 ],

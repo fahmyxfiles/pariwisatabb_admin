@@ -47,7 +47,8 @@
           </div>
 
           <!-- table -->
-          <vue-good-table v-if="rows.length > 0"
+          <vue-good-table
+            v-if="rows.length > 0"
             :columns="columns"
             :rows="rows"
             :select-options="{
@@ -62,7 +63,7 @@
               slot="table-row"
               slot-scope="props"
             >
-            <span v-if="props.column.field === 'no'">
+              <span v-if="props.column.field === 'no'">
                 {{ meta.from + props.index }}
               </span>
               <span v-else-if="props.column.field === 'category'">
@@ -169,7 +170,7 @@
           />
         </b-form-group>
         <b-form-group>
-          <label for="kategori">Kategori</label>
+          <label for="category">Category</label>
           <v-select
             v-model="params.category_id"
             :options="availableFacilityCategories"
@@ -227,7 +228,7 @@ export default {
         keyword: '',
         limit: 15,
         page: 1,
-        type: 'hotel',
+        type: 'hotel_room',
       },
       modalTitle: '',
       availableFacilityCategories: [],
@@ -265,20 +266,20 @@ export default {
     this.getAvailableFacilityCategories()
   },
   methods: {
-    getFacilityCategoryById(id){
-      var result = this.availableFacilityCategories.find(facility => {return facility.id === id})
-      if(result){
+    getFacilityCategoryById(id) {
+      const result = this.availableFacilityCategories.find(facility => facility.id === id)
+      if (result) {
         return result.name
       }
-      return ""
+      return ''
     },
     toastErrorMsg,
-    perPageChanged(limit){
+    perPageChanged(limit) {
       console.log(limit)
       this.query.limit = limit
       this.getData()
     },
-    pageChanged(page){
+    pageChanged(page) {
       this.query.page = page
       this.getData()
     },
@@ -317,8 +318,8 @@ export default {
         return this.toastErrorMsg(err.message)
       })
     },
-    getAvailableFacilityCategories () {
-      this.$http.get('/facility/getAvailableCategoriesByType/hotel').then(res => {
+    getAvailableFacilityCategories() {
+      this.$http.get('/facility/getAvailableCategoriesByType/hotel_room').then(res => {
         this.availableFacilityCategories = res.data.data
       }).catch(err => {
         if (err.response) {

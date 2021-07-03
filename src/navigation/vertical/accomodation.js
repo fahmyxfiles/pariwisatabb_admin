@@ -12,12 +12,12 @@ export default [{
     title: 'Facilities',
     children: [
       {
-        title: 'Hotel',
-        route: 'facilities-hotel',
+        title: 'General',
+        route: 'hotel-facilities-general',
       },
       {
         title: 'Room',
-        route: 'facilities-room',
+        route: 'hotel-facilities-room',
       },
     ],
   },
@@ -32,7 +32,16 @@ export default [{
   },
   {
     title: 'Facilities',
-    route: 'guest-house-facilities',
+    children: [
+      {
+        title: 'General',
+        route: 'guest-house-facilities-general',
+      },
+      {
+        title: 'Room',
+        route: 'guest-house-facilities-room',
+      },
+    ],
   },
   ],
 },

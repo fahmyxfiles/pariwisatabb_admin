@@ -14,7 +14,7 @@
                 <b-button
                   v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                   variant="outline-primary"
-                  @click="addHotelModal()"
+                  @click="addGuestHouseModal()"
                 >
                   <feather-icon
                     icon="PlusIcon"
@@ -65,33 +65,33 @@
                 >
                   <!-- card 1 -->
                   <b-card
-                    v-for="(hotel, hotelIndex) in row"
-                    :key="hotelIndex"
+                    v-for="(guestHouse, guestHouseIndex) in row"
+                    :key="guestHouseIndex"
                     img-top
                     no-body
                   >
                     <router-link
-                      :to="{ name: 'hotel-view', params: { id: hotel.id } }"
+                      :to="{ name: 'guest-house-view', params: { id: guestHouse.id } }"
                     >
                       <b-card-img
-                        :src="getImageByType(hotel.images, 'main').image_filename"
-                        :alt="hotel.name"
+                        :src="getImageByType(guestHouse.images, 'main').image_filename"
+                        :alt="guestHouse.name"
                       />
                     </router-link>
                     <b-card-body>
                       <b-card-title>
                         <router-link
-                          :to="{ name: 'hotel-view', params: { id: hotel.id } }"
+                          :to="{ name: 'guest-house-view', params: { id: guestHouse.id } }"
                         >
-                          {{ hotel.name }}
+                          {{ guestHouse.name }}
                         </router-link>
                       </b-card-title>
-                      <b-card-text>{{ hotel.address }},
-                        {{ hotel.regency.name }}</b-card-text>
+                      <b-card-text>{{ guestHouse.address }},
+                        {{ guestHouse.regency.name }}</b-card-text>
                     </b-card-body>
                     <b-card-footer>
                       <router-link
-                        :to="{ name: 'hotel-view', params: { id: hotel.id } }"
+                        :to="{ name: 'guest-house-view', params: { id: guestHouse.id } }"
                       >
                         <b-button
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
@@ -106,14 +106,14 @@
                         variant="outline-danger"
                         class="btn-icon rounded-circle"
                         style="margin-left: 5px;"
-                        @click="deleteData(hotel)"
+                        @click="deleteData(guestHouse)"
                       >
                         <feather-icon icon="TrashIcon" />
                       </b-button>
                       <small
                         class="text-muted ml-1"
                       >Last updated
-                        {{ hotel.updated_at | moment("from", "now") }}
+                        {{ guestHouse.updated_at | moment("from", "now") }}
                       </small>
                     </b-card-footer>
                   </b-card>
@@ -127,7 +127,7 @@
         </div>
       </b-overlay>
       <b-modal
-        ref="modal-hotel-input"
+        ref="modal-guest-house-input"
         centered
         :title="modalTitle"
         :no-close-on-backdrop="true"
@@ -141,7 +141,7 @@
             <b-form-group>
               <label for="Regency">Regency :</label>
               <v-select
-                v-model="hotelParams.regency_id"
+                v-model="guestHouseParams.regency_id"
                 :options="availableRegencies"
                 :reduce="(regency) => regency.id"
                 label="name"
@@ -152,9 +152,9 @@
               <label for="name">Name :</label>
               <b-form-input
                 id="name"
-                v-model="hotelParams.name"
+                v-model="guestHouseParams.name"
                 type="text"
-                placeholder="Hotel Name"
+                placeholder="Guest House Name"
                 autocomplete="off"
               />
             </b-form-group>
@@ -162,9 +162,9 @@
               <label for="address">Address :</label>
               <b-form-input
                 id="address"
-                v-model="hotelParams.address"
+                v-model="guestHouseParams.address"
                 type="text"
-                placeholder="Hotel Address"
+                placeholder="Guest House Address"
                 autocomplete="off"
               />
             </b-form-group>
@@ -172,9 +172,9 @@
               <label for="postalCode">Postal Code :</label>
               <b-form-input
                 id="postalCode"
-                v-model="hotelParams.postal_code"
+                v-model="guestHouseParams.postal_code"
                 type="text"
-                placeholder="Hotel Postal Code"
+                placeholder="Guest House Postal Code"
                 autocomplete="off"
               />
             </b-form-group>
@@ -182,8 +182,8 @@
               <label for="description">Description :</label>
               <b-form-textarea
                 id="description"
-                v-model="hotelParams.description"
-                placeholder="Hotel Description"
+                v-model="guestHouseParams.description"
+                placeholder="Guest House Description"
                 rows="3"
                 no-resize
                 autocomplete="off"
@@ -272,7 +272,7 @@ export default {
       loading: true,
       data: [],
       imagePath: this.$imagePath,
-      defaultHotelParams: {
+      defaultGuestHouseParams: {
         regency_id: 0,
         name: '',
         address: '',
@@ -281,10 +281,10 @@ export default {
         map_coordinate: '',
         map_center: '',
       },
-      hotelParams: null,
-      defaultHotelImageParams: {
-        hotel_id: 0,
-        hotel_room_id: null,
+      guestHouseParams: null,
+      defaultGuestHouseImageParams: {
+        guest_house_id: 0,
+        guest_house_room_id: null,
         name: '',
         type: '',
         file: null,
@@ -299,14 +299,14 @@ export default {
     },
   },
   created() {
-    this.initDefaultHotelParams()
+    this.initDefaultGuestHouseParams()
     this.getAvailableRegencies()
     this.getData()
   },
   methods: {
     getAvailableRegencies() {
       this.$http
-        .get('/hotel/getAvailableRegencies')
+        .get('/guest_house/getAvailableRegencies')
         .then(res => {
           this.availableRegencies = res.data.data
         })
@@ -324,7 +324,7 @@ export default {
     getData() {
       this.loading = true
       this.$http
-        .get('/hotel', { params: this.query })
+        .get('/guest_house', { params: this.query })
         .then(res => {
           const _data = res.data.data
           if (_data.length > 0) {
@@ -333,8 +333,8 @@ export default {
               const mainImage = this.getImageByType(this.data[i].images, 'main')
               if (mainImage.length == 0) {
                 this.data[i].images.push({
-                  hotel_id: this.data[i].id,
-                  hotel_room_id: null,
+                  guest_house_id: this.data[i].id,
+                  guest_house_room_id: null,
                   id: null,
                   image_filename: require('@/assets/images/placeholders/16-9.png'),
                   name: 'Main Image',
@@ -378,19 +378,19 @@ export default {
           return this.toastErrorMsg(err.message)
         })
     },
-    addHotelModal() {
-      this.initDefaultHotelParams()
-      this.modalTitle = 'Add Hotel'
-      this.$refs['modal-hotel-input'].onOk = () => this.addHotel(this.hotelParams)
-      this.$refs['modal-hotel-input'].show()
+    addGuestHouseModal() {
+      this.initDefaultGuestHouseParams()
+      this.modalTitle = 'Add Guest House'
+      this.$refs['modal-guest-house-input'].onOk = () => this.addGuestHouse(this.guestHouseParams)
+      this.$refs['modal-guest-house-input'].show()
     },
-    addHotel(params) {
+    addGuestHouse(params) {
       this.modalLoading = true
       this.$http
-        .post('/hotel', params)
+        .post('/guest_house', params)
         .then(res => {
           this.getData()
-          this.$refs['modal-hotel-input'].hide()
+          this.$refs['modal-guest-house-input'].hide()
         })
         .catch(err => {
           if (err.response) {
@@ -405,8 +405,8 @@ export default {
           this.modalLoading = false
         })
     },
-    initDefaultHotelParams() {
-      this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams))
+    initDefaultGuestHouseParams() {
+      this.guestHouseParams = JSON.parse(JSON.stringify(this.defaultGuestHouseParams))
     },
     getImageByType,
   },

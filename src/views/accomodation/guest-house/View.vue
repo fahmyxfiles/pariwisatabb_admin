@@ -6,7 +6,7 @@
       rounded="sm"
     >
       <div id="user-profile">
-        <hotel-header
+        <guest-house-header
           ref="header"
           :header-data="headerData"
           @tab-changed="tabChanged"
@@ -40,7 +40,7 @@
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                         variant="outline-primary"
                         size="sm"
-                        @click="editHotelModal()"
+                        @click="editGuestHouseModal()"
                       >
                         <feather-icon
                           icon="Edit2Icon"
@@ -55,7 +55,7 @@
                       Name
                     </h5>
                     <b-card-text>
-                      {{ hotelData.name }}
+                      {{ guestHouseData.name }}
                     </b-card-text>
                   </div>
                   <div class="mt-2">
@@ -63,7 +63,7 @@
                       Address
                     </h5>
                     <b-card-text>
-                      {{ hotelData.address }}
+                      {{ guestHouseData.address }}
                     </b-card-text>
                   </div>
                   <div class="mt-2">
@@ -71,7 +71,7 @@
                       Description
                     </h5>
                     <b-card-text>
-                      {{ hotelData.description }}
+                      {{ guestHouseData.description }}
                     </b-card-text>
                   </div>
                 </b-card>
@@ -101,7 +101,7 @@
                   </div>
                   <b-list-group>
                     <b-list-group-item
-                      v-for="(room, index) in hotelData.rooms"
+                      v-for="(room, index) in guestHouseData.rooms"
                       :key="index"
                     >{{ room.name }}</b-list-group-item>
                   </b-list-group>
@@ -206,7 +206,7 @@
                   <b-card-text>
                     <ul class="pl-2">
                       <li
-                        v-for="(facility, index) in hotelData.facilities"
+                        v-for="(facility, index) in guestHouseData.facilities"
                         :key="index"
                         style="margin-top: 0.3rem"
                       >
@@ -220,7 +220,7 @@
             </b-row>
             <b-row v-show="activeTab === 1">
               <b-col lg="12">
-                <b-card title="Hotel Images">
+                <b-card title="Guest House Images">
                   <b-row>
                     <b-col md="6">
                       <h4>Main Image (Aspect Ratio 16:9)</h4>
@@ -267,7 +267,7 @@
                           :key="index"
                         >
                           <div class="text-center mb-2">
-                            <h5>{{ data | printHotelImage(hotelData) }}</h5>
+                            <h5>{{ data | printGuestHouseImage(guestHouseData) }}</h5>
                           </div>
                           <b-img
                             :src="data.img"
@@ -319,7 +319,7 @@
                         <b-button
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-success"
-                          @click="addHotelImageModal()"
+                          @click="addGuestHouseImageModal()"
                         >
                           <feather-icon icon="PlusIcon" />
                           Add
@@ -328,7 +328,7 @@
                           v-if="swiperData.length > 0"
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-primary"
-                          @click="editHotelImageModal()"
+                          @click="editGuestHouseImageModal()"
                         >
                           <feather-icon icon="Edit2Icon" />
                           Edit
@@ -337,7 +337,7 @@
                           v-if="swiperData.length > 0"
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-danger"
-                          @click="deleteHotelImage(swiperData[swiperCommonImageActiveIndex])"
+                          @click="deleteGuestHouseImage(swiperData[swiperCommonImageActiveIndex])"
                         >
                           <feather-icon icon="TrashIcon" />
                           Delete
@@ -357,14 +357,14 @@
                       class="text-capitalize mb-75"
                       style="margin-top: 3px"
                     >
-                      Hotel Rooms
+                      Guest House Rooms
                     </h4>
                     <b-form-group class="ml-1">
                       <b-button
                         v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                         variant="outline-primary"
                         size="sm"
-                        @click="addHotelRoomModal()"
+                        @click="addGuestHouseRoomModal()"
                       >
                         <feather-icon
                           icon="PlusIcon"
@@ -374,21 +374,21 @@
                       </b-button>
                     </b-form-group>
                   </div>
-                  <div v-if="Object.keys(hotelData).length !== 0">
-                    <b-row v-if="hotelData.rooms.length == 0">
+                  <div v-if="Object.keys(guestHouseData).length !== 0">
+                    <b-row v-if="guestHouseData.rooms.length == 0">
                       <b-col md="12">
                         <h4 class="text-center">
-                          No hotel room has been added
+                          No guest house room has been added
                         </h4>
                       </b-col>
                     </b-row>
                   </div>
                   <app-collapse accordion>
                     <app-collapse-item
-                      v-for="(room, hotelRoomIndex) in hotelData.rooms"
-                      :key="hotelRoomIndex"
+                      v-for="(room, guestHouseRoomIndex) in guestHouseData.rooms"
+                      :key="guestHouseRoomIndex"
                       :title="room.name"
-                      :isVisible="(hotelRoomIndex==0)"
+                      :isVisible="(guestHouseRoomIndex==0)"
                     >
                       {{ room.description }}
                       <b-row>
@@ -426,7 +426,7 @@
                               variant="outline-primary"
                               class="btn-icon rounded-circle"
                               size="sm"
-                              @click="editHotelRoomModal(room)"
+                              @click="editGuestHouseRoomModal(room)"
                             >
                               <feather-icon icon="Edit2Icon" />
                             </b-button>
@@ -436,7 +436,7 @@
                               variant="outline-danger"
                               class="btn-icon rounded-circle ml-1"
                               size="sm"
-                              @click="deleteHotelRoom(room)"
+                              @click="deleteGuestHouseRoom(room)"
                             >
                               <feather-icon icon="TrashIcon" />
                             </b-button>
@@ -457,7 +457,7 @@
                         <div
                           v-for="(
                             facilityCategory, facilityCategoryIndex
-                          ) in availableHotelRoomFacilityCategories"
+                          ) in availableGuestHouseRoomFacilityCategories"
                           :key="facilityCategoryIndex"
                           class="group-wrapper"
                         >
@@ -468,7 +468,7 @@
                             <div
                               v-for="(
                                 facility, facilityIndex
-                              ) in getAvailableHotelFacilityByCategoryId(
+                              ) in getAvailableGuestHouseFacilityByCategoryId(
                                 facilityCategory.id
                               )"
                               :key="facilityIndex"
@@ -492,7 +492,7 @@
                         <b-button
                           v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                           variant="outline-primary"
-                          @click="saveHotelRoomFacilitiesEdit(room.id)"
+                          @click="saveGuestHouseRoomFacilitiesEdit(room.id)"
                         >
                           <feather-icon
                             icon="SaveIcon"
@@ -514,7 +514,7 @@
                             v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                             variant="outline-primary"
                             size="sm"
-                            @click="addHotelRoomPricingModal(room.id)"
+                            @click="addGuestHouseRoomPricingModal(room.id)"
                           >
                             <feather-icon
                               icon="PlusIcon"
@@ -544,7 +544,7 @@
                               class="btn-icon rounded-circle"
                               size="sm"
                               @click="
-                                editHotelRoomPricingModal(room.id, data.item)
+                                editGuestHouseRoomPricingModal(room.id, data.item)
                               "
                             >
                               <feather-icon icon="Edit2Icon" />
@@ -555,7 +555,7 @@
                               variant="outline-danger"
                               class="btn-icon rounded-circle ml-md-1"
                               size="sm"
-                              @click="deleteHotelRoomPricing(data.item)"
+                              @click="deleteGuestHouseRoomPricing(data.item)"
                             >
                               <feather-icon icon="TrashIcon" />
                             </b-button>
@@ -575,13 +575,13 @@
             <b-row v-show="activeTab === 3">
               <b-col md="12">
                 <b-card
-                  v-if="availableHotelFacilityCategories.length > 0"
-                  title="Hotel Facilities"
+                  v-if="availableGuestHouseFacilityCategories.length > 0"
+                  title="Guest House Facilities"
                 >
                   <div
                     v-for="(
                       facilityCategory, facilityCategoryIndex
-                    ) in availableHotelFacilityCategories"
+                    ) in availableGuestHouseFacilityCategories"
                     :key="facilityCategoryIndex"
                     class="group-wrapper"
                   >
@@ -592,7 +592,7 @@
                       <div
                         v-for="(
                           facility, facilityIndex
-                        ) in getAvailableHotelFacilityByCategoryId(
+                        ) in getAvailableGuestHouseFacilityByCategoryId(
                           facilityCategory.id
                         )"
                         :key="facilityIndex"
@@ -616,7 +616,7 @@
                     <b-button
                       v-ripple.400="'rgba(113, 102, 240, 0.15)'"
                       variant="outline-primary"
-                      @click="saveHotelFacilitiesEdit()"
+                      @click="saveGuestHouseFacilitiesEdit()"
                     >
                       <feather-icon
                         icon="SaveIcon"
@@ -634,7 +634,7 @@
       </div>
     </b-overlay>
     <b-modal
-      ref="modal-hotel-input"
+      ref="modal-guest-house-input"
       centered
       :title="modalTitle"
       :no-close-on-backdrop="true"
@@ -648,7 +648,7 @@
           <b-form-group>
             <label for="Regency">Regency :</label>
             <v-select
-              v-model="hotelParams.regency_id"
+              v-model="guestHouseParams.regency_id"
               :options="availableRegencies"
               :reduce="(regency) => regency.id"
               label="name"
@@ -659,9 +659,9 @@
             <label for="name">Name :</label>
             <b-form-input
               id="name"
-              v-model="hotelParams.name"
+              v-model="guestHouseParams.name"
               type="text"
-              placeholder="Hotel Name"
+              placeholder="Guest House Name"
               autocomplete="off"
             />
           </b-form-group>
@@ -669,9 +669,9 @@
             <label for="address">Address :</label>
             <b-form-input
               id="address"
-              v-model="hotelParams.address"
+              v-model="guestHouseParams.address"
               type="text"
-              placeholder="Hotel Address"
+              placeholder="Guest House Address"
               autocomplete="off"
             />
           </b-form-group>
@@ -679,9 +679,9 @@
             <label for="postalCode">Postal Code :</label>
             <b-form-input
               id="postalCode"
-              v-model="hotelParams.postal_code"
+              v-model="guestHouseParams.postal_code"
               type="text"
-              placeholder="Hotel Postal Code"
+              placeholder="Guest House Postal Code"
               autocomplete="off"
             />
           </b-form-group>
@@ -689,8 +689,8 @@
             <label for="description">Description :</label>
             <b-form-textarea
               id="description"
-              v-model="hotelParams.description"
-              placeholder="Hotel Description"
+              v-model="guestHouseParams.description"
+              placeholder="Guest House Description"
               rows="3"
               no-resize
               autocomplete="off"
@@ -700,7 +700,7 @@
       </b-overlay>
     </b-modal>
     <b-modal
-      ref="modal-hotel-room-input"
+      ref="modal-guest-house-room-input"
       centered
       :title="modalTitle"
       :no-close-on-backdrop="true"
@@ -715,7 +715,7 @@
             <label for="name">Name :</label>
             <b-form-input
               id="name"
-              v-model="hotelRoomParams.name"
+              v-model="guestHouseRoomParams.name"
               type="text"
               placeholder="Room Name"
             />
@@ -724,7 +724,7 @@
             <label for="description">Description :</label>
             <b-form-textarea
               id="description"
-              v-model="hotelRoomParams.description"
+              v-model="guestHouseRoomParams.description"
               placeholder="Room Description"
               rows="3"
               no-resize
@@ -734,7 +734,7 @@
             <label for="num_of_guest">Number Of Guest :</label>
             <b-form-input
               id="num_of_guest"
-              v-model="hotelRoomParams.num_of_guest"
+              v-model="guestHouseRoomParams.num_of_guest"
               type="number"
               placeholder="Number Of Guest"
             />
@@ -743,7 +743,7 @@
             <label for="room_size">Room Size :</label>
             <b-form-input
               id="room_size"
-              v-model="hotelRoomParams.room_size"
+              v-model="guestHouseRoomParams.room_size"
               type="number"
               placeholder="Room Size"
             />
@@ -751,7 +751,7 @@
           <b-form-group>
             <label for="bed_size">Bed Size :</label>
             <b-form-radio-group
-              v-model="hotelRoomParams.bed_size"
+              v-model="guestHouseRoomParams.bed_size"
               :options="bedSizeOptions"
               class="spacer"
             />
@@ -760,7 +760,7 @@
       </b-overlay>
     </b-modal>
     <b-modal
-      ref="modal-hotel-room-pricing-input"
+      ref="modal-guest-house-room-pricing-input"
       centered
       :title="modalTitle"
       :no-close-on-backdrop="true"
@@ -774,7 +774,7 @@
           <b-form-group>
             <label for="type">Type :</label>
             <b-form-radio-group
-              v-model="hotelRoomPricingParams.type"
+              v-model="guestHouseRoomPricingParams.type"
               :options="pricingTypeOptions"
               class="spacer"
             />
@@ -782,7 +782,7 @@
           <b-form-group>
             <label for="date">Date :</label>
             <b-form-input
-              v-if="hotelRoomPricingParams.type == 'Weekday'"
+              v-if="guestHouseRoomPricingParams.type == 'Weekday'"
               id="date"
               type="text"
               placeholder="date"
@@ -790,7 +790,7 @@
               :disabled="true"
             />
             <b-form-input
-              v-if="hotelRoomPricingParams.type == 'Weekend'"
+              v-if="guestHouseRoomPricingParams.type == 'Weekend'"
               id="date"
               type="text"
               placeholder="date"
@@ -798,9 +798,9 @@
               :disabled="true"
             />
             <b-form-datepicker
-              v-if="hotelRoomPricingParams.type == 'Date'"
+              v-if="guestHouseRoomPricingParams.type == 'Date'"
               id="date"
-              v-model="hotelRoomPricingParams.date"
+              v-model="guestHouseRoomPricingParams.date"
               class="mb-1"
             />
           </b-form-group>
@@ -808,7 +808,7 @@
             <label for="price">Price :</label>
             <b-form-input
               id="price"
-              v-model="hotelRoomPricingParams.price"
+              v-model="guestHouseRoomPricingParams.price"
               type="number"
               placeholder="Price"
             />
@@ -817,7 +817,7 @@
       </b-overlay>
     </b-modal>
     <b-modal
-      ref="modal-hotel-image-input"
+      ref="modal-guest-house-image-input"
       centered
       :title="modalTitle"
       :no-close-on-backdrop="true"
@@ -832,7 +832,7 @@
             <label for="name">Name :</label>
             <b-form-input
               id="name"
-              v-model="hotelImageParams.name"
+              v-model="guestHouseImageParams.name"
               type="text"
               placeholder="Name"
             />
@@ -840,8 +840,8 @@
           <b-form-group>
             <label for="room">Room :</label>
             <v-select
-              v-model="hotelImageParams.hotel_room_id"
-              :options="hotelData.rooms"
+              v-model="guestHouseImageParams.guestHouse_room_id"
+              :options="guestHouseData.rooms"
               :reduce="(room) => room.id"
               label="name"
               autocomplete="off"
@@ -901,7 +901,7 @@ import AppCollapse from '@core/components/app-collapse/AppCollapse.vue'
 import AppCollapseItem from '@core/components/app-collapse/AppCollapseItem.vue'
 import VSelect from 'vue-select'
 import flatPickr from 'vue-flatpickr-component'
-import HotelHeader from './HotelHeader.vue'
+import GuestHouseHeader from './GuestHouseHeader.vue'
 
 export default {
   components: {
@@ -932,15 +932,15 @@ export default {
     BImg,
     BFormCheckbox,
     BFormCheckboxGroup,
-    HotelHeader,
+    GuestHouseHeader,
   },
   directives: {
     Ripple,
   },
   filters: {
-    printHotelImage(data, hotelData) {
-      if (data.hotelRoomId !== null) {
-        const room = hotelData.rooms.find(x => x.id === data.hotelRoomId)
+    printGuestHouseImage(data, guestHouseData) {
+      if (data.guestHouseRoomId !== null) {
+        const room = guestHouseData.rooms.find(x => x.id === data.guestHouseRoomId)
         return `${room.name} - ${data.name}`
       }
       return data.name
@@ -949,8 +949,8 @@ export default {
   data() {
     return {
       availableRegencies: [],
-      availableHotelFacilityCategories: [],
-      availableHotelRoomFacilityCategories: [],
+      availableGuestHouseFacilityCategories: [],
+      availableGuestHouseRoomFacilityCategories: [],
       availableFacilities: [],
       dropzoneImageOptions: {
         url: 'url',
@@ -968,16 +968,16 @@ export default {
       dropzoneMainImageSelectedFile: null,
       dropzoneBannerImageSelectedFile: null,
       dropzoneCommonImageSelectedFile: null,
-      hotelData: {},
-      hotelRoomFacilities: [],
+      guestHouseData: {},
+      guestHouseRoomFacilities: [],
       headerData: {
         name: '',
         address: '',
         headerImage: require('@/assets/images/profile/user-uploads/timeline.jpg'),
         mainImage: require('@/assets/images/placeholders/16-9.png'),
       },
-      hotelId: null,
-      defaultHotelParams: {
+      guestHouseId: null,
+      defaultGuestHouseParams: {
         regency_id: 0,
         name: '',
         address: '',
@@ -986,31 +986,31 @@ export default {
         map_coordinate: '',
         map_center: '',
       },
-      hotelParams: null,
-      defaultHotelImageParams: {
-        hotel_id: 0,
-        hotel_room_id: null,
+      guestHouseParams: null,
+      defaultGuestHouseImageParams: {
+        guest_house_id: 0,
+        guest_house_room_id: null,
         name: '',
         type: '',
         file: null,
       },
-      hotelImageParams: null,
-      defaultHotelRoomParams: {
-        hotel_id: 0,
+      guestHouseImageParams: null,
+      defaultGuestHouseRoomParams: {
+        guest_house_id: 0,
         name: '',
         description: '',
         num_of_guest: 0,
         room_size: 0,
         bed_size: '',
       },
-      hotelRoomParams: null,
-      defaultHotelRoomPricingParams: {
-        hotel_room_id: 0,
+      guestHouseRoomParams: null,
+      defaultGuestHouseRoomPricingParams: {
+        guest_house_room_id: 0,
         type: 'Weekday',
         date: null,
         price: 0,
       },
-      hotelRoomPricingParams: null,
+      guestHouseRoomPricingParams: null,
       bedSizeOptions: [
         { text: 'Single', value: 'single' },
         { text: 'Double', value: 'double' },
@@ -1064,11 +1064,11 @@ export default {
     }
   },
   created() {
-    this.hotelId = this.$route.params.id
-    this.initDefaultHotelParams()
-    this.initDefaultHotelRoomParams()
-    this.initDefaultHotelRoomPricingParams()
-    this.initDefaultHotelImageParams()
+    this.guestHouseId = this.$route.params.id
+    this.initDefaultGuestHouseParams()
+    this.initDefaultGuestHouseRoomParams()
+    this.initDefaultGuestHouseRoomPricingParams()
+    this.initDefaultGuestHouseImageParams()
     this.getAvailableRegencies()
     this.getAvailableFacilityCategories()
     this.getAvailableFacilities()
@@ -1076,7 +1076,7 @@ export default {
   },
   methods: {
     setMapEditMode() {
-      if (this.hotelData.map_coordinate == null) {
+      if (this.guestHouseData.map_coordinate == null) {
         this.marker = this.createGoogleMapMarker(
           '-5.466450019745824, 122.60788425767214',
           this.map,
@@ -1085,24 +1085,24 @@ export default {
       this.marker.setDraggable(true)
       this.mapEditMode = true
     },
-    editHotelModal() {
-      this.initDefaultHotelParams()
-      for (const key in this.defaultHotelParams) {
-        this.hotelParams[key] = this.hotelData[key]
+    editGuestHouseModal() {
+      this.initDefaultGuestHouseParams()
+      for (const key in this.defaultGuestHouseParams) {
+        this.guestHouseParams[key] = this.guestHouseData[key]
       }
-      this.modalTitle = 'Edit Hotel'
-      this.$refs['modal-hotel-input'].onOk = () => this.editHotel(this.hotelParams)
-      this.$refs['modal-hotel-input'].show()
+      this.modalTitle = 'Edit Guest House'
+      this.$refs['modal-guest-house-input'].onOk = () => this.editGuestHouse(this.guestHouseParams)
+      this.$refs['modal-guest-house-input'].show()
     },
-    editHotel(params) {
+    editGuestHouse(params) {
       this.modalLoading = true
       params._method = 'PUT'
       this.$http
-        .post(`/hotel/${this.hotelData.id}`, params)
+        .post(`/guest_house/${this.guestHouseData.id}`, params)
         .then(res => {
-          this.hotelData = res.data.data
+          this.guestHouseData = res.data.data
           this.drawMap()
-          this.$refs['modal-hotel-input'].hide()
+          this.$refs['modal-guest-house-input'].hide()
         })
         .catch(err => {
           this.tabLoading = false
@@ -1118,19 +1118,19 @@ export default {
           this.modalLoading = false
         })
     },
-    addHotelRoomModal() {
-      this.initDefaultHotelRoomParams()
-      this.modalTitle = 'Add Hotel Room'
-      this.$refs['modal-hotel-room-input'].onOk = () => this.addHotelRoom(this.hotelRoomParams)
-      this.$refs['modal-hotel-room-input'].show()
+    addGuestHouseRoomModal() {
+      this.initDefaultGuestHouseRoomParams()
+      this.modalTitle = 'Add Guest House Room'
+      this.$refs['modal-guest-house-room-input'].onOk = () => this.addGuestHouseRoom(this.guestHouseRoomParams)
+      this.$refs['modal-guest-house-room-input'].show()
     },
-    addHotelRoom(params) {
+    addGuestHouseRoom(params) {
       this.modalLoading = true
       this.$http
-        .post('/hotel_room', params)
+        .post('/guest_house_room', params)
         .then(res => {
           this.getData()
-          this.$refs['modal-hotel-room-input'].hide()
+          this.$refs['modal-guest-house-room-input'].hide()
         })
         .catch(err => {
           if (err.response) {
@@ -1145,23 +1145,23 @@ export default {
           this.modalLoading = false
         })
     },
-    editHotelRoomModal(params) {
-      this.initDefaultHotelRoomParams()
-      for (const key in this.defaultHotelRoomParams) {
-        this.hotelRoomParams[key] = params[key]
+    editGuestHouseRoomModal(params) {
+      this.initDefaultGuestHouseRoomParams()
+      for (const key in this.defaultGuestHouseRoomParams) {
+        this.guestHouseRoomParams[key] = params[key]
       }
-      this.modalTitle = `Edit Hotel Room : ${params.name}`
-      this.$refs['modal-hotel-room-input'].onOk = () => this.editHotelRoom(params.id, this.hotelRoomParams)
-      this.$refs['modal-hotel-room-input'].show()
+      this.modalTitle = `Edit Guest House Room : ${params.name}`
+      this.$refs['modal-guest-house-room-input'].onOk = () => this.editGuestHouseRoom(params.id, this.guestHouseRoomParams)
+      this.$refs['modal-guest-house-room-input'].show()
     },
-    editHotelRoom(id, params) {
+    editGuestHouseRoom(id, params) {
       this.modalLoading = true
       params._method = 'PUT'
       this.$http
-        .post(`/hotel_room/${id}`, params)
+        .post(`/guest_house_room/${id}`, params)
         .then(res => {
           this.getData()
-          this.$refs['modal-hotel-room-input'].hide()
+          this.$refs['modal-guest-house-room-input'].hide()
         })
         .catch(err => {
           if (err.response) {
@@ -1176,10 +1176,10 @@ export default {
           this.modalLoading = false
         })
     },
-    deleteHotelRoom(item) {
+    deleteGuestHouseRoom(item) {
       this.$swal({
         title: 'Are you sure?',
-        text: `Room ${item.name} will be removed. All related data with this Hotel Room will also be removed.`,
+        text: `Room ${item.name} will be removed. All related data with this Guest House Room will also be removed.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -1191,12 +1191,12 @@ export default {
       }).then(result => {
         if (result.value) {
           this.$http
-            .delete(`/hotel_room/${item.id}`)
+            .delete(`/guest_house_room/${item.id}`)
             .then(res => {
               this.$swal({
                 icon: 'success',
                 title: 'Deleted!',
-                text: 'Hotel Room has been deleted.',
+                text: 'Guest House Room has been deleted.',
                 customClass: {
                   confirmButton: 'btn btn-success',
                 },
@@ -1210,23 +1210,23 @@ export default {
         }
       })
     },
-    addHotelRoomPricingModal(room_id) {
-      this.initDefaultHotelRoomPricingParams()
-      this.hotelRoomPricingParams.hotel_room_id = room_id
-      this.modalTitle = 'Add Hotel Room Pricing'
-      this.$refs['modal-hotel-room-pricing-input'].onOk = () => this.addHotelRoomPricing(this.hotelRoomPricingParams)
-      this.$refs['modal-hotel-room-pricing-input'].show()
+    addGuestHouseRoomPricingModal(room_id) {
+      this.initDefaultGuestHouseRoomPricingParams()
+      this.guestHouseRoomPricingParams.guest_house_room_id = room_id
+      this.modalTitle = 'Add Guest House Room Pricing'
+      this.$refs['modal-guest-house-room-pricing-input'].onOk = () => this.addGuestHouseRoomPricing(this.guestHouseRoomPricingParams)
+      this.$refs['modal-guest-house-room-pricing-input'].show()
     },
-    addHotelRoomPricing(params) {
+    addGuestHouseRoomPricing(params) {
       this.modalLoading = true
       if (params.type == 'Weekday' || params.type == 'Weekend') {
         delete params.date
       }
       this.$http
-        .post('/hotel_room_pricing', params)
+        .post('/guest_house_room_pricing', params)
         .then(res => {
           this.getData()
-          this.$refs['modal-hotel-room-pricing-input'].hide()
+          this.$refs['modal-guest-house-room-pricing-input'].hide()
         })
         .catch(err => {
           if (err.response) {
@@ -1241,27 +1241,27 @@ export default {
           this.modalLoading = false
         })
     },
-    editHotelRoomPricingModal(room_id, params) {
-      this.initDefaultHotelRoomPricingParams()
-      for (const key in this.defaultHotelRoomPricingParams) {
-        this.hotelRoomPricingParams[key] = params[key]
+    editGuestHouseRoomPricingModal(room_id, params) {
+      this.initDefaultGuestHouseRoomPricingParams()
+      for (const key in this.defaultGuestHouseRoomPricingParams) {
+        this.guestHouseRoomPricingParams[key] = params[key]
       }
-      this.hotelRoomPricingParams.hotel_room_id = room_id
-      this.modalTitle = 'Edit Hotel Room Pricing'
-      this.$refs['modal-hotel-room-pricing-input'].onOk = () => this.editHotelRoomPricing(params.id, this.hotelRoomPricingParams)
-      this.$refs['modal-hotel-room-pricing-input'].show()
+      this.guestHouseRoomPricingParams.guest_house_room_id = room_id
+      this.modalTitle = 'Edit Guest House Room Pricing'
+      this.$refs['modal-guest-house-room-pricing-input'].onOk = () => this.editGuestHouseRoomPricing(params.id, this.guestHouseRoomPricingParams)
+      this.$refs['modal-guest-house-room-pricing-input'].show()
     },
-    editHotelRoomPricing(id, params) {
+    editGuestHouseRoomPricing(id, params) {
       this.modalLoading = true
       params._method = 'PUT'
       if (params.type == 'Weekday' || params.type == 'Weekend') {
         delete params.date
       }
       this.$http
-        .post(`/hotel_room_pricing/${id}`, params)
+        .post(`/guest_house_room_pricing/${id}`, params)
         .then(res => {
           this.getData()
-          this.$refs['modal-hotel-room-pricing-input'].hide()
+          this.$refs['modal-guest-house-room-pricing-input'].hide()
         })
         .catch(err => {
           if (err.response) {
@@ -1276,10 +1276,10 @@ export default {
           this.modalLoading = false
         })
     },
-    deleteHotelRoomPricing(item) {
+    deleteGuestHouseRoomPricing(item) {
       this.$swal({
         title: 'Are you sure?',
-        text: 'Room Pricing will be removed. All related data with this Hotel Room Pricing will also be removed.',
+        text: 'Room Pricing will be removed. All related data with this Guest House Room Pricing will also be removed.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -1291,12 +1291,12 @@ export default {
       }).then(result => {
         if (result.value) {
           this.$http
-            .delete(`/hotel_room_pricing/${item.id}`)
+            .delete(`/guest_house_room_pricing/${item.id}`)
             .then(res => {
               this.$swal({
                 icon: 'success',
                 title: 'Deleted!',
-                text: 'Hotel Room Pricing has been deleted.',
+                text: 'Guest House Room Pricing has been deleted.',
                 customClass: {
                   confirmButton: 'btn btn-success',
                 },
@@ -1310,19 +1310,19 @@ export default {
         }
       })
     },
-    editHotelImageModal() {
-      this.initDefaultHotelImageParams()
+    editGuestHouseImageModal() {
+      this.initDefaultGuestHouseImageParams()
       const currentImageId = this.swiperData[this.swiperCommonImageActiveIndex].id
-      const params = this.hotelData.images.find(image => image.id === currentImageId)
-      for (const key in this.defaultHotelImageParams) {
-        this.hotelImageParams[key] = params[key]
+      const params = this.guestHouseData.images.find(image => image.id === currentImageId)
+      for (const key in this.defaultGuestHouseImageParams) {
+        this.guestHouseImageParams[key] = params[key]
       }
-      this.modalTitle = `Edit Hotel Image : ${params.name}`
-      this.$refs['modal-hotel-image-input'].onOk = () => this.editHotelImage(params.id, this.hotelImageParams)
-      this.$refs['modal-hotel-image-input'].show()
+      this.modalTitle = `Edit Guest House Image : ${params.name}`
+      this.$refs['modal-guest-house-image-input'].onOk = () => this.editGuestHouseImage(params.id, this.guestHouseImageParams)
+      this.$refs['modal-guest-house-image-input'].show()
       this.$nextTick(() => {
         const currentImageId = this.swiperData[this.swiperCommonImageActiveIndex].id
-        const params = this.hotelData.images.find(image => image.id === currentImageId)
+        const params = this.guestHouseData.images.find(image => image.id === currentImageId)
         this.$refs.dropzoneCommonImage.setOption('autoProcessQueue', false)
         const fileExt = params.image_filename.split('.').pop()
         const file = { size: 1, type: `image/${fileExt}` }
@@ -1330,17 +1330,17 @@ export default {
         this.$refs.dropzoneCommonImage.manuallyAddFile(file, url)
       })
     },
-    editHotelImage(id, params) {
+    editGuestHouseImage(id, params) {
       if (this.dropzoneCommonImageSelectedFile) {
         params.file = this.dropzoneCommonImageSelectedFile.dataURL
       }
       params._method = 'PUT'
       this.modalLoading = true
       this.$http
-        .post(`/hotel_image/${id}`, params)
+        .post(`/guest_house_image/${id}`, params)
         .then(res => {
           this.modalLoading = false
-          this.$refs['modal-hotel-image-input'].hide()
+          this.$refs['modal-guest-house-image-input'].hide()
           this.getData()
         })
         .catch(err => {
@@ -1354,10 +1354,10 @@ export default {
           return this.toastErrorMsg(err.message)
         })
     },
-    deleteHotelImage(item) {
+    deleteGuestHouseImage(item) {
       this.$swal({
         title: 'Are you sure?',
-        text: `Room Image : ${item.name} will be removed. All related data with this Hotel Image will also be removed.`,
+        text: `Room Image : ${item.name} will be removed. All related data with this Guest House Image will also be removed.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -1369,12 +1369,12 @@ export default {
       }).then(result => {
         if (result.value) {
           this.$http
-            .delete(`/hotel_image/${item.id}`)
+            .delete(`/guest_house_image/${item.id}`)
             .then(res => {
               this.$swal({
                 icon: 'success',
                 title: 'Deleted!',
-                text: 'Hotel Image has been deleted.',
+                text: 'Guest House Image has been deleted.',
                 customClass: {
                   confirmButton: 'btn btn-success',
                 },
@@ -1388,24 +1388,24 @@ export default {
         }
       })
     },
-    addHotelImageModal() {
-      this.initDefaultHotelImageParams()
-      this.hotelImageParams.hotel_id = this.hotelData.id
-      this.hotelImageParams.type = 'common'
-      this.modalTitle = 'Add Hotel Image'
-      this.$refs['modal-hotel-image-input'].onOk = () => this.addHotelImage(this.hotelImageParams)
-      this.$refs['modal-hotel-image-input'].show()
+    addGuestHouseImageModal() {
+      this.initDefaultGuestHouseImageParams()
+      this.guestHouseImageParams.guest_house_id = this.guestHouseData.id
+      this.guestHouseImageParams.type = 'common'
+      this.modalTitle = 'Add Guest House Image'
+      this.$refs['modal-guest-house-image-input'].onOk = () => this.addGuestHouseImage(this.guestHouseImageParams)
+      this.$refs['modal-guest-house-image-input'].show()
       this.$nextTick(() => {
         this.$refs.dropzoneCommonImage.setOption('autoProcessQueue', false)
       })
     },
-    addHotelImage(params) {
+    addGuestHouseImage(params) {
       this.modalLoading = true
       if (this.dropzoneCommonImageSelectedFile) {
         params.file = this.dropzoneCommonImageSelectedFile.dataURL
       }
-      if (params.hotel_room_id == null) {
-        delete params.hotel_room_id
+      if (params.guest_house_room_id == null) {
+        delete params.guest_house_room_id
       }
       const formData = new FormData()
       formData.append(
@@ -1417,11 +1417,11 @@ export default {
         formData.append(e, params[e])
       })
       this.$http
-        .post('/hotel_image', formData, {
+        .post('/guest_house_image', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then(res => {
-          this.$refs['modal-hotel-image-input'].hide()
+          this.$refs['modal-guest-house-image-input'].hide()
           this.getData()
         })
         .catch(err => {
@@ -1432,7 +1432,7 @@ export default {
           this.modalLoading = false
         })
     },
-    saveHotelFacilitiesEdit() {
+    saveGuestHouseFacilitiesEdit() {
       const selectedFacilities = this.availableFacilities.filter(
         facility => facility.value == 'Y',
       )
@@ -1442,11 +1442,11 @@ export default {
       }
       this.tabLoading = true
       this.$http
-        .post(`/hotel/${this.hotelData.id}/syncFacilities`, {
+        .post(`/guest_house/${this.guestHouseData.id}/syncFacilities`, {
           facilities: _facilities,
         })
         .then(res => {
-          this.hotelData = res.data.data
+          this.guestHouseData = res.data.data
           this.tabLoading = false
           this.drawMap()
         })
@@ -1468,19 +1468,19 @@ export default {
       const zoom = this.map.getZoom().toString()
       const coord = this.marker.getPosition().toString().substr(1).slice(0, -1)
 
-      this.hotelData.map_coordinate = coord
-      this.hotelData.map_center = `${center}, ${zoom}`
+      this.guestHouseData.map_coordinate = coord
+      this.guestHouseData.map_center = `${center}, ${zoom}`
 
-      this.initDefaultHotelParams()
-      for (const key in this.defaultHotelParams) {
-        this.hotelParams[key] = this.hotelData[key]
+      this.initDefaultGuestHouseParams()
+      for (const key in this.defaultGuestHouseParams) {
+        this.guestHouseParams[key] = this.guestHouseData[key]
       }
-      this.hotelParams._method = 'PUT'
+      this.guestHouseParams._method = 'PUT'
       this.tabLoading = true
       this.$http
-        .post(`/hotel/${this.hotelData.id}`, this.hotelParams)
+        .post(`/guest_house/${this.guestHouseData.id}`, this.guestHouseParams)
         .then(res => {
-          this.hotelData = res.data.data
+          this.guestHouseData = res.data.data
           this.tabLoading = false
           this.drawMap()
         })
@@ -1499,14 +1499,14 @@ export default {
       this.mapEditMode = false
       this.marker.setDraggable(false)
       this.marker.setMap(null)
-      if (this.hotelData.map_coordinate !== null) {
+      if (this.guestHouseData.map_coordinate !== null) {
         this.marker = this.createGoogleMapMarker(
-          this.hotelData.map_coordinate,
+          this.guestHouseData.map_coordinate,
           this.map,
         )
       }
     },
-    getAvailableHotelFacilityByCategoryId(id) {
+    getAvailableGuestHouseFacilityByCategoryId(id) {
       return this.availableFacilities.filter(
         facility => facility.category_id == id,
       )
@@ -1555,27 +1555,27 @@ export default {
       this.dropzoneBannerImageSelectedFile = file
     },
     dropzoneMainImageSending(file, xhr, formData) {
-      const mainImage = this.getImageByType(this.hotelData.images, 'main')
+      const mainImage = this.getImageByType(this.guestHouseData.images, 'main')
       if (mainImage.length !== 0) {
         formData.append('_method', 'PUT')
       }
       formData.append('type', 'main')
       formData.append('name', 'Main Image')
-      formData.append('hotel_id', this.hotelData.id)
+      formData.append('guest_house_id', this.guestHouseData.id)
     },
     dropzoneBannerImageSending(file, xhr, formData) {
-      const bannerImage = this.getImageByType(this.hotelData.images, 'banner')
+      const bannerImage = this.getImageByType(this.guestHouseData.images, 'banner')
       if (bannerImage.length !== 0) {
         formData.append('_method', 'PUT')
       }
       formData.append('type', 'banner')
       formData.append('name', 'Banner Image')
-      formData.append('hotel_id', this.hotelData.id)
+      formData.append('guest_house_id', this.guestHouseData.id)
     },
     dropzoneMainImageSuccess(file, response) {
-      const mainImage = this.getImageByType(this.hotelData.images, 'main')
+      const mainImage = this.getImageByType(this.guestHouseData.images, 'main')
       if (mainImage.length == 0) {
-        this.hotelData.images.push(response.data)
+        this.guestHouseData.images.push(response.data)
       } else {
         mainImage.image_filename = response.data.image_filename
       }
@@ -1583,9 +1583,9 @@ export default {
       this.setDropzoneImages()
     },
     dropzoneBannerImageSuccess(file, response) {
-      const bannerImage = this.getImageByType(this.hotelData.images, 'banner')
+      const bannerImage = this.getImageByType(this.guestHouseData.images, 'banner')
       if (bannerImage.length == 0) {
-        this.hotelData.images.push(response.data)
+        this.guestHouseData.images.push(response.data)
       } else {
         bannerImage.image_filename = response.data.image_filename
       }
@@ -1614,24 +1614,24 @@ export default {
     },
     drawMap() {
       this.$refs.map.innerHTML = ''
-      if (this.hotelData.map_center == null) {
-        this.hotelData.map_center = '-5.466090678870657, 122.60769753809814, 14'
+      if (this.guestHouseData.map_center == null) {
+        this.guestHouseData.map_center = '-5.466090678870657, 122.60769753809814, 14'
       }
 
       this.map = this.createGoogleMap(
-        this.hotelData.map_center,
+        this.guestHouseData.map_center,
         this.$refs.map,
       )
-      if (this.hotelData.map_coordinate !== null) {
+      if (this.guestHouseData.map_coordinate !== null) {
         this.marker = this.createGoogleMapMarker(
-          this.hotelData.map_coordinate,
+          this.guestHouseData.map_coordinate,
           this.map,
         )
       }
     },
     getAvailableRegencies() {
       this.$http
-        .get('/hotel/getAvailableRegencies')
+        .get('/guest_house/getAvailableRegencies')
         .then(res => {
           this.availableRegencies = res.data.data
         })
@@ -1647,9 +1647,9 @@ export default {
     },
     getAvailableFacilityCategories() {
       this.$http
-        .get('/facility/getAvailableCategoriesByType/hotel')
+        .get('/facility/getAvailableCategoriesByType/guest_house')
         .then(res => {
-          this.availableHotelFacilityCategories = res.data.data
+          this.availableGuestHouseFacilityCategories = res.data.data
         })
         .catch(err => {
           if (err.response) {
@@ -1661,15 +1661,15 @@ export default {
           return this.toastErrorMsg(err.message)
         })
       this.$http
-        .get('/facility/getAvailableCategoriesByType/hotel_room')
+        .get('/facility/getAvailableCategoriesByType/guest_house_room')
         .then(res => {
-          this.availableHotelRoomFacilityCategories = res.data.data
+          this.availableGuestHouseRoomFacilityCategories = res.data.data
           for (
             let i = 0;
-            i < this.availableHotelRoomFacilityCategories.length;
+            i < this.availableGuestHouseRoomFacilityCategories.length;
             i++
           ) {
-            this.availableHotelRoomFacilityCategories[i].selected = []
+            this.availableGuestHouseRoomFacilityCategories[i].selected = []
           }
         })
         .catch(err => {
@@ -1699,10 +1699,10 @@ export default {
         })
     },
     setHeaderData() {
-      const mainImage = this.getImageByType(this.hotelData.images, 'main')
-      const bannerImage = this.getImageByType(this.hotelData.images, 'banner')
-      this.headerData.name = this.hotelData.name
-      this.headerData.address = this.hotelData.address
+      const mainImage = this.getImageByType(this.guestHouseData.images, 'main')
+      const bannerImage = this.getImageByType(this.guestHouseData.images, 'banner')
+      this.headerData.name = this.guestHouseData.name
+      this.headerData.address = this.guestHouseData.address
       if (mainImage.length !== 0) {
         this.headerData.mainImage = this.imagePath + mainImage.image_filename
       }
@@ -1713,14 +1713,14 @@ export default {
     setDropzoneImages() {
       this.$refs.dropzoneMainImage.removeAllFiles()
       this.$refs.dropzoneBannerImage.removeAllFiles()
-      const mainImage = this.getImageByType(this.hotelData.images, 'main')
+      const mainImage = this.getImageByType(this.guestHouseData.images, 'main')
       if (mainImage.length !== 0) {
         this.$refs.dropzoneMainImage.setOption(
           'url',
-          `${this.$http.defaults.baseURL}hotel_image/${mainImage.id}`,
+          `${this.$http.defaults.baseURL}guest_house_image/${mainImage.id}`,
         )
         this.$nextTick(() => {
-          const mainImage = this.getImageByType(this.hotelData.images, 'main')
+          const mainImage = this.getImageByType(this.guestHouseData.images, 'main')
           const fileExt = mainImage.image_filename.split('.').pop()
           const file = { size: 1, type: `image/${fileExt}` }
           const url = this.imagePath + mainImage.image_filename
@@ -1730,19 +1730,19 @@ export default {
         this.$nextTick(() => {
           this.$refs.dropzoneMainImage.setOption(
             'url',
-            `${this.$http.defaults.baseURL}hotel_image`,
+            `${this.$http.defaults.baseURL}guest_house_image`,
           )
         })
       }
-      const bannerImage = this.getImageByType(this.hotelData.images, 'banner')
+      const bannerImage = this.getImageByType(this.guestHouseData.images, 'banner')
       if (bannerImage.length !== 0) {
         this.$refs.dropzoneBannerImage.setOption(
           'url',
-          `${this.$http.defaults.baseURL}hotel_image/${bannerImage.id}`,
+          `${this.$http.defaults.baseURL}guest_house_image/${bannerImage.id}`,
         )
         this.$nextTick(() => {
           const bannerImage = this.getImageByType(
-            this.hotelData.images,
+            this.guestHouseData.images,
             'banner',
           )
           const fileExt = bannerImage.image_filename.split('.').pop()
@@ -1754,14 +1754,14 @@ export default {
         this.$nextTick(() => {
           this.$refs.dropzoneBannerImage.setOption(
             'url',
-            `${this.$http.defaults.baseURL}hotel_image`,
+            `${this.$http.defaults.baseURL}guest_house_image`,
           )
         })
       }
     },
     setSwiperImage() {
       this.swiperData = []
-      const commonImage = this.getImageByType(this.hotelData.images, 'common')
+      const commonImage = this.getImageByType(this.guestHouseData.images, 'common')
       if (Array.isArray(commonImage)) {
         for (let i = 0; i < commonImage.length; i++) {
           this.swiperData.push({
@@ -1769,7 +1769,7 @@ export default {
             id: commonImage[i].id,
             name: commonImage[i].name,
             type: commonImage[i].type,
-            hotelRoomId: commonImage[i].hotel_room_id,
+            guestHouseRoomId: commonImage[i].guest_house_room_id,
           })
         }
       } else {
@@ -1778,7 +1778,7 @@ export default {
           id: commonImage.id,
           name: commonImage.name,
           type: commonImage.type,
-          hotelRoomId: commonImage.hotel_room_id,
+          guestHouseRoomId: commonImage.guest_house_room_id,
         })
       }
       if (this.swiperData.length > 0) {
@@ -1794,8 +1794,8 @@ export default {
       for (let a = 0; a < this.availableFacilities.length; a++) {
         this.availableFacilities[a].value = ''
       }
-      for (let i = 0; i < this.hotelData.facilities.length; i++) {
-        const facilityId = this.hotelData.facilities[i].id
+      for (let i = 0; i < this.guestHouseData.facilities.length; i++) {
+        const facilityId = this.guestHouseData.facilities[i].id
         for (let j = 0; j < this.availableFacilities.length; j++) {
           const currentFacilityId = this.availableFacilities[j].id
           if (currentFacilityId == facilityId) {
@@ -1804,23 +1804,23 @@ export default {
         }
       }
     },
-    setHotelRoomFacilities() {
-      for (let i = 0; i < this.hotelData.rooms.length; i++) {
-        this.hotelData.rooms[i].facilityList = []
-        const currentRoom = this.hotelData.rooms[i]
+    setGuestHouseRoomFacilities() {
+      for (let i = 0; i < this.guestHouseData.rooms.length; i++) {
+        this.guestHouseData.rooms[i].facilityList = []
+        const currentRoom = this.guestHouseData.rooms[i]
         const facilityList = []
         for (let j = 0; j < currentRoom.facilities.length; j++) {
           facilityList.push(currentRoom.facilities[j].id)
         }
-        this.hotelData.rooms[i].facilityList = facilityList
+        this.guestHouseData.rooms[i].facilityList = facilityList
       }
     },
-    saveHotelRoomFacilitiesEdit(room_id) {
-      const room = this.hotelData.rooms.find(room => room.id === room_id)
+    saveGuestHouseRoomFacilitiesEdit(room_id) {
+      const room = this.guestHouseData.rooms.find(room => room.id === room_id)
       const _facilities = room.facilityList
       this.tabLoading = true
       this.$http
-        .post(`/hotel_room/${room_id}/syncFacilities`, {
+        .post(`/guest_house_room/${room_id}/syncFacilities`, {
           facilities: _facilities,
         })
         .then(res => {
@@ -1840,14 +1840,14 @@ export default {
     getData() {
       this.loading = true
       this.$http
-        .get(`/hotel/${this.hotelId}`)
+        .get(`/guest_house/${this.guestHouseId}`)
         .then(res => {
-          this.hotelData = res.data.data
+          this.guestHouseData = res.data.data
           this.setHeaderData()
           this.drawMap()
           this.setSwiperImage()
           this.setDropzoneImages()
-          this.setHotelRoomFacilities()
+          this.setGuestHouseRoomFacilities()
           this.setFacilities()
           // next tick adalah fungsi bawaan vue js yang berfungsi untuk mengeksekusi perintah apabila komponen sdh di render
           this.loading = false
@@ -1865,23 +1865,23 @@ export default {
           return this.toastErrorMsg(err.message)
         })
     },
-    initDefaultHotelParams() {
-      this.hotelParams = JSON.parse(JSON.stringify(this.defaultHotelParams))
+    initDefaultGuestHouseParams() {
+      this.guestHouseParams = JSON.parse(JSON.stringify(this.defaultGuestHouseParams))
     },
-    initDefaultHotelRoomParams() {
-      this.hotelRoomParams = JSON.parse(
-        JSON.stringify(this.defaultHotelRoomParams),
+    initDefaultGuestHouseRoomParams() {
+      this.guestHouseRoomParams = JSON.parse(
+        JSON.stringify(this.defaultGuestHouseRoomParams),
       )
-      this.hotelRoomParams.hotel_id = this.hotelId
+      this.guestHouseRoomParams.guest_house_id = this.guestHouseId
     },
-    initDefaultHotelRoomPricingParams() {
-      this.hotelRoomPricingParams = JSON.parse(
-        JSON.stringify(this.defaultHotelRoomPricingParams),
+    initDefaultGuestHouseRoomPricingParams() {
+      this.guestHouseRoomPricingParams = JSON.parse(
+        JSON.stringify(this.defaultGuestHouseRoomPricingParams),
       )
     },
-    initDefaultHotelImageParams() {
-      this.hotelImageParams = JSON.parse(
-        JSON.stringify(this.defaultHotelImageParams),
+    initDefaultGuestHouseImageParams() {
+      this.guestHouseImageParams = JSON.parse(
+        JSON.stringify(this.defaultGuestHouseImageParams),
       )
     },
     getImageByType,
@@ -1898,7 +1898,7 @@ export default {
         this.setSwiperImage()
         this.setDropzoneImages()
       } else if (tab == 2) {
-        this.setHotelRoomFacilities()
+        this.setGuestHouseRoomFacilities()
       } else if (tab == 3) {
         this.setFacilities()
       }

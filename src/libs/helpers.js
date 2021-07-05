@@ -69,3 +69,8 @@ export function createGoogleMapMarker(coordinate, _map) {
     map: _map,
   })
 }
+
+export function capitalize(s)
+{
+    return s[0].toUpperCase() + s.slice(1);
+}

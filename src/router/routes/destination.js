@@ -1,7 +1,38 @@
 export default [{
   path: '/tourist-attraction/list',
   name: 'tourist-attraction-list',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
+  component: () => import('@/views/destination/tourist-attraction/Index.vue'),
+  meta: {
+    pageTitle: 'Tourist Attraction List',
+    breadcrumb: [{
+      text: 'Tourist Attraction',
+    },
+    {
+      text: 'List',
+      active: true,
+    },
+    ],
+  },
+},
+{
+  path: '/tourist-attraction/:id',
+  name: 'tourist-attraction-view',
+  component: () => import('@/views/destination/tourist-attraction/View.vue'),
+  meta: {
+    pageTitle: 'Tourist Attraction View',
+    breadcrumb: [{
+      text: 'Tourist Attraction',
+    },
+    {
+      text: 'List',
+      to: '/tourist-attraction/list',
+    },
+    {
+      text: 'View',
+      active: true,
+    },
+    ],
+  },
 },
 {
   path: '/tourist-attraction/facilities',

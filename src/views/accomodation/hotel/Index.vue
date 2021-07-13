@@ -36,7 +36,7 @@
                   <b-input-group-append>
                     <b-button
                       variant="outline-primary"
-                      @click="getData()"
+                      @click="search()"
                     >
                       <feather-icon icon="SearchIcon" />
                     </b-button>
@@ -347,6 +347,11 @@ export default {
     this.getData()
   },
   methods: {
+    search(){
+      this.query.page = 1;
+      this.query.limit = 6;
+      this.getData();
+    },
     perPageChanged(limit) {
       this.query.limit = limit;
       this.getData();

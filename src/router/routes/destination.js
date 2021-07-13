@@ -37,7 +37,18 @@ export default [{
 {
   path: '/tourist-attraction/facilities',
   name: 'tourist-attraction-facilities',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
+  component: () => import('@/views/destination/tourist-attraction/Facility.vue'),
+  meta: {
+    pageTitle: 'Facilities',
+    breadcrumb: [{
+      text: 'Tourist Attraction',
+    },
+    {
+      text: 'Facilities',
+      active: true,
+    },
+    ],
+  },
 },
 {
   path: '/culinary/restaurant',

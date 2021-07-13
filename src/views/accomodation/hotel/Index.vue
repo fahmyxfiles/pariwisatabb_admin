@@ -123,6 +123,45 @@
                 </b-card-group>
               </b-col>
             </b-row>
+            <b-row>
+              <b-col cols="12">
+                <div class="d-flex justify-content-between flex-wrap">
+                  <div class="d-flex align-items-center mb-0 mt-1">
+                    <span class="text-nowrap"> Showing 1 to </span>
+                    <b-form-select
+                      v-model="query.limit"
+                      :options="['6', '12']"
+                      class="mx-1"
+                      @input="perPageChanged"
+                    />
+                    <span class="text-nowrap">
+                      of {{ meta.total }} entries
+                    </span>
+                  </div>
+                  <div>
+                    <b-pagination
+                      :value="1"
+                      :total-rows="meta.total"
+                      :per-page="query.limit"
+                      first-number
+                      last-number
+                      align="right"
+                      prev-class="prev-item"
+                      next-class="next-item"
+                      class="mt-1 mb-0"
+                      @input="pageChanged"
+                    >
+                      <template #prev-text>
+                        <feather-icon icon="ChevronLeftIcon" size="18" />
+                      </template>
+                      <template #next-text>
+                        <feather-icon icon="ChevronRightIcon" size="18" />
+                      </template>
+                    </b-pagination>
+                  </div>
+                </div>
+              </b-col>
+            </b-row>
           </div>
         </div>
       </b-overlay>
@@ -206,11 +245,13 @@ import {
   BSpinner,
   BForm,
   BModal,
+  BFormSelect,
   BFormInput,
   BInputGroupAppend,
   BFormGroup,
   BInputGroup,
   BCardSubTitle,
+  BPagination,
   BLink,
   BImg,
   BRow,
@@ -237,11 +278,13 @@ export default {
     BFormRadioGroup,
     BOverlay,
     ToastificationContent,
+    BFormSelect,
     BAlert,
     BSpinner,
     BForm,
     BModal,
     BFormInput,
+    BPagination,
     BInputGroupAppend,
     BFormGroup,
     BInputGroup,
@@ -304,6 +347,14 @@ export default {
     this.getData()
   },
   methods: {
+    perPageChanged(limit) {
+      this.query.limit = limit;
+      this.getData();
+    },
+    pageChanged(page) {
+      this.query.page = page;
+      this.getData();
+    },
     getAvailableRegencies() {
       this.$http
         .get('/hotel/getAvailableRegencies')
@@ -329,6 +380,7 @@ export default {
           const _data = res.data.data
           if (_data.length > 0) {
             this.data = _data
+            this.meta = res.data.meta;
             for (let i = 0; i < this.data.length; i++) {
               const mainImage = this.getImageByType(this.data[i].images, 'main')
               if (mainImage.length == 0) {

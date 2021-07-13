@@ -275,7 +275,6 @@ export default {
     },
     toastErrorMsg,
     perPageChanged(limit) {
-      console.log(limit)
       this.query.limit = limit
       this.getData()
     },

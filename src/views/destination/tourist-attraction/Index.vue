@@ -36,7 +36,7 @@
                   <b-input-group-append>
                     <b-button
                       variant="outline-primary"
-                      @click="getData()"
+                      @click="search()"
                     >
                       <feather-icon icon="SearchIcon" />
                     </b-button>
@@ -121,6 +121,45 @@
                   <!-- eslint-disable-next-line -->
                   <b-card v-for="_idx in (3 - row.length)" no-body />
                 </b-card-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col cols="12">
+                <div class="d-flex justify-content-between flex-wrap">
+                  <div class="d-flex align-items-center mb-0 mt-1">
+                    <span class="text-nowrap"> Showing 1 to </span>
+                    <b-form-select
+                      v-model="query.limit"
+                      :options="['6', '12']"
+                      class="mx-1"
+                      @input="perPageChanged"
+                    />
+                    <span class="text-nowrap">
+                      of {{ meta.total }} entries
+                    </span>
+                  </div>
+                  <div>
+                    <b-pagination
+                      :value="1"
+                      :total-rows="meta.total"
+                      :per-page="query.limit"
+                      first-number
+                      last-number
+                      align="right"
+                      prev-class="prev-item"
+                      next-class="next-item"
+                      class="mt-1 mb-0"
+                      @input="pageChanged"
+                    >
+                      <template #prev-text>
+                        <feather-icon icon="ChevronLeftIcon" size="18" />
+                      </template>
+                      <template #next-text>
+                        <feather-icon icon="ChevronRightIcon" size="18" />
+                      </template>
+                    </b-pagination>
+                  </div>
+                </div>
               </b-col>
             </b-row>
           </div>
@@ -220,6 +259,8 @@
 <script>
 import {
   BCardImg,
+  BPagination,
+  BFormSelect,
   BFormTextarea,
   BFormRadioGroup,
   BOverlay,
@@ -253,6 +294,8 @@ import { toastErrorMsg, getImageByType } from '@/libs/helpers'
 export default {
   components: {
     BCardImg,
+    BPagination,
+    BFormSelect,
     BFormTextarea,
     VSelect,
     BFormRadioGroup,
@@ -291,6 +334,7 @@ export default {
         limit: 6,
         page: 1,
       },
+      meta: {},
       loading: true,
       data: [],
       imagePath: this.$imagePath,
@@ -328,6 +372,19 @@ export default {
     this.getData()
   },
   methods: {
+    search(){
+      this.query.page = 1;
+      this.query.limit = 6;
+      this.getData();
+    },
+    perPageChanged(limit) {
+      this.query.limit = limit;
+      this.getData();
+    },
+    pageChanged(page) {
+      this.query.page = page;
+      this.getData();
+    },
     getAvailableRegencies() {
       this.$http
         .get('/tourist_attraction/getAvailableRegencies')

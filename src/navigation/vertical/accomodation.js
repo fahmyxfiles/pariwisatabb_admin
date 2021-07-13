@@ -9,15 +9,15 @@ export default [{
     route: 'hotel-list',
   },
   {
-    title: 'Facilities',
+    title: 'Facility',
     children: [
       {
         title: 'General',
-        route: 'hotel-facilities-general',
+        route: 'hotel-facility-general',
       },
       {
         title: 'Room',
-        route: 'hotel-facilities-room',
+        route: 'hotel-facility-room',
       },
     ],
   },
@@ -31,15 +31,15 @@ export default [{
     route: 'guest-house-list',
   },
   {
-    title: 'Facilities',
+    title: 'Facility',
     children: [
       {
         title: 'General',
-        route: 'guest-house-facilities-general',
+        route: 'guest-house-facility-general',
       },
       {
         title: 'Room',
-        route: 'guest-house-facilities-room',
+        route: 'guest-house-facility-room',
       },
     ],
   },

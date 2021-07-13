@@ -35,16 +35,16 @@ export default [{
   },
 },
 {
-  path: '/hotel/facilities-general',
-  name: 'hotel-facilities-general',
+  path: '/hotel/facility-general',
+  name: 'hotel-facility-general',
   component: () => import('@/views/accomodation/hotel/GeneralFacility.vue'),
   meta: {
-    pageTitle: 'General Facilities',
+    pageTitle: 'General Facility',
     breadcrumb: [{
       text: 'Hotel',
     },
     {
-      text: 'Facilities',
+      text: 'Facility',
     },
     {
       text: 'General',
@@ -55,16 +55,16 @@ export default [{
   },
 },
 {
-  path: '/hotel/facilities-room',
-  name: 'hotel-facilities-room',
+  path: '/hotel/facility-room',
+  name: 'hotel-facility-room',
   component: () => import('@/views/accomodation/hotel/RoomFacility.vue'),
   meta: {
-    pageTitle: 'Room Facilities',
+    pageTitle: 'Room Facility',
     breadcrumb: [{
       text: 'Hotel',
     },
     {
-      text: 'Facilities',
+      text: 'Facility',
     },
     {
       text: 'Room',
@@ -110,16 +110,16 @@ export default [{
   },
 },
 {
-  path: '/guest-house/facilities-general',
-  name: 'guest-house-facilities-general',
+  path: '/guest-house/facility-general',
+  name: 'guest-house-facility-general',
   component: () => import('@/views/accomodation/guest-house/GeneralFacility.vue'),
   meta: {
-    pageTitle: 'General Facilities',
+    pageTitle: 'General Facility',
     breadcrumb: [{
       text: 'Guest House',
     },
     {
-      text: 'Facilities',
+      text: 'Facility',
     },
     {
       text: 'General',
@@ -130,16 +130,16 @@ export default [{
   },
 },
 {
-  path: '/guest-house/facilities-room',
-  name: 'guest-house-facilities-room',
+  path: '/guest-house/facility-room',
+  name: 'guest-house-facility-room',
   component: () => import('@/views/accomodation/guest-house/RoomFacility.vue'),
   meta: {
-    pageTitle: 'Room Facilities',
+    pageTitle: 'Room Facility',
     breadcrumb: [{
       text: 'Guest House',
     },
     {
-      text: 'Facilities',
+      text: 'Facility',
     },
     {
       text: 'Room',

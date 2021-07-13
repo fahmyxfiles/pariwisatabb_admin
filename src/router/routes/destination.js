@@ -51,18 +51,67 @@ export default [{
   },
 },
 {
-  path: '/culinary/restaurant',
-  name: 'culinary-restaurant',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
+  path: '/culinary/list',
+  name: 'culinary-list',
+  component: () => import('@/views/destination/culinary/Index.vue'),
+  meta: {
+    pageTitle: 'Culinary List',
+    breadcrumb: [{
+      text: 'Culinary',
+    },
+    {
+      text: 'List',
+      active: true,
+    },
+    ],
+  },
 },
 {
-  path: '/culinary/streetfood',
-  name: 'culinary-streetfood',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
+  path: '/culinary/category',
+  name: 'culinary-category',
+  component: () => import('@/views/destination/culinary/Category.vue'),
+  meta: {
+    pageTitle: 'Culinary Category',
+    breadcrumb: [{
+      text: 'Culinary',
+    },
+    {
+      text: 'Category',
+      active: true,
+    },
+    ],
+  },
 },
 {
-  path: '/culinary/facilities',
-  name: 'culinary-facilities',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
+  path: '/culinary/menu',
+  name: 'culinary-menu',
+  component: () => import('@/views/destination/culinary/Menu.vue'),
+  meta: {
+    pageTitle: 'Culinary Menu',
+    breadcrumb: [{
+      text: 'Culinary',
+    },
+    {
+      text: 'Menu',
+      active: true,
+    },
+    ],
+  },
+},
+{
+  path: '/culinary/facility',
+  name: 'culinary-facility',
+  component: () => import('@/views/destination/culinary/Facility.vue'),
+  meta: {
+    pageTitle: 'Culinary Facility',
+    breadcrumb: [{
+      text: 'Culinary',
+    },
+    {
+      text: 'Facility',
+      active: true,
+    },
+    ],
+  },
 },
 ]

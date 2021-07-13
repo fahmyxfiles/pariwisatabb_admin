@@ -41,4 +41,5 @@ import uiElements from './ui-elements'
 import formAndTable from './forms-and-table'
 
 // Array of sections
-export default [...dashboard, ...accomodation, ...destination, ...settings, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+//export default [...dashboard, ...accomodation, ...destination, ...settings, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+export default [...dashboard, ...accomodation, ...destination, ...settings]

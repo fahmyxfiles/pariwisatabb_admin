@@ -9,8 +9,8 @@ export default [{
     route: 'tourist-attraction-list',
   },
   {
-    title: 'Facilities',
-    route: 'tourist-attraction-facilities',
+    title: 'Facility',
+    route: 'tourist-attraction-facility',
   },
   ],
 },
@@ -18,16 +18,20 @@ export default [{
   title: 'Culinary',
   icon: 'ShoppingBagIcon',
   children: [{
-    title: 'Restaurant',
-    route: 'culinary-restaurant',
+    title: 'List',
+    route: 'culinary-list',
   },
   {
-    title: 'Streetfood',
-    route: 'culinary-streetfood',
+    title: 'Category',
+    route: 'culinary-category',
   },
   {
-    title: 'Facilities',
-    route: 'culinary-facilities',
+    title: 'Menu',
+    route: 'culinary-menu',
+  },
+  {
+    title: 'Facility',
+    route: 'culinary-facility',
   },
   ],
 },

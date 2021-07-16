@@ -377,6 +377,40 @@ export default {
         })
     },
     toastErrorMsg,
+    deleteData(item) {
+      this.$swal({
+        title: 'Are you sure?',
+        text: `Hotel ${item.name} will be removed. All related data with this Hotel will be deleted.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ml-1',
+        },
+        buttonsStyling: false,
+      }).then(result => {
+        if (result.value) {
+          this.$http
+            .delete(`/hotel/${item.id}`)
+            .then(res => {
+              this.$swal({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Hotel has been deleted.',
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                },
+              })
+              this.getData()
+            })
+            .catch(err => {
+              const errMsg = err.response.data.data
+              this.toastErrorMsg(errMsg)
+            })
+        }
+      })
+    },
     getData() {
       this.loading = true
       this.$http

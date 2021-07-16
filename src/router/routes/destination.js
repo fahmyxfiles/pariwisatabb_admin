@@ -35,16 +35,16 @@ export default [{
   },
 },
 {
-  path: '/tourist-attraction/facilities',
-  name: 'tourist-attraction-facilities',
+  path: '/tourist-attraction/facility',
+  name: 'tourist-attraction-facility',
   component: () => import('@/views/destination/tourist-attraction/Facility.vue'),
   meta: {
-    pageTitle: 'Facilities',
+    pageTitle: 'Facility',
     breadcrumb: [{
       text: 'Tourist Attraction',
     },
     {
-      text: 'Facilities',
+      text: 'Facility',
       active: true,
     },
     ],

@@ -426,6 +426,7 @@ export default {
           const _data = res.data.data
           if (_data.length > 0) {
             this.data = _data
+            this.meta = res.data.meta
             for (let i = 0; i < this.data.length; i++) {
               const mainImage = this.getImageByType(this.data[i].images, 'main')
               if (mainImage.length == 0) {

@@ -1007,7 +1007,7 @@ export default {
         delete params.date;
       }
       this.$http
-        .post(`/tourist_attraction_ricing/${id}`, params)
+        .post(`/tourist_attraction_pricing/${id}`, params)
         .then((res) => {
           this.getData();
           this.$refs["modal-tourist-attraction-pricing-input"].hide();

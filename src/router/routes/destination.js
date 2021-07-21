@@ -51,6 +51,22 @@ export default [{
   },
 },
 {
+  path: '/tourist-attraction/category',
+  name: 'tourist-attraction-category',
+  component: () => import('@/views/destination/tourist-attraction/Category.vue'),
+  meta: {
+    pageTitle: 'Category',
+    breadcrumb: [{
+      text: 'Tourist Attraction',
+    },
+    {
+      text: 'Category',
+      active: true,
+    },
+    ],
+  },
+},
+{
   path: '/culinary/list',
   name: 'culinary-list',
   component: () => import('@/views/destination/culinary/Index.vue'),

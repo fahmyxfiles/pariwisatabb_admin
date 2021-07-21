@@ -9,6 +9,10 @@ export default [{
     route: 'tourist-attraction-list',
   },
   {
+    title: 'Category',
+    route: 'tourist-attraction-category',
+  },
+  {
     title: 'Facility',
     route: 'tourist-attraction-facility',
   },

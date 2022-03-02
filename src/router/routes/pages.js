@@ -118,7 +118,6 @@ export default [
     component: () => import('@/views/pages/miscellaneous/NotAuthorized.vue'),
     meta: {
       layout: 'full',
-      resource: 'Auth',
     },
   },
   {

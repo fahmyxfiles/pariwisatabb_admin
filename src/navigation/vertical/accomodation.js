@@ -7,6 +7,8 @@ export default [{
   children: [{
     title: 'List',
     route: 'hotel-list',
+    resource: 'hotel',
+    action: 'manage',
   },
   {
     title: 'Facility',
@@ -14,10 +16,14 @@ export default [{
       {
         title: 'General',
         route: 'hotel-facility-general',
+        resource: 'hotel',
+        action: 'manage',
       },
       {
         title: 'Room',
         route: 'hotel-facility-room',
+        resource: 'hotel',
+        action: 'manage',
       },
     ],
   },
@@ -29,6 +35,8 @@ export default [{
   children: [{
     title: 'List',
     route: 'guest-house-list',
+    resource: 'guest-house',
+    action: 'manage',
   },
   {
     title: 'Facility',
@@ -36,10 +44,14 @@ export default [{
       {
         title: 'General',
         route: 'guest-house-facility-general',
+        resource: 'guest-house',
+        action: 'manage',
       },
       {
         title: 'Room',
         route: 'guest-house-facility-room',
+        resource: 'guest-house',
+        action: 'manage',
       },
     ],
   },

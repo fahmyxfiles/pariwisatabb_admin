@@ -7,9 +7,9 @@
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
         <p class="user-name font-weight-bolder mb-0">
-          {{ userData.fullName || userData.username }}
+          {{ userData.full_name }}
         </p>
-        <span class="user-status">{{ userData.role }}</span>
+        <span class="user-status">{{ userData.roles[0].name }}</span>
       </div>
       <b-avatar
         size="40"
@@ -26,7 +26,7 @@
         />
       </b-avatar>
     </template>
-
+    <!--
     <b-dropdown-item
       :to="{ name: 'pages-profile'}"
       link-class="d-flex align-items-center"
@@ -107,6 +107,7 @@
       />
       <span>FAQ</span>
     </b-dropdown-item>
+    -->
     <b-dropdown-item
       link-class="d-flex align-items-center"
       @click="logout"

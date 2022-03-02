@@ -4,6 +4,8 @@ export default [{
   component: () => import('@/views/accomodation/hotel/Index.vue'),
   meta: {
     pageTitle: 'Hotel List',
+    action: 'manage',
+    resource: 'hotel',
     breadcrumb: [{
       text: 'Hotel',
     },
@@ -20,6 +22,8 @@ export default [{
   component: () => import('@/views/accomodation/hotel/View.vue'),
   meta: {
     pageTitle: 'Hotel View',
+    action: 'manage',
+    resource: 'hotel',
     breadcrumb: [{
       text: 'Hotel',
     },
@@ -40,6 +44,8 @@ export default [{
   component: () => import('@/views/accomodation/hotel/GeneralFacility.vue'),
   meta: {
     pageTitle: 'General Facility',
+    action: 'manage',
+    resource: 'hotel',
     breadcrumb: [{
       text: 'Hotel',
     },
@@ -60,6 +66,8 @@ export default [{
   component: () => import('@/views/accomodation/hotel/RoomFacility.vue'),
   meta: {
     pageTitle: 'Room Facility',
+    action: 'manage',
+    resource: 'hotel',
     breadcrumb: [{
       text: 'Hotel',
     },
@@ -79,6 +87,8 @@ export default [{
   component: () => import('@/views/accomodation/guest-house/Index.vue'),
   meta: {
     pageTitle: 'Guest House List',
+    action: 'manage',
+    resource: 'guest-house',
     breadcrumb: [{
       text: 'Guest House',
     },
@@ -95,6 +105,8 @@ export default [{
   component: () => import('@/views/accomodation/guest-house/View.vue'),
   meta: {
     pageTitle: 'Guest House View',
+    action: 'manage',
+    resource: 'guest-house',
     breadcrumb: [{
       text: 'Guest House',
     },
@@ -115,6 +127,8 @@ export default [{
   component: () => import('@/views/accomodation/guest-house/GeneralFacility.vue'),
   meta: {
     pageTitle: 'General Facility',
+    action: 'manage',
+    resource: 'guest-house',
     breadcrumb: [{
       text: 'Guest House',
     },
@@ -135,6 +149,8 @@ export default [{
   component: () => import('@/views/accomodation/guest-house/RoomFacility.vue'),
   meta: {
     pageTitle: 'Room Facility',
+    action: 'manage',
+    resource: 'guest-house',
     breadcrumb: [{
       text: 'Guest House',
     },

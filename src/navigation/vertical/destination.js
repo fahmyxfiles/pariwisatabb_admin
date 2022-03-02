@@ -7,14 +7,20 @@ export default [{
   children: [{
     title: 'List',
     route: 'tourist-attraction-list',
+    resource: 'tourist-attraction',
+    action: 'manage',
   },
   {
     title: 'Category',
     route: 'tourist-attraction-category',
+    resource: 'tourist-attraction',
+    action: 'manage',
   },
   {
     title: 'Facility',
     route: 'tourist-attraction-facility',
+    resource: 'tourist-attraction',
+    action: 'manage',
   },
   ],
 },
@@ -24,18 +30,26 @@ export default [{
   children: [{
     title: 'List',
     route: 'culinary-list',
+    resource: 'culinary',
+    action: 'manage',
   },
   {
     title: 'Category',
     route: 'culinary-category',
+    resource: 'culinary',
+    action: 'manage',
   },
   {
     title: 'Menu',
     route: 'culinary-menu',
+    resource: 'culinary',
+    action: 'manage',
   },
   {
     title: 'Facility',
     route: 'culinary-facility',
+    resource: 'culinary',
+    action: 'manage',
   },
   ],
 },

@@ -6,7 +6,7 @@ import axios from 'axios'
 const axiosIns = axios.create({
   // You can add your headers here
   // ================================
-  baseURL: 'http://server.mymoments.web.id:8000/api/',
+  baseURL: 'https://admin.visitbaubau.id/api/',
   // timeout: 1000,
   headers: { Accept: 'application/json' },
 })

@@ -179,8 +179,8 @@ export default {
     return {
       loggingIn: false,
       status: '',
-      password: 'mikasa123',
-      userEmail: 'fahmy.xfiles@gmail.com',
+      password: '',
+      userEmail: '',
       sideImg: require('@/assets/images/pages/login-v2.svg'),
 
       // validation rules

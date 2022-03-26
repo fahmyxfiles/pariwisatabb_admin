@@ -62,20 +62,37 @@
               slot="table-row"
               slot-scope="props"
             >
-              <span v-if="props.column.field === 'permissions'">
+              <span v-if="props.column.field === 'roles'">
                 <b-row
-                  v-for="permission in props.row.permissions"
-                  :key="permission.id"
+                  v-for="role in props.row.roles"
+                  :key="role.id"
                 >
                   <span class="spacer">
-                    <b-badge variant="light-primary">
-                      {{ permission.action | uppercase }}
-                    </b-badge>
-                    <b-badge variant="light-success">
-                      {{ permission.subject | uppercase }}
+                    <b-badge variant="light-warning">
+                      {{ role.name | uppercase }}
                     </b-badge>
                   </span>
                 </b-row>
+              </span>
+              <span v-else-if="props.column.field === 'permissions'">
+                <div
+                  v-for="role in props.row.roles"
+                  :key="role.id"
+                >
+                  <b-row
+                    v-for="permission in role.permissions"
+                    :key="permission.id"
+                  >
+                    <span class="spacer">
+                      <b-badge variant="light-primary">
+                        {{ permission.action | uppercase }}
+                      </b-badge>
+                      <b-badge variant="light-success">
+                        {{ permission.subject | uppercase }}
+                      </b-badge>
+                    </span>
+                  </b-row>
+                </div>
               </span>
               <!-- Column: Action -->
               <span v-else-if="props.column.field === 'action'">
@@ -170,12 +187,50 @@
     >
       <b-form>
         <b-form-group>
-          <label for="roleName">Role Name :</label>
+          <label for="fullName">Full Name :</label>
           <b-form-input
-            id="roleName"
-            v-model="params.name"
+            id="fullName"
+            v-model="params.full_name"
             type="text"
-            placeholder="Role Name"
+            placeholder="Full Name"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="email">Email :</label>
+          <b-form-input
+            id="email"
+            v-model="params.email"
+            type="text"
+            placeholder="Full Name"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="password">Password :</label>
+          <b-form-input
+            id="password"
+            v-model="params.password"
+            type="password"
+            placeholder="Password"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="passwordConfirm">Confirm Password :</label>
+          <b-form-input
+            id="passwordConfirm"
+            v-model="params.c_password"
+            type="password"
+            placeholder="Confirm Password"
+          />
+        </b-form-group>
+        <b-form-group>
+          <label for="roles">Roles</label>
+          <v-select
+            v-model="params.roles"
+            multiple
+            :options="availableRoles"
+            :reduce="role => role.id"
+            label="name"
+            :close-on-select="false"
           />
         </b-form-group>
         <b-form-group>
@@ -184,7 +239,7 @@
             v-model="params.permissions"
             multiple
             :options="availablePermissions"
-            :reduce="permissions => permissions.id"
+            :reduce="permission => permission.id"
             label="name"
             :close-on-select="false"
           />
@@ -199,6 +254,7 @@ import {
   BOverlay, BForm, BRow, BCol, BInputGroup, BInputGroupAppend, BButton, BSpinner, BCard, BAvatar, BBadge, BPagination, BFormGroup, BFormInput, BFormSelect, BDropdown, BDropdownItem,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import { VueGoodTable } from 'vue-good-table'
 import VSelect from 'vue-select'
 import { toastErrorMsg } from '@/libs/helpers'
@@ -241,17 +297,30 @@ export default {
         page: 1,
       },
       modalTitle: '',
+      availableRoles: [],
       availablePermissions: [],
       params: null,
       defaultParams: {
-        name: '',
+        email: '',
+        full_name: '',
+        roles: [],
         permissions: [],
+        password: '',
+        c_password: '',
       },
       loading: true,
       columns: [
         {
-          label: 'Name',
-          field: 'name',
+          label: 'Full Name',
+          field: 'full_name',
+        },
+        {
+          label: 'Email',
+          field: 'email',
+        },
+        {
+          label: 'Roles',
+          field: 'roles',
         },
         {
           label: 'Permissions',
@@ -268,13 +337,14 @@ export default {
   created() {
     this.initDefaultParams()
     this.getData()
+    this.getAvailableRoles()
     this.getAvailablePermissions()
   },
   methods: {
     toastErrorMsg,
     getData() {
       this.loading = true
-      this.$http.get('/role', { params: this.query }).then(res => {
+      this.$http.get('/user', { params: this.query }).then(res => {
         const _data = res.data.data
         if (_data.length > 0) {
           this.rows = _data
@@ -306,8 +376,21 @@ export default {
         return this.toastErrorMsg(err.message)
       })
     },
+    getAvailableRoles() {
+      this.$http.get('/user/getAvailableRoles').then(res => {
+        this.availableRoles = res.data.data
+      }).catch(err => {
+        if (err.response) {
+          const errMsg = err.response.data.data
+          if (errMsg) {
+            return this.toastErrorMsg(errMsg)
+          }
+        }
+        return this.toastErrorMsg(err.message)
+      })
+    },
     getAvailablePermissions() {
-      this.$http.get('/role/getAvailablePermissions').then(res => {
+      this.$http.get('/user/getAvailablePermissions').then(res => {
         this.availablePermissions = res.data.data
       }).catch(err => {
         if (err.response) {
@@ -324,12 +407,12 @@ export default {
     },
     addModal() {
       this.initDefaultParams()
-      this.modalTitle = 'Add Access Control'
+      this.modalTitle = 'Add User'
       this.$refs['modal-input'].onOk = () => this.addData(this.params)
       this.$refs['modal-input'].show()
     },
     addData(params) {
-      this.$http.post('/role', params)
+      this.$http.post('/user', params)
         .then(res => {
           this.$refs['modal-input'].hide()
           this.getData()
@@ -340,19 +423,20 @@ export default {
     },
     editModal(item) {
       this.initDefaultParams()
-      this.modalTitle = `Edit Access Control : ${item.name}`
-      const _permissions = []
-      for (let i = 0; i < item.permissions.length; i++) {
-        _permissions.push(item.permissions[i].id)
+      this.modalTitle = `Edit User : ${item.full_name}`
+      const _roles = []
+      for (let i = 0; i < item.roles.length; i++) {
+        _roles.push(item.roles[i].id)
       }
-      this.params.name = item.name
-      this.params.permissions = _permissions
+      this.params.full_name = item.full_name
+      this.params.email = item.email
+      this.params.roles = _roles
       this.$refs['modal-input'].onOk = () => this.editData(item.id, this.params)
       this.$refs['modal-input'].show()
     },
     editData(id, params) {
       params._method = 'PUT'
-      this.$http.post(`/role/${id}`, params)
+      this.$http.post(`/user/${id}`, params)
         .then(res => {
           this.$refs['modal-input'].hide()
           this.getData()
@@ -364,7 +448,7 @@ export default {
     deleteData(item) {
       this.$swal({
         title: 'Are you sure?',
-        text: `Access Control ${item.name} will be removed. All user with this Access Control need to be updated with new Access Control.`,
+        text: `User ${item.name} will be removed.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
@@ -379,7 +463,7 @@ export default {
             this.$swal({
               icon: 'success',
               title: 'Deleted!',
-              text: 'Access Control has been deleted.',
+              text: 'User has been deleted.',
               customClass: {
                 confirmButton: 'btn btn-success',
               },

@@ -40,12 +40,6 @@ export default [{
     action: 'manage',
   },
   {
-    title: 'Menu',
-    route: 'culinary-menu',
-    resource: 'culinary',
-    action: 'manage',
-  },
-  {
     title: 'Facility',
     route: 'culinary-facility',
     resource: 'culinary',

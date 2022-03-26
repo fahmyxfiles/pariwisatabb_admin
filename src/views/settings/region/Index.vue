@@ -209,6 +209,7 @@ import VSelect from 'vue-select'
 import vueDropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { toastErrorMsg } from '@/libs/helpers'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {

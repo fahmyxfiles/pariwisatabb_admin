@@ -17,7 +17,18 @@ export default [{
 {
   path: '/settings/users',
   name: 'settings-users',
-  component: () => import('@/views/apps/calendar/Calendar.vue'),
+  component: () => import('@/views/settings/user/Index.vue'),
+  meta: {
+    pageTitle: 'Users',
+    breadcrumb: [{
+      text: 'Settings',
+    },
+    {
+      text: 'Users',
+      active: true,
+    },
+    ],
+  },
 },
 {
   path: '/settings/access-control',

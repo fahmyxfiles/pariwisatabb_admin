@@ -111,24 +111,6 @@ export default [{
   },
 },
 {
-  path: '/culinary/menu',
-  name: 'culinary-menu',
-  component: () => import('@/views/destination/culinary/Menu.vue'),
-  meta: {
-    pageTitle: 'Culinary Menu',
-    resource: 'culinary',
-    action: 'manage',
-    breadcrumb: [{
-      text: 'Culinary',
-    },
-    {
-      text: 'Menu',
-      active: true,
-    },
-    ],
-  },
-},
-{
   path: '/culinary/facility',
   name: 'culinary-facility',
   component: () => import('@/views/destination/culinary/Facility.vue'),

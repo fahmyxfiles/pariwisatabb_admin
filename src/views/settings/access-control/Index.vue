@@ -202,6 +202,7 @@ import Ripple from 'vue-ripple-directive'
 import { VueGoodTable } from 'vue-good-table'
 import VSelect from 'vue-select'
 import { toastErrorMsg } from '@/libs/helpers'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {

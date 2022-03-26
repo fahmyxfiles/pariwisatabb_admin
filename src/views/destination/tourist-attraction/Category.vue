@@ -234,7 +234,6 @@ export default {
         page: 1,
       },
       modalTitle: '',
-      availableProvinces: [],
       params: null,
       defaultParams: {
         name: '',
@@ -254,7 +253,6 @@ export default {
   created() {
     this.initDefaultParams()
     this.getData()
-    this.getAvailableProvinces()
   },
   methods: {
     toastErrorMsg,
